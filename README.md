@@ -13,7 +13,7 @@ echo 'eval $(/opt/homebrew/bin/brew shellenv)' >> /Users/taharatakashi/.zprofile
 # Install Python3
 brew install python
 
-# Apache 設定
+# Apache Configure
 which httpd
 which apachectl
 sudo vi /etc/apache2/httpd.conf
@@ -23,9 +23,12 @@ sudo vi /etc/apache2/httpd.conf
 # Git clone
 git clone https://github.com/temt-ceo/work.git
 
-# Apache 起動
+# Start Apache
 sudo /usr/sbin/apachectl start
 
 # localhost確認
+
+# git push
+git push origin HEAD:main
 
 ```
