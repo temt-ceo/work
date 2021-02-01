@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Research the stock expected move</title>
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="static_files/fonts/material-icon/css/material-design-iconic-font.min.css">
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="static_files/css/style.css">
+</head>
+<body>
+
+    <div class="main">
+        <div class="container">
+            <div class="signup-content">
+                <div class="signup-img">
+                    <img src="static_files/images/stock-img.jpg" alt="">
+                </div>
+                <div class="signup-form">
+                    <form method="POST" class="register-form" id="register-form">
+                        <h2>CSV用のデータを作成します (全て百文率で入力)</h2>
+{% if html_json.message!='' %}
+                        <div class="form-group">
+                            <label"><span style="color:red;">{{ html_json.message }}</span></label>
+                        </div>
+{% endif %}
+                        <div class="form-group">
+                            <label for="ticker">Ticker :</label>
+                            <div class="form-select">
+                                <select name="ticker" id="ticker">
+                                    <option value="zm">zm (ズーム・ビデオ・コミュニケーションズ)</option>
+                                    <option value="aapl">Apple (現在実装中)</option>
+                                    <option value="fb">Facebook (現在実装中)</option>
+                                </select>
+                                <span class="select-icon"><i class="zmdi zmdi-chevron-down"></i></span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="pass">パスコード:</label>
+                                <input type="text" value="{{ html_json.pass }}" name="pass" id="pass"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="type">Type<span style="color:red;vertical-align:super;">*</span> :</label>
+                                <input type="text" value="{{ html_json.type }}" name="type" id="type" required/>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="_8_38">時間外【市場開始１時間前】<span style="color:red;vertical-align:super;">*</span> :</label>
+                                <input type="text" value="{{ html_json._8_38 }}" name="_8_38" id="_8_38" required/>
+                            </div>
+                            <div class="form-group">
+                                <label for="_9_26">時間外【市場開始5分前】<span style="color:red;vertical-align:super;">*</span> :</label>
+                                <input type="text" value="{{ html_json._9_26 }}" name="_9_26" id="_9_26" required/>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="_9_30">9:30(始値)<span style="color:red;vertical-align:super;">*</span> :</label>
+                                <input type="text" value="{{ html_json._9_30 }}" name="_9_30" id="_9_30" required/>
+                            </div>
+                            <div class="form-group">
+                                <label for="_10_00">10:00(30分経過後)<span style="color:red;vertical-align:super;">*</span> :</label>
+                                <input type="text" value="{{ html_json._10_00 }}" name="_10_00" id="_10_00" required/>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="_13_30">13:30(4時間経過後)<span style="color:red;vertical-align:super;">*</span> :</label>
+                                <input type="text" value="{{ html_json._13_30 }}" name="_13_30" id="_13_30" required/>
+                            </div>
+                            <div class="form-group">
+                                <label for="_16_00">16:00(終値)<span style="color:red;vertical-align:super;">*</span> :</label>
+                                <input type="text" value="{{ html_json._16_00 }}" name="_16_00" id="_16_00" required/>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="max">高値<span style="color:red;vertical-align:super;">*</span> :</label>
+                                <input type="text" value="{{ html_json.max }}" name="max" id="max" required/>
+                            </div>
+                            <div class="form-group">
+                                <label for="min">安値<span style="color:red;vertical-align:super;">*</span> :</label>
+                                <input type="text" value="{{ html_json.min }}" name="min" id="min" required/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="flag">流動性に影響するNews</label>
+                            <div class="form-select">
+                                <select name="flag" id="flag">
+                                    <option value="0" {% if html_json.flag=='0' %} selected="selected"{% endif %}>なし</option>
+                                    <option value="1" {% if html_json.flag=='1' %} selected="selected"{% endif %}>下がる要因のNewsがある</option>
+                                    <option value="2" {% if html_json.flag=='2' %} selected="selected"{% endif %}>月末/祝日など流動性に影響がある</option>
+                                </select>
+                                <span class="select-icon"><i class="zmdi zmdi-chevron-down"></i></span>
+                            </div>
+                        </div>
+                        <div class="form-submit">
+                            <input type="submit" value="Submit Form" class="submit" name="submit" id="submit" />
+                        </div>
+                        <div class="form-group">
+                            <label"><a href="/">戻る</a></label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JS -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="js/main.js"></script>
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>

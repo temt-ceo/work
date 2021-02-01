@@ -22,8 +22,12 @@
                 </div>
                 <div class="signup-form">
                     <form method="POST" class="register-form" id="register-form">
-                        <h2>stock expected move research form [{{ html_json.date }}]</h2>
+                        <h2>stock expected move research form</h2>
+{% if html_json.message!='' %}
                         <div class="form-group">
+                            <label"><span style="color:red;">{{ html_json.message }}</span></label>
+                        </div>
+{% endif %}                        <div class="form-group">
                             <label for="ticker">Ticker :</label>
                             <div class="form-select">
                                 <select name="ticker" id="ticker">
@@ -86,6 +90,9 @@
                         </div>
                         <div class="form-submit">
                             <input type="submit" value="Submit Form" class="submit" name="submit" id="submit" />
+                        </div>
+                        <div class="form-group">
+                            <label"><a href="./create_csv">CSVのデータを作成</a></label>
                         </div>
                     </form>
                 </div>
