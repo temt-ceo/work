@@ -16,22 +16,7 @@ def create_csv():
         #
         if request.method == 'GET':
             html_json = {}
-            today = date.today()
-            yesterday = today - timedelta(days=1)
-
-            real_datas = []
-            with open('saved_data/real_data.csv', newline='') as csvfile:
-                reader = csv.DictReader(csvfile, skipinitialspace=True)
-                for row in reader:
-                    real_datas.append(row)
-
-            if yesterday.isoformat() == real_datas[-1]['date']:
-                html_json['_8_38'] = real_datas[-1]['8:38']
-                html_json['_9_26'] = real_datas[-1]['9:26']
-                html_json['_9_30'] = real_datas[-1]['9:30']
-            html_json['flag'] = real_datas[-1]['flag']
             html_json['message'] = ''
-
             return render_template('create_csv.html', html_json=html_json)
         #
         # Method: POST
@@ -68,12 +53,6 @@ def create_csv():
             except ValueError:
                 html_json['message'] = '{}: 少数点第一位までの数値で入力してください。'.format(outputs)
             if html_json['message'] != '':
-                # データ初期化して再表示
-                if yesterday.isoformat() == real_datas[-1]['date']:
-                    html_json['_8_38'] = real_datas[-1]['8:38']
-                    html_json['_9_26'] = real_datas[-1]['9:26']
-                    html_json['_9_30'] = real_datas[-1]['9:30']
-                html_json['flag'] = real_datas[-1]['flag']
                 return render_template('create_csv.html', html_json=html_json)
 
             prev_row = -1
@@ -96,20 +75,18 @@ def create_csv():
             d3 = int(float(real_datas[day2ago]['終値']) * 10)
             d4 = int(float(real_datas[day3ago]['終値']) * 10)
             d5 = int(float(real_datas[day4ago]['終値']) * 10)
-            d6 = int(float(real_datas[day5ago]['終値']) * 10)
-            d7 = int(float(real_datas[day6ago]['終値']) * 10)
-            real_data['B5'] = (d1 + d2 + d3 + d4 + d5) / 10
+            real_data['B5'] = real_datas[day2ago]['5日差']
             real_data['B開'] = real_datas[day2ago]['9:30']
             real_data['B終'] = real_datas[day2ago]['終値']
             real_data['8:38'] = form_data['_8_38']
             real_data['9:26'] = form_data['_9_26']
             real_data['flag'] = form_dict['flag']
             real_data['9:30'] = form_data['_9_30']
-            real_data['活度'] = form_data['_10_00']
+            real_data['活度'] = ((int(form_data['_10_00'] * 10) * 2) - int(form_data['_9_30'] * 10)) / 10
             real_data['max'] = form_data['max']
             real_data['min'] = form_data['min']
             lowest = min(form_data['_9_30'], form_data['_10_00'], form_data['_13_30'], form_data['_16_00'])
-            real_data['down'] = (int(form_data['_9_26'] * 10) - int(lowest * 10)) / 10
+            real_data['down'] = (int(lowest * 10) - int(form_data['_9_26'] * 10)) / 10
             real_data['終値'] = form_data['_16_00']
             real_data['5日差'] = (d1 + d2 + d3 + d4 + d5) / 10
             real_data['type'] = int(form_data['type'])
@@ -148,40 +125,50 @@ def create_csv():
 @server.route("/", methods=['GET', 'POST'])
 def index(html_json=None):
     try:
+        #
+        # Method: GET
+        # 入力画面
+        #
+        #
         if request.method == 'GET':
-            html_json = None
             today = date.today()
+            yesterday = today - timedelta(days=1)
 
-            with open('saved_data/saved_form_data.txt', 'r+', encoding="utf-8") as file:
-                json_str = file.readlines()
+            real_datas = []
+            with open('saved_data/saved_form_data.txt', 'r', encoding="utf-8") as txt_file:
+                json_str = txt_file.readlines()
                 html_json = json.loads(json_str[0])
-                if not 'date' in  html_json or html_json['date'] != today.strftime("%-m/%d"):
-                    if html_json['y_date'] == today.strftime("%-m/%d") and date.hour < 21:
-                        pass
-                    else:
-                        if 'date' in  html_json:
-                            html_json['y_date'] = html_json['date']
-                        else:
-                            html_json['y_date'] = ''
-                        html_json['date'] = today.strftime("%-m/%d")
-                        html_json['y_930'] = html_json['t_930']
-                        html_json['t_930'] = ''
-                        html_json['t_838'] = ''
-                        html_json['t_926'] = ''
-                        html_json['y_1000'] = ''
-                        html_json['y_1600'] = ''
-                        html_json['y_lowest'] = ''
-                        html_json['t_flag'] = '0'
-                        file.truncate(0)
-                        file.seek(0)
-                        file.writelines(json.dumps(html_json))
-            html_json['message'] = ''
+                html_json['message'] = ''
+                if html_json['date'] != today.isoformat() and html_json['date'] != yesterday.isoformat():
+                    html_json['_8_38'] = ''
+                    html_json['_9_26'] = ''
+                    html_json['_9_30'] = ''
+                    html_json['flag'] = 0
+
+                with open('saved_data/real_data.csv', newline='', encoding="utf-8") as csvfile:
+                    reader = csv.DictReader(csvfile, skipinitialspace=True)
+                    for row in reader:
+                        real_datas.append(row)
+                    html_json['pre_9_30'] = real_datas[-1]['8:38']
+                    html_json['pre_16_00'] = real_datas[-1]['9:26']
+                    html_json['pre_vitality'] = real_datas[-1]['活度']
+                    html_json['pre_highest'] = real_datas[-1]['max']
+                    html_json['pre_lowest'] = real_datas[-1]['min']
+                    html_json['_5days_volume'] = real_datas[-1]['5日差']
+                    html_json['pre2_9_30'] = real_datas[-1]['B開']
+                    html_json['pre2_16_00'] = real_datas[-1]['B終']
+
             return render_template('index.html', html_json=html_json)
+        #
+        # Method: POST
+        # 当日データ登録
+        #
+        #
         elif request.method == 'POST':
             html_json['message'] = ''
             form_dict = request.form.to_dict()
             if form_dict['ticker'] != 'zm':
-                with open('saved_data/saved_form_data.txt', 'w', encoding="utf-8") as file:
+                with open('saved_data/saved_form_data.txt', 'r', encoding="utf-8") as file:
                     json_str = file.readlines()
                     html_json = json.loads(json_str[0])
                 return render_template('index.html', html_json=html_json)
@@ -236,6 +223,7 @@ def index(html_json=None):
             "code": 0,
             "name": "Unexpected Exception",
             "description": "Server Error: {}".format(e),
+            "traceback": traceback.format_exc(),
         })
     else:
         pass
