@@ -38,13 +38,18 @@
                                 <span class="select-icon"><i class="zmdi zmdi-chevron-down"></i></span>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label><span style="color:red;">※</span><span>その他の入力データ(全て前日終値からの変化量を百分率)：</span></label>
-                            <label style="margin-left: 40px;"><span style="margin-right: 10px;">前日の始値＝【{{ html_json.pre_9_30 }}】,</span><span>前日の終値＝【{{ html_json.pre_16_00 }}】</span></label>
-                            <label style="margin-left: 40px;"><span>前日の取引活性度＝【{{ html_json.pre_vitality }}】</span></label>
-                            <label style="margin-left: 40px;"><span style="margin-right: 10px;">前日の高値＝【{{ html_json.pre_highest }}】,</span><span>前日の安値＝【{{ html_json.pre_lowest }}】</span></label>
-                            <label style="margin-left: 40px;"><span style="margin-right: 10px;">2日前の過去5日間の変化量＝【{{ html_json._5days_volume }}】</span></label>
-                            <label style="margin-left: 40px;"><span style="margin-right: 10px;">2日前の始値＝【{{ html_json.pre2_9_30 }}】,</span><span>2日前の終値＝【{{ html_json.pre2_16_00 }}】</span></label>
+                        <div class="form-group" style="font-size: 11px; font-weight: normal">
+                            <label style="font-size: 13px"><span>データ(全て前日終値からの変化量)：</span></label>
+                            <div style="margin-left: 20px;">
+                                <span style="margin-right: 8px;">前日の始値＝<u style="color:red;font-size:12px;">{{ html_json.pre_9_30 }}</u>%,</span>
+                                <span style="margin-right: 8px;">前日の終値＝<u style="color:red;font-size:12px;">{{ html_json.pre_16_00 }}</u>%,</span>
+                                <span style="margin-right: 8px;">前日の取引活性度＝<u style="color:red;font-size:12px;">{{ html_json.pre_vitality }}</u>%,</span><br>
+                                <span style="margin-right: 8px;">前日の高値＝<u style="color:red;font-size:12px;">{{ html_json.pre_highest }}</u>%,</span>
+                                <span style="margin-right: 8px;">前日の安値＝<u style="color:red;font-size:12px;">{{ html_json.pre_lowest }}</u>%,</span><br>
+                                <span style="margin-right: 8px;">2日前の過去5日間の変化量＝<u style="color:red;font-size:12px;">{{ html_json._5days_volume }}</u>%,</span><br>
+                                <span style="margin-right: 8px;">2日前の始値＝<u style="color:red;font-size:12px;">{{ html_json.pre2_9_30 }}</u>%,</span>
+                                <span>2日前の終値＝<u style="color:red">{{ html_json.pre2_16_00 }}</u>%</span>
+                            </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">

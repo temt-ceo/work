@@ -18,18 +18,26 @@ which httpd
 which apachectl
 sudo vi /etc/apache2/httpd.conf
 
-# DocumentRootをProject Pathに変更
+## DocumentRootをProject Pathに変更
 DocumentRoot "/Users/Path_To_Project_Files/public_html/"
 ScriptAliasMatch ^/cgi-bin/((?!(?i:webobjects)).*$) "/Users/taharatakashi/AI/work/public_html/cgi-bin/$1"
-# .htaccessを使用可能にする
+
+## .htaccessを使用可能にする
 <Directory >
 　　　　AllowOverride All
-＃ cgiの設定
+
+＃# cgiの設定
 mod_cgi.so, mod_userdir.so, mod_rewrite.soのコメントを外す
-#AddHandler cgi~script .cgi をコメントを外し .pyを足す
+
+## AddHandler cgi~script .cgi をコメントを外し .pyを足す
 Options FollowSymLinks Multiviews に ExecCGIを足す
-# ApacheのUserを変更し、/Users/UserName/以下のファイルへアクセス可能にする
+
+## ApacheのUserを変更し、/Users/UserName/以下のファイルへアクセス可能にする
 User _www => User (自らのUserName)
+
+### error_log初期化
+sudo bash -c 'echo > /var/log/apache2/error_log'
+sudo /usr/sbin/apachectl restart
 
 # Git clone
 git clone https://github.com/temt-ceo/work.git
@@ -38,9 +46,10 @@ chmod 755 public_html
 # Start Apache
 sudo /usr/sbin/apachectl start
 
-# flask インストール
+# flask インストール(リモートサーバと共通コマンド)
 python3 -m pip install --upgrade pip --user
 python3 -m pip install Flask --user
+python3 -m pip install pandas --user
 
 # index.pyに以下の記述を追加
 import site

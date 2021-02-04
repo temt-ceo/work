@@ -1,7 +1,9 @@
-import sys, traceback, json, csv, shutil
+import sys, traceback, json, csv, shutil, pickle
+import flask
 from flask import Flask, request, render_template, json
 from werkzeug.exceptions import HTTPException
 from datetime import date, timedelta
+# import pandas as pd
 
 server = Flask(__name__)
 
@@ -20,10 +22,11 @@ def create_csv():
             return render_template('create_csv.html', html_json=html_json)
         #
         # Method: POST
-        # CSVデータ登録
+        # CSVデータ登録画面
         #
         #
         elif request.method == 'POST':
+            form_dict = request.form.to_dict()
             today = date.today()
             yesterday = today - timedelta(days=1)
             csv_columns = ["date", "Y開", "Y終", "Y活", "Yx", "Yn", "B5", "B開", "B終", "8:38", "9:26", "flag", "9:30", "活度", "max", "min", "down", "終値", "5日差", "type"]
@@ -32,19 +35,21 @@ def create_csv():
             real_datas = []
             html_json = {}
             html_json['message'] = ''
-            form_dict = request.form.to_dict()
             form_data = {}
             real_data = {}
+            # CSV登録データを呼び出す
             with open('saved_data/real_data.csv', newline='', encoding="utf-8") as csvfile:
                 reader = csv.DictReader(csvfile, skipinitialspace=True)
                 for row in reader:
                     real_datas.append(row)
-
+            # Validation
             if form_dict['ticker'] != 'zm' or yesterday.isoformat() != form_dict['pass']:
                 if form_dict['ticker'] != 'zm':
                     html_json['message'] = 'zm以外は現在実装中です。'
                 else:
                     html_json['message'] = 'パスコードが一致しません。'
+            if real_datas[-1]['date'] == yesterday.isoformat():
+                    html_json['message'] = 'すでに直近データは登録済みです。'
             try:
                 for key, value in form_dict.items():
                     outputs = value
@@ -52,18 +57,17 @@ def create_csv():
                         form_data[key] = float(value)
             except ValueError:
                 html_json['message'] = '{}: 少数点第一位までの数値で入力してください。'.format(outputs)
+            # 入力不備あり
             if html_json['message'] != '':
                 return render_template('create_csv.html', html_json=html_json)
 
             prev_row = -1
-            if yesterday.isoformat() == real_datas[-1]['date']:
-                real_data = real_datas[-1]
-                prev_row = -2
             day2ago = prev_row - 1
             day3ago = prev_row - 2
             day4ago = prev_row - 3
             day5ago = prev_row - 4
             day6ago = prev_row - 5
+            # CSV登録データから前日のデータを取得、新規行の入力データに活用する
             real_data['date'] = yesterday.isoformat()
             real_data['Y開'] = real_datas[prev_row]['9:30']
             real_data['Y終'] = real_datas[prev_row]['終値']
@@ -90,8 +94,11 @@ def create_csv():
             real_data['終値'] = form_data['_16_00']
             real_data['5日差'] = (d1 + d2 + d3 + d4 + d5) / 10
             real_data['type'] = int(form_data['type'])
+            # バックアップする
             shutil.copyfile('saved_data/real_data_backup.csv', 'saved_data/real_data_backup2.csv')
+            # バックアップする(2つ目)
             shutil.copyfile('saved_data/real_data.csv', 'saved_data/real_data_backup.csv')
+            # CSVにデータを登録する
             with open('saved_data/real_data.csv', 'w', newline='', encoding="utf-8") as csvfile:
                 writer = csv.DictWriter(csvfile, quoting=csv.QUOTE_ALL, fieldnames=csv_columns)
                 writer.writeheader()
@@ -99,11 +106,8 @@ def create_csv():
                     if row['date'] != yesterday.isoformat():
                         writer.writerow(row)
                 writer.writerow(real_data)
-            with open('saved_data/saved_form_data.txt', 'r', encoding="utf-8") as file:
-                json_str = file.readlines()
-                html_json = json.loads(json_str[0])
-                html_json['message'] = 'CSVデータの登録が完了しました。'
-            return render_template('index.html', html_json=html_json)
+            # TOP画面にリダイレクトする
+            return flask.redirect("/?from_page=create_csv")
 
     except Exception as e:
         exc_type, exc_value, exc_traceback = sys.exc_info()
@@ -127,55 +131,28 @@ def index(html_json=None):
     try:
         #
         # Method: GET
-        # 入力画面
+        # 当日データ登録画面
         #
         #
         if request.method == 'GET':
-            today = date.today()
-            yesterday = today - timedelta(days=1)
-
-            real_datas = []
-            with open('saved_data/saved_form_data.txt', 'r', encoding="utf-8") as txt_file:
-                json_str = txt_file.readlines()
-                html_json = json.loads(json_str[0])
-                html_json['message'] = ''
-                if html_json['date'] != today.isoformat() and html_json['date'] != yesterday.isoformat():
-                    html_json['_8_38'] = ''
-                    html_json['_9_26'] = ''
-                    html_json['_9_30'] = ''
-                    html_json['flag'] = 0
-
-                with open('saved_data/real_data.csv', newline='', encoding="utf-8") as csvfile:
-                    reader = csv.DictReader(csvfile, skipinitialspace=True)
-                    for row in reader:
-                        real_datas.append(row)
-                    html_json['pre_9_30'] = real_datas[-1]['8:38']
-                    html_json['pre_16_00'] = real_datas[-1]['9:26']
-                    html_json['pre_vitality'] = real_datas[-1]['活度']
-                    html_json['pre_highest'] = real_datas[-1]['max']
-                    html_json['pre_lowest'] = real_datas[-1]['min']
-                    html_json['_5days_volume'] = real_datas[-1]['5日差']
-                    html_json['pre2_9_30'] = real_datas[-1]['B開']
-                    html_json['pre2_16_00'] = real_datas[-1]['B終']
-
-            return render_template('index.html', html_json=html_json)
+            from_page = request.args.get('from_page')
+            return show_top_page(from_page)
         #
         # Method: POST
-        # 当日データ登録
+        # 分析結果画面
         #
         #
         elif request.method == 'POST':
-            html_json['message'] = ''
             form_dict = request.form.to_dict()
             if form_dict['ticker'] != 'zm':
-                with open('saved_data/saved_form_data.txt', 'r', encoding="utf-8") as file:
-                    json_str = file.readlines()
+                with open('saved_data/saved_form_data.txt', 'r', encoding="utf-8") as data_file:
+                    json_str = data_file.readlines()
                     html_json = json.loads(json_str[0])
                 return render_template('index.html', html_json=html_json)
 
             stats = []
-            with open('saved_data/saved_form_data.txt', 'r+', encoding="utf-8") as file:
-                json_str = file.readlines()
+            with open('saved_data/saved_form_data.txt', 'r+', encoding="utf-8") as data_file:
+                json_str = data_file.readlines()
                 html_json = json.loads(json_str[0])
                 html_json['t_838'] = form_dict['t_838']
                 html_json['t_926'] = form_dict['t_926']
@@ -229,6 +206,54 @@ def index(html_json=None):
         pass
     finally:
         pass
+
+def show_top_page(from_page=None):
+    today = date.today()
+    yesterday = today - timedelta(days=1)
+
+    # 保存ずみのフォーム入力情報を呼び出す
+    with open('saved_data/saved_form_data.txt', 'r', encoding="utf-8") as txt_file:
+        json_str = txt_file.readlines()
+        html_json = json.loads(json_str[0])
+
+    if from_page == 'create_csv':
+        html_json['message'] = 'CSVデータの登録が完了しました。'
+
+    # 保存ずみのフォーム入力情報が古い場合は初期化する
+    if html_json['date'] != today.isoformat() and html_json['date'] != yesterday.isoformat():
+        html_json['_8_38'] = ''
+        html_json['_9_26'] = ''
+        html_json['_9_30'] = ''
+        html_json['flag'] = 0
+
+    # CSV登録データを呼び出す
+    real_datas = []
+    with open('saved_data/real_data.csv', newline='', encoding="utf-8") as csvfile:
+        reader = csv.DictReader(csvfile, skipinitialspace=True)
+        for row in reader:
+            real_datas.append(row)
+
+    # CSV登録データの直近データ
+    html_json['pre_9_30'] = real_datas[-1]['9:30']
+    html_json['pre_16_00'] = real_datas[-1]['終値']
+    html_json['pre_vitality'] = real_datas[-1]['活度']
+    html_json['pre_highest'] = real_datas[-1]['max']
+    html_json['pre_lowest'] = real_datas[-1]['min']
+    html_json['_5days_volume'] = real_datas[-2]['5日差']
+    html_json['pre2_9_30'] = real_datas[-2]['9:30']
+    html_json['pre2_16_00'] = real_datas[-2]['終値']
+
+    # Load from file
+    # model = None
+    # with open('saved_data/stock_data_model.pkl'), 'rb') as file:
+    #     model = pickle.load(file)
+
+    # # Calculate the accuracy score and predict target values
+    # score = model.score(Xtest, Ytest)
+    # print("Test score: {0:.2f} %".format(100 * score))
+    # Ypredict = model.predict(Xtest)
+
+    return render_template('index.html', html_json=html_json)
 
 @server.errorhandler(HTTPException)
 def handle_exception(e):
