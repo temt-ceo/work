@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Research the stock expected move</title>
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="static_files/fonts/material-icon/css/material-design-iconic-font.min.css">
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="static_files/css/style.css">
+    <style>
+        table.greyGridTable {
+  border: 2px solid #FFFFFF;
+  width: 100%;
+  text-align: center;
+  border-collapse: collapse;
+}
+table.greyGridTable td, table.greyGridTable th {
+  border: 1px solid #FFFFFF;
+  padding: 3px 4px;
+}
+table.greyGridTable tbody td {
+  font-size: 11px;
+}
+table.greyGridTable td:nth-child(even) {
+  background: #EBEBEB;
+}
+table.greyGridTable thead {
+  background: #FFFFFF;
+  border-bottom: 2px solid #333333;
+}
+table.greyGridTable thead th {
+  font-size: 13px;
+  font-weight: bold;
+  color: #333333;
+  text-align: center;
+  border-left: 2px solid #333333;
+}
+table.greyGridTable thead th:first-child {
+  border-left: none;
+}
+
+table.greyGridTable tfoot {
+  font-size: 12px;
+  font-weight: normal;
+  color: #333333;
+  border-top: 2px solid #333333;
+}
+table.greyGridTable tfoot td {
+  font-size: 12px;
+}
+    </style>
+</head>
+<body>
+
+    <div class="main">
+        <div class="container">
+            <div class="signup-content">
+                <div class="signup-img">
+                    <img src="static_files/images/market-image2.png" alt="">
+                    <img src="static_files/images/market-image1.png" alt="">
+                </div>
+                <div class="signup-form">
+                    <form method="POST" class="register-form" id="register-form">
+                        <h2>CSV用のデータを作成します (全て前日終値からの変化量を百分率で入力)</h2>
+{% if html_json.message!='' %}
+                        <div class="form-group">
+                            <label"><span style="color:red;">{{ html_json.message }}</span></label>
+                        </div>
+{% endif %}
+                        <div class="form-group">
+                            <label for="ticker">Ticker :</label>
+                            <div class="form-select">
+                                <select name="ticker" id="ticker">
+                                    <option value="zm">zm (ズーム・ビデオ・コミュニケーションズ)</option>
+                                    <option value="aapl">Apple (現在実装中)</option>
+                                    <option value="fb">Facebook (現在実装中)</option>
+                                </select>
+                                <span class="select-icon"><i class="zmdi zmdi-chevron-down"></i></span>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-top: 20px;">
+                            <label style="font-size: 13px"><span>過去の予測結果：</span></label>
+                            <table class="greyGridTable">
+                                <thead>
+                                    <tr>
+                                    <th>head1</th>
+                                    <th>head2</th>
+                                    <th>head3</th>
+                                    <th>head4</th>
+                                    <th>head5</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                    <td>foot1</td>
+                                    <td>foot2</td>
+                                    <td>foot3</td>
+                                    <td>foot4</td>
+                                    <td>foot5</td>
+                                </tr>
+                                </tfoot>
+                                <tbody>
+                                    <tr>
+                                    <td>1日前</td>
+                                    <td>{{ html_json.predicted_type[-1]}}</td>
+                                    <td>{{ html_json.real_type[-1]}}</td>
+                                    <td>cell4_1</td>
+                                    <td>cell5_1</td>
+                                    </tr>
+                                    <tr>
+                                    <td>2日前</td>
+                                    <td>{{ html_json.predicted_type[-2]}}</td>
+                                    <td>{{ html_json.real_type[-2]}}</td>
+                                    <td>cell4_2</td>
+                                    <td>cell5_2</td>
+                                    </tr>
+                                    <tr>
+                                    <td>3日前</td>
+                                    <td>{{ html_json.predicted_type[-3]}}</td>
+                                    <td>{{ html_json.real_type[-3]}}</td>
+                                    <td>cell4_3</td>
+                                    <td>cell5_3</td>
+                                    </tr>
+                                    <tr>
+                                    <td>4日前</td>
+                                    <td>{{ html_json.predicted_type[-4]}}</td>
+                                    <td>{{ html_json.real_type[-4]}}</td>
+                                    <td>cell4_4</td>
+                                    <td>cell5_4</td>
+                                    </tr>
+                                    <tr>
+                                    <td>5日前</td>
+                                    <td>{{ html_json.predicted_type[-5]}}</td>
+                                    <td>{{ html_json.real_type[-5]}}</td>
+                                    <td>cell4_5</td>
+                                    <td>cell5_5</td>
+                                    </tr>
+                                    <tr>
+                                    <td>6日前</td>
+                                    <td>{{ html_json.predicted_type[-6]}}</td>
+                                    <td>{{ html_json.real_type[-6]}}</td>
+                                    <td>cell4_6</td>
+                                    <td>cell5_6</td>
+                                    </tr>
+                                    <tr>
+                                    <td>7日前</td>
+                                    <td>{{ html_json.predicted_type[-7]}}</td>
+                                    <td>{{ html_json.real_type[-7]}}</td>
+                                    <td>cell4_7</td>
+                                    <td>cell5_7</td>
+                                    </tr>
+                                    <tr>
+                                    <td>8日前</td>
+                                    <td>{{ html_json.predicted_type[-8]}}</td>
+                                    <td>{{ html_json.real_type[-8]}}</td>
+                                    <td>cell4_8</td>
+                                    <td>cell5_8</td>
+                                    </tr>
+                                    <tr>
+                                    <td>9日前</td>
+                                    <td>{{ html_json.predicted_type[-9]}}</td>
+                                    <td>{{ html_json.real_type[-9]}}</td>
+                                    <td>cell4_9</td>
+                                    <td>cell5_9</td>
+                                    </tr>
+                                    <tr>
+                                    <td>10日前</td>
+                                    <td>{{ html_json.predicted_type[-10]}}</td>
+                                    <td>{{ html_json.real_type[-10]}}</td>
+                                    <td>cell4_10</td>
+                                    <td>cell5_10</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="form-group" style="margin-top: 20px;">
+                            <label"><a href="/">戻る</a></label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JS -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="js/main.js"></script>
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>

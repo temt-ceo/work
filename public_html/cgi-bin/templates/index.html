@@ -41,16 +41,30 @@
                         <div class="form-group" style="font-size: 11px; font-weight: normal">
                             <label style="font-size: 13px"><span>データ(全て前日終値からの変化量)：</span></label>
                             <div style="margin-left: 20px;">
-                                <span style="margin-right: 8px;">前日の始値＝<u style="color:red;font-size:12px;">{{ html_json.pre_9_30 }}</u>%,</span>
-                                <span style="margin-right: 8px;">前日の終値＝<u style="color:red;font-size:12px;">{{ html_json.pre_16_00 }}</u>%,</span>
-                                <span style="margin-right: 8px;">前日の取引活性度＝<u style="color:red;font-size:12px;">{{ html_json.pre_vitality }}</u>%,</span><br>
-                                <span style="margin-right: 8px;">前日の高値＝<u style="color:red;font-size:12px;">{{ html_json.pre_highest }}</u>%,</span>
-                                <span style="margin-right: 8px;">前日の安値＝<u style="color:red;font-size:12px;">{{ html_json.pre_lowest }}</u>%,</span><br>
-                                <span style="margin-right: 8px;">2日前の過去5日間の変化量＝<u style="color:red;font-size:12px;">{{ html_json._5days_volume }}</u>%,</span><br>
-                                <span style="margin-right: 8px;">2日前の始値＝<u style="color:red;font-size:12px;">{{ html_json.pre2_9_30 }}</u>%,</span>
-                                <span>2日前の終値＝<u style="color:red">{{ html_json.pre2_16_00 }}</u>%</span>
+                                <span style="margin-right: 8px;">前日の終値: <u style="color:red;font-size:12px;">{% if html_json.pre_16_00[0] !='-' %}+{% endif %}{{ html_json.pre_16_00 }}</u>%,</span>
+                                <span style="margin-right: 8px;">前日活性度: <u style="color:red;font-size:12px;">{% if html_json.pre_vitality[0] !='-' %}+{% endif %}{{ html_json.pre_vitality }}</u>%</span><br>
+                                <span style="margin-right: 8px;">5日間移動平均: <u style="color:red;font-size:12px;">{% if html_json._5days_volume[0] !='-' %}+{% endif %}{{ html_json._5days_volume }}</u>%,</span>
+                                <span style="margin-right: 8px;">(前日比: <u style="color:red;font-size:12px;">{% if html_json._5days_diff[0] !='-' %}+{% endif %}{{ html_json._5days_diff }}</u>%)</span><br>
+                                <span style="margin-right: 8px;">前日の高値: <u style="color:red;font-size:12px;">{% if html_json.pre_highest[0] !='-' %}+{% endif %}{{ html_json.pre_highest }}</u>%,</span>
+                                <span>前日の安値: <u style="color:red;font-size:12px;">{% if html_json.pre_lowest[0] !='-' %}+{% endif %}{{ html_json.pre_lowest }}</u>%</span><br>
                             </div>
-                        </div>
+                            <label style="font-size: 13px"><span>昨日の予測結果：</span></label>
+                            <div style="margin-left: 20px;">
+                                <span>株価動き: <u style="color:red">パターン{{ html_json.predicted_type[-1] }}</u> (実際の値:パターン{{ html_json.real_type[-1] }})</span><br>
+                                <span style="margin-right: 8px;">高値の位置: <u style="color:red;font-size:12px;">{{ html_json.pre_high_pos }}頃</u> (実際の値: {{ html_json.real_high_pos }}頃)</span><br>
+                                <span style="margin-right: 8px;">安値の位置: <u style="color:red;font-size:12px;">{{ html_json.pre_low_pos }}頃</u> (実際の値: {{ html_json.real_low_pos }}頃)</span><br>
+                            </div>
+                            {% if html_json.form_submitted == True %}
+                            <label style="font-size: 13px"><span>今日の早期予測結果：</span></label>
+                            <div style="margin-left: 20px;">
+                                <span><u style="color:red">パターン{{ html_json.predicted_today_type }}</u></span>
+                                <!-- <span style="margin-right: 8px;">5日間移動平均＝<u style="color:red;font-size:12px;">{% if html_json._5days_volume[0] !='-' %}+{% endif %}{{ html_json._5days_volume }}</u>%,</span>
+                                <span style="margin-right: 8px;">(一昨日比: <u style="color:red;font-size:12px;">{% if html_json._5days_diff[0] !='-' %}+{% endif %}{{ html_json._5days_diff }}</u>%)</span><br>
+                                <span style="margin-right: 8px;">前日の高値＝<u style="color:red;font-size:12px;">{% if html_json.pre_highest[0] !='-' %}+{% endif %}{{ html_json.pre_highest }}</u>%,</span>
+                                <span style="margin-right: 8px;">前日の安値＝<u style="color:red;font-size:12px;">{% if html_json.pre_lowest[0] !='-' %}+{% endif %}{{ html_json.pre_lowest }}</u>%</span><br> -->
+                            </div>
+                            {% endif %}
+                       </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="_8_38">時間外【市場開始１時間前】:<span style="color:red;vertical-align:super;">*</span> :</label>
