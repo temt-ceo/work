@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>RESULT: the stock expected move</title>
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="static_files/fonts/material-icon/css/material-design-iconic-font.min.css">
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="static_files/css/style_posted.css">
+    <link rel="stylesheet" href="static_files/css/style.css">
+    <style>
+        #nobr-ask {
+          font-size: 18px;
+          padding-right: 100px;
+          font-weight: 400;
+        }
+      @media screen and (max-width: 480px) {
+        .submit {
+            width: 40%;
+        }
+        #nobr-ask {
+          padding-right: 0;
+        }
+      }
+    </style>
+</head>
+<body style="padding: 14px 0;background: darkolivegreen;">
+    {{ html_json.message }}
+    <div class="main">
+        <h2 style="color:silver;margin-bottom:14px;">stock expected move in "zm"</h2>
+        <div id="chartdiv"></div>
+        <h2 style="color:black;margin-bottom: 0px;font-size: 15px;">本日の予想される動き(予測データではありません。前回の同じパターンの実データです。)</h2>
+        <form method="POST" class="register-form" id="register-form" style="padding: 0 0 0 15px;margin-bottom: 32px;">
+          <div class="form-group"><nobr>
+            <span id="nobr-ask">本日の株価動きパターンを修正しますか？</span><wbr>
+            <label for="type" style="display: inline-block;padding-right: 10px;">現在のパターン<span style="color:red;vertical-align:super;">*</span> :</label>
+            <input type="text" value="{{ previous.type }}" name="type" id="type" style="width:60px;display: inline-block;margin: 0 8px 0 2px;" required/>
+            <input type="hidden" value="{{ html_json.ticker }}" name="ticker"/>
+            <input type="hidden" value="{{ previous.type }}" name="old_type"/>
+            <input type="submit" value="Submit Form" class="submit" name="submit" id="submit" /></nobr>
+        </div>
+      </form>
+      <div class="form-group" style="margin-top: 15px;">
+        <label><a href="/stats?ticker=zm&type={{ previous.type }}">明日以降の動き予測</a></label>
+        <label style="margin-top: 5px;"><a href="/">TOPへ戻る</a></label>
+      </div>
+</div>
+<!-- 
+    <div class="main">
+        <div id="chartdivStats" style="width:100%;height:500px;background-color:#161616;"></div>
+        <h2 style="color:orange;margin-bottom:10px;">過去10日間のパターン別動き</h2>
+    </div>
+ -->    
+
+    <!-- JS -->
+    <script src="https://www.amcharts.com/lib/3/amcharts.js?x"></script>
+    <script src="https://www.amcharts.com/lib/3/serial.js?x"></script>
+    <script src="https://www.amcharts.com/lib/3/themes/dark.js"></script>
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script>
+
+var chartData = [
+    {
+        "date": {{ previous.date }},
+        "todays_data": {{ html_json.today_9_30 }},
+        "typeNumber": {{ previous.type }},
+        "timing": "9:30",
+        "real_value": {{ previous._9_30 }}
+    },
+    {
+        "date": {{ previous.date }},
+        "todays_data": 0,
+        "typeNumber": {{ previous.type }},
+        "timing": "9:45",
+        "real_value": {{ previous._9_45 }}
+    },
+    {
+        "date": {{ previous.date }},
+        "todays_data": {{ html_json.today_10_00 }},
+        "typeNumber": {{ previous.type }},
+        "timing": "10:00",
+        "real_value": {{ previous._10_00 }}
+    },
+    {
+        "date": {{ previous.date }},
+        "todays_data": 0,
+        "typeNumber": {{ previous.type }},
+        "timing": "10:45",
+        "real_value": {{ previous._10_45 }}
+    },
+    {
+        "date": {{ previous.date }},
+        "todays_data": 0,
+        "typeNumber": {{ previous.type }},
+        "timing": "11:00",
+        "real_value": {{ previous._11_00 }}
+    },
+    {
+        "date": {{ previous.date }},
+        "todays_data": 0,
+        "typeNumber": {{ previous.type }},
+        "timing": "11:15",
+        "real_value": {{ previous._11_15 }}
+    },
+    {
+        "date": {{ previous.date }},
+        "todays_data": 0,
+        "typeNumber": {{ previous.type }},
+        "timing": "11:30",
+        "real_value": {{ previous._11_30 }}
+    },
+    {
+        "date": {{ previous.date }},
+        "todays_data": 0,
+        "typeNumber": {{ previous.type }},
+        "timing": "12:30",
+        "real_value": {{ previous._12_30 }}
+    },
+    {
+        "date": {{ previous.date }},
+        "todays_data": 0,
+        "typeNumber": {{ previous.type }},
+        "timing": "13:30",
+        "real_value": {{ previous._13_30 }}
+    },
+    {
+        "date": {{ previous.date }},
+        "todays_data": 0,
+        "typeNumber": {{ previous.type }},
+        "timing": "16:00",
+        "real_value": {{ previous._16_00 }}
+    }
+];
+var chart = AmCharts.makeChart("chartdiv", {
+  type: "serial",
+  theme: "dark",
+  dataProvider: chartData,
+
+  addClassNames: true,
+  startDuration: 1,
+  color: "#FFFFFF",
+  marginLeft: 0,
+
+  categoryField: "timing",
+
+  valueAxes: [{
+    id: "a1",
+    title: "前日終値比 (%)",
+    gridAlpha: 0,
+    axisAlpha: 0,
+    maximum: 5.0,
+    minimum: -5.0,
+  },{
+    id: "a3",
+    title: "",
+    position: "right",
+    gridAlpha: 0,
+    axisAlpha: 0,
+    inside: true,
+    maximum: 5.1,
+    minimum: -5.0,
+  }],
+  graphs: [{
+    id: "g1",
+    valueField:  "todays_data",
+    title:  "本日のデータ",
+    type:  "column",
+    fillAlphas:  0.9,
+    valueAxis:  "a3",
+    balloonText:  "[[value]] %",
+    legendValueText:  "[[description]] : [[value]]%",
+    descriptionField: "timing",
+    lineColor:  "#263138",
+    alphaField:  "alpha",
+  },{
+    id: "g3",
+    title: "前回の動き",
+    valueField: "real_value",
+    type: "line",
+    valueAxis: "a1",
+    lineColor: "#ff5755",
+    labelText: "[[value]]%",
+    labelPosition: "right",
+    balloonText: "前回:[[value]]%",
+    lineThickness: 1,
+    legendValueText: "[[description]] : [[value]]%",
+    descriptionField: "timing",
+    bullet: "square",
+    bulletBorderColor: "#ff5755",
+    bulletBorderThickness: 1,
+    bulletBorderAlpha: 1,
+    dashLengthField: "dashLength",
+    animationPlayed: true
+  }],
+
+  chartCursor: {
+    zoomable: false,
+    categoryBalloonDateFormat: "DD",
+    cursorAlpha: 0,
+    valueBalloonsEnabled: false
+  },
+  legend: {
+    bulletType: "round",
+    equalWidths: false,
+    valueWidth: 120,
+    useGraphSettings: true,
+    color: "#FFFFFF"
+  }
+});
+
+
+
+// var chartDataStats = [
+// {% for data in stats %}
+//     {
+//         "date": "{{ data.date }}",
+//         "typeNumber": "{{ data.real_type }}",
+//         "typeNumberEarly": {{ data.early_type }},
+//         "typeNumberLater": {{ data.later_type }},
+//         "todays_data": {{ data.real_type_prob }},
+//         "err_930": {{ data.err_930 }},
+//         "err_1000": {{ data.err_1000 }},
+//         "err_lowest": {{ data.err_lowest }},
+//     },
+// {% endfor %}
+// ];
+// var chartStats = AmCharts.makeChart("chartdivStats", {
+//   type: "serial",
+//   theme: "dark",
+//   dataProvider: chartDataStats,
+
+//   addClassNames: true,
+//   startDuration: 1,
+//   color: "#FFFFFF",
+//   marginLeft: 0,
+
+//   categoryField: "date",
+//   categoryAxis: {
+//     //title: "日"
+//   },
+//   valueAxes: [{
+//     id: "a1",
+//     title: "誤差 (%)",
+//     gridAlpha: 0,
+//     axisAlpha: 0
+//   },{
+//     id: "a2",
+//     position: "left",
+//     gridAlpha: 0,
+//     axisAlpha: 0,
+//     labelsEnabled: false
+//   },{
+//     id: "a3",
+//     position: "left",
+//     gridAlpha: 0,
+//     axisAlpha: 0,
+//     labelsEnabled: false
+//   },{
+//     id: "a4",
+//     title: "Probability (%)",
+//     position: "right",
+//     gridAlpha: 0,
+//     axisAlpha: 0,
+//     inside: true,
+//     maximum: 101,
+//     minimum: 0,
+//   }],
+//   graphs: [{
+//     id: "g1",
+//     valueField:  "todays_data",
+//     title:  "Type的中率",
+//     type:  "column",
+//     fillAlphas:  0.9,
+//     valueAxis:  "a4",
+//     balloonText:  "[[value]] %",
+//     legendValueText:  "[[value]]% (実際のType: [[typeNumber]])",
+//     legendPeriodValueText:  "Avg. [[value.average]]%",
+//     labelText: "[[typeNumber]]:[[typeNumberEarly]]→[[typeNumberLater]]",
+//     labelPosition: "top",
+//     precision: 0,
+//     lineColor:  "#263138",
+//     alphaField:  "alpha",
+//   },{
+//     id: "g2",
+//     valueField: "err_930",
+//     classNameField: "bulletClass",
+//     title: "9:30時点の誤差",
+//     type: "line",
+//     valueAxis: "a3",
+//     lineColor: "#786c56",
+//     lineThickness: 1,
+//     legendValueText: "[[value]]% (Type:[[typeNumberEarly]])",
+//     legendPeriodValueText:  "Avg. [[value.average]]%",
+//     precision: 1,
+//     descriptionField: "date",
+//     bullet: "round",
+//     bulletBorderColor: "#786c56",
+//     bulletBorderAlpha: 1,
+//     bulletBorderThickness: 2,
+//     bulletColor: "#000000",
+//     labelPosition: "left",
+//     balloonText: "[[value]]% (Type[[typeNumberEarly]])",
+//     showBalloon: true,
+//     animationPlayed: true,
+//   },{
+//     id: "g3",
+//     title: "10:00時点の誤差",
+//     valueField: "err_1000",
+//     type: "line",
+//     valueAxis: "a2",
+//     lineColor: "#00b7ce",
+//     labelPosition: "right",
+//     balloonText: "[[value]]% (Type[[typeNumberLater]])",
+//     lineThickness: 1,
+//     legendValueText: "[[value]]% (Type:[[typeNumberLater]])",
+//     legendPeriodValueText:  "Avg. [[value.average]]%",
+//     precision: 1,
+//     descriptionField: "date",
+//     bullet: "square",
+//     bulletBorderColor: "#00b7ce",
+//     bulletBorderThickness: 1,
+//     bulletBorderAlpha: 1,
+//     bulletColor: "#00b7ce",
+//     dashLengthField: "dashLength",
+//     animationPlayed: true
+//   },{
+//     id: "g2",
+//     title: "Lowest時点の誤差",
+//     valueField: "err_lowest",
+//     classNameField: "bulletClass",
+//     type: "line",
+//     valueAxis: "a1",
+//     lineColor: "#ff5755",
+//     lineThickness: 1,
+//     legendValueText: "[[value]]% (Type:[[typeNumberLater]])",
+//     legendPeriodValueText:  "Avg. [[value.average]]%",
+//     precision: 1,
+//     descriptionField: "date",
+//     bullet: "square",
+//     bulletBorderColor: "#ff5755",
+//     bulletBorderAlpha: 1,
+//     bulletBorderThickness: 1,
+//     bulletColor: "#ff5755",
+//     labelPosition: "left",
+//     balloonText: "[[value]]% (Type[[typeNumberLater]])",
+//     showBalloon: true,
+//     animationPlayed: true,
+//   }],
+
+//   chartCursor: {
+//     zoomable: false,
+//     categoryBalloonDateFormat: "DD",
+//     cursorAlpha: 0,
+//     valueBalloonsEnabled: false
+//   },
+//   legend: {
+//     bulletType: "round",
+//     equalWidths: false,
+//     valueWidth: 120,
+//     useGraphSettings: true,
+//     color: "#FFFFFF"
+//   }
+// });
+
+    </script>
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>

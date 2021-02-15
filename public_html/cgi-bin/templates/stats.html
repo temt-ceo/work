@@ -52,6 +52,11 @@ table.greyGridTable tfoot {
 table.greyGridTable tfoot td {
   font-size: 12px;
 }
+@media screen and (max-width: 480px) {
+    #register-form {
+        padding: 50px 25px 50px 15px;
+    }
+}
     </style>
 </head>
 <body>
@@ -60,17 +65,205 @@ table.greyGridTable tfoot td {
         <div class="container">
             <div class="signup-content">
                 <div class="signup-img">
-                    <img src="static_files/images/market-image2.png" alt="">
                     <img src="static_files/images/market-image1.png" alt="">
+                    <img src="static_files/images/market-image2.png" alt="">
                 </div>
                 <div class="signup-form">
                     <form method="POST" class="register-form" id="register-form">
-                        <h2>CSV用のデータを作成します (全て前日終値からの変化量を百分率で入力)</h2>
+                        <h2>明日以降の動きを予測します</h2>
 {% if html_json.message!='' %}
                         <div class="form-group">
-                            <label"><span style="color:red;">{{ html_json.message }}</span></label>
+                            <label><span style="color:red;">{{ html_json.message }}</span></label>
                         </div>
 {% endif %}
+                        {% if html_json.form_submitted == True %}
+                        <div class="form-group" style="font-size: 11px; font-weight: normal">
+                            <label style="font-size: 13px"><span>明日の株価動き:</span></label>
+                            <div style="margin-left: 20px;">
+                                <div{% if html_json.past_data_closed_at == 'LargePlus' %} style="background-color: aquamarine;"{% endif %}>
+                                    <div><nobr>
+                                        <span>今日の終値を<b style="font-weight:bold;color:blue;">+5.0%</b>、明日の開始１時間前を<b style="font-weight:bold;color:darkblue;">+0.6%</b><wbr>と仮定し予測した結果: </span><wbr>
+                                        <span style="color:Aqua;padding-left:10px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[0] }}
+                                        <span style="color:Orange;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[1] }}
+                                        <span style="color:Gainsboro;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[2] }}
+                                        <span style="color:DarkGray;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[3] }}
+                                        <span style="color:GreenYellow;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[4] }}
+                                        <span style="color:Purple;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[5] }}
+                                        </nobr>
+                                    </div>
+                                    <div><nobr>
+                                        <span>今日の終値を<b style="font-weight:bold;color:blue;">+5.0%</b>、明日の開始１時間前を<b style="color:darkred;">-0.6%</b><wbr>と仮定し予測した結果: </span><wbr>
+                                        <span style="color:Aqua;padding-left:10px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[6] }}
+                                        <span style="color:Orange;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[7] }}
+                                        <span style="color:Gainsboro;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[8] }}
+                                        <span style="color:DarkGray;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[9] }}
+                                        <span style="color:GreenYellow;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[10] }}
+                                        <span style="color:Purple;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[11] }}
+                                        </nobr>
+                                    </div> 
+                                </div>
+                                <div{% if html_json.past_data_closed_at == 'SmallPlus' %} style="background-color: aquamarine;"{% endif %}>
+                                    <div><nobr>
+                                        <span>今日の終値を<b style="font-weight:bold;color:darkblue;">+0.5%</b>、明日の開始１時間前を<b style="font-weight:bold;color:darkblue;">+0.6%</b><wbr>と仮定し予測した結果: </span><wbr>
+                                        <span style="color:Aqua;padding-left:10px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[12] }}
+                                        <span style="color:Orange;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[13] }}
+                                        <span style="color:Gainsboro;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[14] }}
+                                        <span style="color:DarkGray;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[15] }}
+                                        <span style="color:GreenYellow;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[16] }}
+                                        <span style="color:Purple;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[17] }}
+                                        </nobr>
+                                    </div>
+                                    <div><nobr>
+                                        <span>今日の終値を<b style="font-weight:bold;color:darkblue;">+0.5%</b>、明日の開始１時間前を<b style="color:darkred;">-0.6%</b><wbr>と仮定し予測した結果: </span><wbr>
+                                        <span style="color:Aqua;padding-left:10px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[18] }}
+                                        <span style="color:Orange;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[19] }}
+                                        <span style="color:Gainsboro;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[20] }}
+                                        <span style="color:DarkGray;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[21] }}
+                                        <span style="color:GreenYellow;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[22] }}
+                                        <span style="color:Purple;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[23] }}
+                                        </nobr>
+                                    </div>    
+                                </div>
+                                <div{% if html_json.past_data_closed_at == 'SmallMinus' %} style="background-color: aquamarine;"{% endif %}>
+                                    <div><nobr>
+                                        <span>今日の終値を<b style="font-weight:bold;color:darkred;">-0.5%</b>、明日の開始１時間前を<b style="font-weight:bold;color:darkblue;">+0.6%</b><wbr>と仮定し予測した結果: </span><wbr>
+                                        <span style="color:Aqua;padding-left:10px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[24] }}
+                                        <span style="color:Orange;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[25] }}
+                                        <span style="color:Gainsboro;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[26] }}
+                                        <span style="color:DarkGray;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[27] }}
+                                        <span style="color:GreenYellow;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[28] }}
+                                        <span style="color:Purple;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[29] }}
+                                        </nobr>
+                                    </div>
+                                    <div><nobr>
+                                        <span>今日の終値を<b style="font-weight:bold;color:darkred;">-0.5%</b>、明日の開始１時間前を<b style="color:darkred;">-0.6%</b><wbr>と仮定し予測した結果: </span><wbr>
+                                        <span style="color:Aqua;padding-left:10px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[30] }}
+                                        <span style="color:Orange;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[31] }}
+                                        <span style="color:Gainsboro;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[32] }}
+                                        <span style="color:DarkGray;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[33] }}
+                                        <span style="color:GreenYellow;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[34] }}
+                                        <span style="color:Purple;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[35] }}
+                                        </nobr>
+                                    </div>    
+                                </div>
+                                <div{% if html_json.past_data_closed_at == 'LargeMinus' %} style="background-color: aquamarine;"{% endif %}>
+                                    <div><nobr>
+                                        <span>今日の終値を<b style="font-weight:bold;color:red;">-5.0%</b>、明日の開始１時間前を<b style="font-weight:bold;color:darkblue;">+0.6%</b><wbr>と仮定し予測した結果: </span><wbr>
+                                        <span style="color:Aqua;padding-left:10px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[36] }}
+                                        <span style="color:Orange;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[37] }}
+                                        <span style="color:Gainsboro;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[38] }}
+                                        <span style="color:DarkGray;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[39] }}
+                                        <span style="color:GreenYellow;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[40] }}
+                                        <span style="color:Purple;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[41] }}
+                                        </nobr>
+                                    </div>
+                                    <div><nobr>
+                                        <span>今日の終値を<b style="font-weight:bold;color:red;">5.0%</b>、明日の開始１時間前を<b style="color:darkred;">-0.6%</b><wbr>と仮定し予測した結果: </span><wbr>
+                                        <span style="color:Aqua;padding-left:10px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[42] }}
+                                        <span style="color:Orange;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[43] }}
+                                        <span style="color:Gainsboro;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[44] }}
+                                        <span style="color:DarkGray;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[45] }}
+                                        <span style="color:GreenYellow;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[46] }}
+                                        <span style="color:Purple;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[47] }}
+                                        </nobr>
+                                    </div>    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" style="font-size: 11px; font-weight: normal">
+                            <label style="font-size: 13px"><span>明日の高値の位置: </span></label>
+                            <div style="margin-left: 20px;">
+                                <div{% if html_json.past_data_closed_at == 'LargePlus' %} style="background-color: aquamarine;"{% endif %}>
+                                    <div><nobr>
+                                        <span>今日の終値を<b style="font-weight:bold;color:blue;">+5.0%</b>、明日の開始１時間前を<b style="font-weight:bold;color:darkblue;">+0.6%</b><wbr>と仮定し予測した結果: </span><wbr>
+                                        <span style="color:Aqua;padding-left:10px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[0]-1] }}
+                                        <span style="color:Orange;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[1]-1] }}
+                                        <span style="color:Gainsboro;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[2]-1] }}
+                                        <span style="color:DarkGray;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[3]-1] }}
+                                        <span style="color:GreenYellow;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[4]-1] }}
+                                        <span style="color:Purple;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[5]-1] }}
+                                        </nobr>
+                                    </div>
+                                    <div><nobr>
+                                        <span>今日の終値を<b style="font-weight:bold;color:blue;">+5.0%</b>、明日の開始１時間前を<b style="color:darkred;">-0.6%</b><wbr>と仮定し予測した結果: </span><wbr>
+                                        <span style="color:Aqua;padding-left:10px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[6]-1] }}
+                                        <span style="color:Orange;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[7]-1] }}
+                                        <span style="color:Gainsboro;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[8]-1] }}
+                                        <span style="color:DarkGray;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[9]-1] }}
+                                        <span style="color:GreenYellow;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[10]-1] }}
+                                        <span style="color:Purple;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[11]-1] }}
+                                        </nobr>
+                                    </div>    
+                                </div>
+                                <div{% if html_json.past_data_closed_at == 'SmallPlus' %} style="background-color: aquamarine;"{% endif %}>
+                                    <div><nobr>
+                                        <span>今日の終値を<b style="font-weight:bold;color:darkblue;">+0.5%</b>、明日の開始１時間前を<b style="font-weight:bold;color:darkblue;">+0.6%</b><wbr>と仮定し予測した結果: </span><wbr>
+                                        <span style="color:Aqua;padding-left:10px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[12]-1] }}
+                                        <span style="color:Orange;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[13]-1] }}
+                                        <span style="color:Gainsboro;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[14]-1] }}
+                                        <span style="color:DarkGray;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[15]-1] }}
+                                        <span style="color:GreenYellow;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[16]-1] }}
+                                        <span style="color:Purple;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[17]-1] }}
+                                        </nobr>
+                                    </div>
+                                    <div><nobr>
+                                        <span>今日の終値を<b style="font-weight:bold;color:darkblue;">+0.5%</b>、明日の開始１時間前を<b style="color:darkred;">-0.6%</b><wbr>と仮定し予測した結果: </span><wbr>
+                                        <span style="color:Aqua;padding-left:10px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[18]-1] }}
+                                        <span style="color:Orange;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[19]-1] }}
+                                        <span style="color:Gainsboro;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[20]-1] }}
+                                        <span style="color:DarkGray;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[21]-1] }}
+                                        <span style="color:GreenYellow;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[22]-1] }}
+                                        <span style="color:Purple;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[23]-1] }}
+                                        </nobr>
+                                    </div>    
+                                </div>
+                                <div{% if html_json.past_data_closed_at == 'SmallMinus' %} style="background-color: aquamarine;"{% endif %}>
+                                    <div><nobr>
+                                        <span>今日の終値を<b style="font-weight:bold;color:darkred;">-0.5%</b>、明日の開始１時間前を<b style="font-weight:bold;color:darkblue;">+0.6%</b><wbr>と仮定し予測した結果: </span><wbr>
+                                        <span style="color:Aqua;padding-left:10px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[24]-1] }}
+                                        <span style="color:Orange;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[25]-1] }}
+                                        <span style="color:Gainsboro;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[26]-1] }}
+                                        <span style="color:DarkGray;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[27]-1] }}
+                                        <span style="color:GreenYellow;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[28]-1] }}
+                                        <span style="color:Purple;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[29]-1] }}
+                                        </nobr>
+                                    </div>
+                                    <div><nobr>
+                                        <span>今日の終値を<b style="font-weight:bold;color:darkred;">-0.5%</b>、明日の開始１時間前を<b style="color:darkred;">-0.6%</b><wbr>と仮定し予測した結果: </span><wbr>
+                                        <span style="color:Aqua;padding-left:10px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[30]-1] }}
+                                        <span style="color:Orange;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[31]-1] }}
+                                        <span style="color:Gainsboro;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[32]-1] }}
+                                        <span style="color:DarkGray;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[33]-1] }}
+                                        <span style="color:GreenYellow;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[34]-1] }}
+                                        <span style="color:Purple;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[35]-1] }}
+                                        </nobr>
+                                    </div>    
+                                </div>
+                                <div{% if html_json.past_data_closed_at == 'LargeMinus' %} style="background-color: aquamarine;"{% endif %}>
+                                    <div><nobr>
+                                        <span>今日の終値を<b style="font-weight:bold;color:red;">-5.0%</b>、明日の開始１時間前を<b style="font-weight:bold;color:darkblue;">+0.6%</b><wbr>と仮定し予測した結果: </span><wbr>
+                                        <span style="color:Aqua;padding-left:10px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[36]-1] }}
+                                        <span style="color:Orange;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[37]-1] }}
+                                        <span style="color:Gainsboro;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[38]-1] }}
+                                        <span style="color:DarkGray;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[39]-1] }}
+                                        <span style="color:GreenYellow;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[40]-1] }}
+                                        <span style="color:Purple;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[41]-1] }}
+                                        </nobr>
+                                    </div>
+                                    <div><nobr>
+                                        <span>今日の終値を<b style="font-weight:bold;color:red;">5.0%</b>、明日の開始１時間前を<b style="color:darkred;">-0.6%</b><wbr>と仮定し予測した結果: </span><wbr>
+                                        <span style="color:Aqua;padding-left:10px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[42]-1] }}
+                                        <span style="color:Orange;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[43]-1] }}
+                                        <span style="color:Gainsboro;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[44]-1] }}
+                                        <span style="color:DarkGray;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[45]-1] }}
+                                        <span style="color:GreenYellow;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[46]-1] }}
+                                        <span style="color:Purple;padding-left:3px;font-size: 12px;">■</span>{{ ['9:30','10:00','13:30','16:00'][html_json.predicted_today_high_pos[47]-1] }}
+                                        </nobr>
+                                    </div>    
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
                         <div class="form-group">
                             <label for="ticker">Ticker :</label>
                             <div class="form-select">
@@ -82,103 +275,86 @@ table.greyGridTable tfoot td {
                                 <span class="select-icon"><i class="zmdi zmdi-chevron-down"></i></span>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="_10_00">今日の10:00時点の前日終値比<span style="color:red;vertical-align:super;">*</span> :</label>
+                            <input type="text" value="{{ html_json._10_00 }}" name="_10_00" id="_10_00" style="width:40%;display:inline-block;" required/>
+                            <span style="font-size: 10px; font-weight: normal;">(取引活性度を求める為に必要になります。)</span><br>
+                            <input type="submit" value="Submit Form" class="submit" name="submit" id="submit" style="margin-top: 20px;" />
+                            <input type="hidden" value="{{ html_json.today_type }}" name="today_type"/>
+                        </div>
+                        <div class="form-group" style="margin-top: 15px;">
+                            {% if html_json.today_type == '' %}
+                            <label style="float:right;">グラフ表示</label>
+                            {% else %}
+                            <label style="float:right;"><a href="/show_graph?ticker=zm&type={{ html_json.today_type }}">グラフ表示</a></label>
+                            {% endif %}
+                            <label style="margin-top: 5px;"><a href="/">TOPへ戻る</a></label>
+                        </div>
                         <div class="form-group" style="margin-top: 20px;">
                             <label style="font-size: 13px"><span>過去の予測結果：</span></label>
                             <table class="greyGridTable">
                                 <thead>
                                     <tr>
-                                    <th>head1</th>
-                                    <th>head2</th>
-                                    <th>head3</th>
-                                    <th>head4</th>
-                                    <th>head5</th>
+                                    <th></th>
+                                    <th>予測結果</th>
+                                    <th>実際の値</th>
                                     </tr>
                                 </thead>
-                                <tfoot>
-                                    <tr>
-                                    <td>foot1</td>
-                                    <td>foot2</td>
-                                    <td>foot3</td>
-                                    <td>foot4</td>
-                                    <td>foot5</td>
-                                </tr>
-                                </tfoot>
                                 <tbody>
                                     <tr>
                                     <td>1日前</td>
                                     <td>{{ html_json.predicted_type[-1]}}</td>
                                     <td>{{ html_json.real_type[-1]}}</td>
-                                    <td>cell4_1</td>
-                                    <td>cell5_1</td>
                                     </tr>
                                     <tr>
                                     <td>2日前</td>
                                     <td>{{ html_json.predicted_type[-2]}}</td>
                                     <td>{{ html_json.real_type[-2]}}</td>
-                                    <td>cell4_2</td>
-                                    <td>cell5_2</td>
                                     </tr>
                                     <tr>
                                     <td>3日前</td>
                                     <td>{{ html_json.predicted_type[-3]}}</td>
                                     <td>{{ html_json.real_type[-3]}}</td>
-                                    <td>cell4_3</td>
-                                    <td>cell5_3</td>
                                     </tr>
                                     <tr>
                                     <td>4日前</td>
                                     <td>{{ html_json.predicted_type[-4]}}</td>
                                     <td>{{ html_json.real_type[-4]}}</td>
-                                    <td>cell4_4</td>
-                                    <td>cell5_4</td>
                                     </tr>
                                     <tr>
                                     <td>5日前</td>
                                     <td>{{ html_json.predicted_type[-5]}}</td>
                                     <td>{{ html_json.real_type[-5]}}</td>
-                                    <td>cell4_5</td>
-                                    <td>cell5_5</td>
                                     </tr>
                                     <tr>
                                     <td>6日前</td>
                                     <td>{{ html_json.predicted_type[-6]}}</td>
                                     <td>{{ html_json.real_type[-6]}}</td>
-                                    <td>cell4_6</td>
-                                    <td>cell5_6</td>
                                     </tr>
                                     <tr>
                                     <td>7日前</td>
                                     <td>{{ html_json.predicted_type[-7]}}</td>
                                     <td>{{ html_json.real_type[-7]}}</td>
-                                    <td>cell4_7</td>
-                                    <td>cell5_7</td>
                                     </tr>
                                     <tr>
                                     <td>8日前</td>
                                     <td>{{ html_json.predicted_type[-8]}}</td>
                                     <td>{{ html_json.real_type[-8]}}</td>
-                                    <td>cell4_8</td>
-                                    <td>cell5_8</td>
                                     </tr>
                                     <tr>
                                     <td>9日前</td>
                                     <td>{{ html_json.predicted_type[-9]}}</td>
                                     <td>{{ html_json.real_type[-9]}}</td>
-                                    <td>cell4_9</td>
-                                    <td>cell5_9</td>
                                     </tr>
                                     <tr>
                                     <td>10日前</td>
                                     <td>{{ html_json.predicted_type[-10]}}</td>
                                     <td>{{ html_json.real_type[-10]}}</td>
-                                    <td>cell4_10</td>
-                                    <td>cell5_10</td>
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>
-                        <div class="form-group" style="margin-top: 20px;">
-                            <label"><a href="/">戻る</a></label>
+                            <div style="font-size: 7px;">(パターン4はパターン3とパターン5の中間の為、パターン3とパターン4、パターン4とパターン5は誤差が出やすくなります。)
+                            </div>
                         </div>
                     </form>
                 </div>
