@@ -1,6 +1,9 @@
 # work
 This is the repository my AI work sits inside.
 
+## AI開発ソースコード
+https://www.kaggle.com/takashitahara/stock-expected-move-analysis
+
 ## 環境構築（Mac）
 ```
 # brew install
