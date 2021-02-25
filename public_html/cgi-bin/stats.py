@@ -37,6 +37,8 @@ def show_stats(form_dict=None, html_json=None):
         html_json['_10_00'] = form_dict['_10_00']
         temp[0]['date'] = tomorrow.isoformat()
         # 予測に使わない項目は空とする
+        temp[0]['Y8:38'] = temp[0]['8:38']
+        temp[0]['Y9:26'] = temp[0]['9:26']
         temp[0]['Y開'] = temp[0]['9:30']
         temp[0]['Y終'] = '' # 必須だが後で入力する
         temp[0]['Y活'] = '{:.1f}'.format(float(form_dict['_10_00']) * 2 - float(temp[0]['9:30']))
@@ -67,11 +69,11 @@ def show_stats(form_dict=None, html_json=None):
         d5 = float(real_datas[-4]['終値'])
         # CSVにデータを登録する
         with open('saved_data/temp_future.csv', 'w', newline='', encoding="utf-8") as csvfile:
-            csv_columns = ["date", "Y開", "Y終", "Y活", "Yx", "Yn", "B5", "Y5", "Px", "Pn", "dis", "B開", "B終", "8:38", "9:26", "flag", "9:30", "活度", "max", "min", "down", "終値", "5日差", "type"]
+            csv_columns = ["date", "Y8:38", "Y9:26", "Y開", "Y終", "Y活", "Yx", "Yn", "B5", "Y5", "Px", "Pn", "dis", "B開", "B終", "8:38", "9:26", "flag", "9:30", "活度", "max", "min", "down", "終値", "5日差", "type"]
             writer = csv.DictWriter(csvfile, quoting=csv.QUOTE_ALL, fieldnames=csv_columns)
             writer.writeheader()
-            for at_close in [5.0, 0.5, -0.5, -5.0]:
-                for _8_38 in [0.6, -0.6]:
+            for at_close in [2.5, 0.5, -0.5, -2.5]:
+                for _8_38 in [0.7, 0.3, -0.3, -0.7]:
 
                     temp[0]['Y終'] = at_close
                     temp[0]['Y5'] = '{:.1f}'.format(at_close + d2 + d3 + d4 + d5)
@@ -123,11 +125,11 @@ def show_stats(form_dict=None, html_json=None):
                 try:
                     if obj['type'] != '' and int(obj['type']) == int(html_json['today_type']):
                         _16_00 = float(obj['_16_00'])
-                        if _16_00 >= 2.2:
+                        if _16_00 >= 1.5:
                             html_json['past_data_closed_at'] = 'LargePlus'
                         elif _16_00 >= 0:
                             html_json['past_data_closed_at'] = 'SmallPlus'
-                        elif _16_00 > -2.2:
+                        elif _16_00 > -1.5:
                             html_json['past_data_closed_at'] = 'SmallMinus'
                         else:
                             html_json['past_data_closed_at'] = 'LargeMinus'

@@ -187,11 +187,15 @@ def show_graph():
                 for row in reader:
                     if i == 0:
                         if row['date'] == tomorrow.isoformat(): # 明日以降の動きのデータ(内の昨日のデータ)を参照しているため
+                            html_json['today_8_38'] = row['Y8:38']
+                            html_json['today_9_26'] = row['Y9:26']
                             html_json['today_9_30'] = row['Y開']
                             _10_00 = (float(row['Y活']) + float(row['Y開'])) / 2
                             html_json['today_10_00'] = '{:.1f}'.format(_10_00)
                         else:
                             # データ未登録のため棒グラフは無し
+                            html_json['today_8_38'] = 0
+                            html_json['today_9_26'] = 0
                             html_json['today_9_30'] = 0
                             html_json['today_10_00'] = 0
                     i = i + 1
@@ -201,6 +205,8 @@ def show_graph():
             with open('saved_data/stats_{}.csv'.format(html_json['ticker']), newline='', encoding="utf-8") as csvfile:
                 reader = csv.DictReader(csvfile, skipinitialspace=True)
                 for row in reader:
+                    row['_8_38'] = row['8:38']
+                    row['_9_26'] = row['9:26']
                     row['_9_30'] = row['9:30']
                     row['_9_45'] = row['9:45']
                     row['_10_00'] = row['10:00']
@@ -212,18 +218,24 @@ def show_graph():
                     row['_13_30'] = row['13:30']
                     row['_16_00'] = row['16:00']
                     stats.append(row)
-            previous = None
+            previous = []
             for obj in reversed(stats):
                 try:
                     if obj['type'] != '' and int(obj['type']) == predicted_type: 
-                        previous = obj
+                        previous.append(obj)
                 except ValueError:
                     # CSV値不備
                     return flask.redirect("/")
 
-            if previous is None:
+            if len(previous) == 0:
                 html_json['message'] = '現在パターン別データの不足により表示できません。'
-            return render_template('graph.html', stats=stats, previous=previous, html_json=html_json)
+                recent = None
+            else:
+                recent = previous[0]
+            grp_num = len(previous)
+            if grp_num > 9:
+                grp_num = 9
+            return render_template('graph.html', stats=stats, previous=previous, html_json=html_json, recent=recent, grp_num=grp_num)
         except Exception as e:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             traceback.print_tb(exc_traceback, limit=1, file=sys.stdout)
@@ -278,11 +290,15 @@ def show_graph():
                 for row in reader:
                     if i == 0:
                         if row['date'] == tomorrow.isoformat(): # 明日以降の動きのデータ(内の昨日のデータ)を参照しているため
+                            html_json['today_8_38'] = row['Y8:38']
+                            html_json['today_9_26'] = row['Y9:26']
                             html_json['today_9_30'] = row['Y開']
                             _10_00 = (float(row['Y活']) + float(row['Y開'])) / 2
                             html_json['today_10_00'] = '{:.1f}'.format(_10_00)
                         else:
                             # データ未登録のため棒グラフは無し
+                            html_json['today_8_38'] = 0
+                            html_json['today_9_26'] = 0
                             html_json['today_9_30'] = 0
                             html_json['today_10_00'] = 0
                     i = i + 1
@@ -292,6 +308,8 @@ def show_graph():
             with open('saved_data/stats_{}.csv'.format(html_json['ticker']), newline='', encoding="utf-8") as csvfile:
                 reader = csv.DictReader(csvfile, skipinitialspace=True)
                 for row in reader:
+                    row['_8_38'] = row['8:38']
+                    row['_9_26'] = row['9:26']
                     row['_9_30'] = row['9:30']
                     row['_9_45'] = row['9:45']
                     row['_10_00'] = row['10:00']
@@ -303,18 +321,24 @@ def show_graph():
                     row['_13_30'] = row['13:30']
                     row['_16_00'] = row['16:00']
                     stats.append(row)
-            previous = None
+            previous = []
             for obj in reversed(stats):
                 try:
                     if obj['type'] != '' and int(obj['type']) == predicted_type: 
-                        previous = obj
+                        previous.append(obj)
                 except ValueError:
                     # CSV値不備
                     return flask.redirect("/")
 
-            if html_json['message'] == '' and previous is None:
+            if html_json['message'] == '' and len(previous) == 0:
                 html_json['message'] = '現在パターン別データの不足により表示できません。'
-            return render_template('graph.html', stats=stats, previous=previous, html_json=html_json)
+                recent = None
+            else:
+                recent = previous[0]
+            grp_num = len(previous)
+            if grp_num > 9:
+                grp_num = 9
+            return render_template('graph.html', stats=stats, previous=previous, html_json=html_json, recent=recent, grp_num=grp_num)
 
         except Exception as e:
             exc_type, exc_value, exc_traceback = sys.exc_info()

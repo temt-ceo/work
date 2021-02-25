@@ -38,14 +38,14 @@
           <div class="form-group"><nobr>
             <span id="nobr-ask">本日の株価動きパターンを修正しますか？</span><wbr>
             <label for="type" style="display: inline-block;padding-right: 10px;">現在のパターン<span style="color:red;vertical-align:super;">*</span> :</label>
-            <input type="text" value="{{ previous.type }}" name="type" id="type" style="width:60px;display: inline-block;margin: 0 8px 0 2px;" required/>
+            <input type="text" value="{{ recent.type }}" name="type" id="type" style="width:60px;display: inline-block;margin: 0 8px 0 2px;" required/>
             <input type="hidden" value="{{ html_json.ticker }}" name="ticker"/>
-            <input type="hidden" value="{{ previous.type }}" name="old_type"/>
+            <input type="hidden" value="{{ recent.type }}" name="old_type"/>
             <input type="submit" value="Submit Form" class="submit" name="submit" id="submit" /></nobr>
         </div>
       </form>
       <div class="form-group" style="margin-top: 15px;">
-        <label><a href="/stats?ticker=zm&type={{ previous.type }}">明日以降の動き予測</a></label>
+        <label><a href="/stats?ticker=zm&type={{ recent.type }}">明日以降の動き予測</a></label>
         <label style="margin-top: 5px;"><a href="/">TOPへ戻る</a></label>
       </div>
 </div>
@@ -65,74 +65,136 @@
 
 var chartData = [
     {
-        "date": {{ previous.date }},
+        "date": {{ recent.date }},
+        "todays_data": {{ html_json.today_8_38 }},
+        "typeNumber": {{ recent.type }},
+        "timing": "8:30",
+        {% if grp_num > 0 %}
+          {% for i in range(0, grp_num) %}
+            "real_value_{{ i }}": {{ previous[i]._8_38 }},
+          {% endfor %}
+        {% endif %}
+    },
+    {
+        "date": {{ recent.date }},
+        "todays_data": {{ html_json.today_9_26 }},
+        "typeNumber": {{ recent.type }},
+        "timing": "9:25",
+        {% if grp_num > 0 %}
+          {% for i in range(0, grp_num) %}
+            "real_value_{{ i }}": {{ previous[i]._9_26 }},
+          {% endfor %}
+        {% endif %}
+    },
+    {
+        "date": {{ recent.date }},
         "todays_data": {{ html_json.today_9_30 }},
-        "typeNumber": {{ previous.type }},
+        "typeNumber": {{ recent.type }},
         "timing": "9:30",
-        "real_value": {{ previous._9_30 }}
+        {% if grp_num > 0 %}
+          {% for i in range(0, grp_num) %}
+            "real_value_{{ i }}": {{ previous[i]._9_30 }},
+          {% endfor %}
+        {% endif %}
     },
     {
-        "date": {{ previous.date }},
+        "date": {{ recent.date }},
         "todays_data": 0,
-        "typeNumber": {{ previous.type }},
+        "typeNumber": {{ recent.type }},
         "timing": "9:45",
-        "real_value": {{ previous._9_45 }}
+        {% if grp_num > 0 %}
+          {% for i in range(0, grp_num) %}
+            "real_value_{{ i }}": {{ previous[i]._9_45 }},
+          {% endfor %}
+        {% endif %}
     },
     {
-        "date": {{ previous.date }},
+        "date": {{ recent.date }},
         "todays_data": {{ html_json.today_10_00 }},
-        "typeNumber": {{ previous.type }},
+        "typeNumber": {{ recent.type }},
         "timing": "10:00",
-        "real_value": {{ previous._10_00 }}
+        {% if grp_num > 0 %}
+          {% for i in range(0, grp_num) %}
+            "real_value_{{ i }}": {{ previous[i]._10_00 }},
+          {% endfor %}
+        {% endif %}
     },
     {
-        "date": {{ previous.date }},
+        "date": {{ recent.date }},
         "todays_data": 0,
-        "typeNumber": {{ previous.type }},
+        "typeNumber": {{ recent.type }},
         "timing": "10:45",
-        "real_value": {{ previous._10_45 }}
+        {% if grp_num > 0 %}
+          {% for i in range(0, grp_num) %}
+            "real_value_{{ i }}": {{ previous[i]._10_45 }},
+          {% endfor %}
+        {% endif %}
     },
     {
-        "date": {{ previous.date }},
+        "date": {{ recent.date }},
         "todays_data": 0,
-        "typeNumber": {{ previous.type }},
+        "typeNumber": {{ recent.type }},
         "timing": "11:00",
-        "real_value": {{ previous._11_00 }}
+        {% if grp_num > 0 %}
+          {% for i in range(0, grp_num) %}
+            "real_value_{{ i }}": {{ previous[i]._11_00 }},
+          {% endfor %}
+        {% endif %}
     },
     {
-        "date": {{ previous.date }},
+        "date": {{ recent.date }},
         "todays_data": 0,
-        "typeNumber": {{ previous.type }},
+        "typeNumber": {{ recent.type }},
         "timing": "11:15",
-        "real_value": {{ previous._11_15 }}
+        {% if grp_num > 0 %}
+          {% for i in range(0, grp_num) %}
+            "real_value_{{ i }}": {{ previous[i]._11_15 }},
+          {% endfor %}
+        {% endif %}
     },
     {
-        "date": {{ previous.date }},
+        "date": {{ recent.date }},
         "todays_data": 0,
-        "typeNumber": {{ previous.type }},
+        "typeNumber": {{ recent.type }},
         "timing": "11:30",
-        "real_value": {{ previous._11_30 }}
+        {% if grp_num > 0 %}
+          {% for i in range(0, grp_num) %}
+            "real_value_{{ i }}": {{ previous[i]._11_30 }},
+          {% endfor %}
+        {% endif %}
     },
     {
-        "date": {{ previous.date }},
+        "date": {{ recent.date }},
         "todays_data": 0,
-        "typeNumber": {{ previous.type }},
+        "typeNumber": {{ recent.type }},
         "timing": "12:30",
-        "real_value": {{ previous._12_30 }}
+        {% if grp_num > 0 %}
+          {% for i in range(0, grp_num) %}
+            "real_value_{{ i }}": {{ previous[i]._12_30 }},
+          {% endfor %}
+        {% endif %}
     },
     {
-        "date": {{ previous.date }},
+        "date": {{ recent.date }},
         "todays_data": 0,
-        "typeNumber": {{ previous.type }},
+        "typeNumber": {{ recent.type }},
         "timing": "13:30",
-        "real_value": {{ previous._13_30 }}
+        {% if grp_num > 0 %}
+          {% for i in range(0, grp_num) %}
+            "real_value_{{ i }}": {{ previous[i]._13_30 }},
+          {% endfor %}
+        {% endif %}
     },
     {
-        "date": {{ previous.date }},
+        "date": {{ recent.date }},
         "todays_data": 0,
-        "typeNumber": {{ previous.type }},
+        "typeNumber": {{ recent.type }},
         "timing": "16:00",
-        "real_value": {{ previous._16_00 }}
+        {% if grp_num > 0 %}
+          {% for i in range(0, grp_num) %}
+            "real_value_{{ i }}": {{ previous[i]._16_00 }},
+          {% endfor %}
+        {% endif %}
     }
 ];
 var chart = AmCharts.makeChart("chartdiv", {
@@ -155,7 +217,7 @@ var chart = AmCharts.makeChart("chartdiv", {
     maximum: 5.0,
     minimum: -5.0,
   },{
-    id: "a3",
+    id: "a2",
     title: "",
     position: "right",
     gridAlpha: 0,
@@ -170,7 +232,7 @@ var chart = AmCharts.makeChart("chartdiv", {
     title:  "本日のデータ",
     type:  "column",
     fillAlphas:  0.9,
-    valueAxis:  "a3",
+    valueAxis:  "a1",
     balloonText:  "[[value]] %",
     legendValueText:  "[[description]] : [[value]]%",
     descriptionField: "timing",
@@ -179,7 +241,7 @@ var chart = AmCharts.makeChart("chartdiv", {
   },{
     id: "g3",
     title: "前回の動き",
-    valueField: "real_value",
+    valueField: "real_value_0",
     type: "line",
     valueAxis: "a1",
     lineColor: "#ff5755",
@@ -195,7 +257,33 @@ var chart = AmCharts.makeChart("chartdiv", {
     bulletBorderAlpha: 1,
     dashLengthField: "dashLength",
     animationPlayed: true
-  }],
+  },
+  {% if grp_num > 1 %}
+    {% for i in range(1, grp_num) %} 
+      {
+        id: "g{{i+3}}",
+        title: "過去({{i}}つ前)の動き",
+        valueField: "real_value_{{i}}",
+        type: "line",
+        valueAxis: "a1",
+        lineColor: "#{{i}}{{i}}{{i}}{{i}}f{{i}}",
+        labelText: "[[value]]%",
+        labelPosition: "right",
+        balloonText: "[[value]]%",
+        lineThickness: 1,
+        legendValueText: "[[description]] : [[value]]%",
+        descriptionField: "timing",
+        bullet: "round",
+        bulletBorderColor: "#786c56",
+        bulletBorderThickness: 1,
+        bulletBorderAlpha: 1,
+        bulletColor: "#{{i}}{{i}}{{i}}{{i}}f{{i}}",
+        dashLengthField: "dashLength",
+        animationPlayed: true
+      },
+    {% endfor %}
+  {% endif %}
+  ],
 
   chartCursor: {
     zoomable: false,
