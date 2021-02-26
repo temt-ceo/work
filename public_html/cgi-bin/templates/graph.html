@@ -65,138 +65,139 @@
 
 var chartData = [
     {
-        "date": {{ recent.date }},
         "todays_data": {{ html_json.today_8_38 }},
         "typeNumber": {{ recent.type }},
         "timing": "8:30",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
             "real_value_{{ i }}": {{ previous[i]._8_38 }},
+            "date_{{ i }}": "{{ previous[i].date }}",
           {% endfor %}
         {% endif %}
     },
     {
-        "date": {{ recent.date }},
         "todays_data": {{ html_json.today_9_26 }},
         "typeNumber": {{ recent.type }},
         "timing": "9:25",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
             "real_value_{{ i }}": {{ previous[i]._9_26 }},
+            "date_{{ i }}": "{{ previous[i].date }}",
           {% endfor %}
         {% endif %}
     },
     {
-        "date": {{ recent.date }},
         "todays_data": {{ html_json.today_9_30 }},
         "typeNumber": {{ recent.type }},
         "timing": "9:30",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
             "real_value_{{ i }}": {{ previous[i]._9_30 }},
+            "date_{{ i }}": "{{ previous[i].date }}",
           {% endfor %}
         {% endif %}
     },
     {
-        "date": {{ recent.date }},
         "todays_data": 0,
         "typeNumber": {{ recent.type }},
         "timing": "9:45",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
             "real_value_{{ i }}": {{ previous[i]._9_45 }},
+            "date_{{ i }}": "{{ previous[i].date }}",
           {% endfor %}
         {% endif %}
     },
     {
-        "date": {{ recent.date }},
         "todays_data": {{ html_json.today_10_00 }},
         "typeNumber": {{ recent.type }},
         "timing": "10:00",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
             "real_value_{{ i }}": {{ previous[i]._10_00 }},
+            "date_{{ i }}": "{{ previous[i].date }}",
           {% endfor %}
         {% endif %}
     },
     {
-        "date": {{ recent.date }},
         "todays_data": 0,
         "typeNumber": {{ recent.type }},
         "timing": "10:45",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
             "real_value_{{ i }}": {{ previous[i]._10_45 }},
+            "date_{{ i }}": "{{ previous[i].date }}",
           {% endfor %}
         {% endif %}
     },
     {
-        "date": {{ recent.date }},
         "todays_data": 0,
         "typeNumber": {{ recent.type }},
         "timing": "11:00",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
             "real_value_{{ i }}": {{ previous[i]._11_00 }},
+            "date_{{ i }}": "{{ previous[i].date }}",
           {% endfor %}
         {% endif %}
     },
     {
-        "date": {{ recent.date }},
         "todays_data": 0,
         "typeNumber": {{ recent.type }},
         "timing": "11:15",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
             "real_value_{{ i }}": {{ previous[i]._11_15 }},
+            "date_{{ i }}": "{{ previous[i].date }}",
           {% endfor %}
         {% endif %}
     },
     {
-        "date": {{ recent.date }},
         "todays_data": 0,
         "typeNumber": {{ recent.type }},
         "timing": "11:30",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
             "real_value_{{ i }}": {{ previous[i]._11_30 }},
+            "date_{{ i }}": "{{ previous[i].date }}",
           {% endfor %}
         {% endif %}
     },
     {
-        "date": {{ recent.date }},
         "todays_data": 0,
         "typeNumber": {{ recent.type }},
         "timing": "12:30",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
             "real_value_{{ i }}": {{ previous[i]._12_30 }},
+            "date_{{ i }}": "{{ previous[i].date }}",
           {% endfor %}
         {% endif %}
     },
     {
-        "date": {{ recent.date }},
         "todays_data": 0,
         "typeNumber": {{ recent.type }},
         "timing": "13:30",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
             "real_value_{{ i }}": {{ previous[i]._13_30 }},
+            "date_{{ i }}": "{{ previous[i].date }}",
           {% endfor %}
         {% endif %}
     },
     {
-        "date": {{ recent.date }},
         "todays_data": 0,
         "typeNumber": {{ recent.type }},
         "timing": "16:00",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
             "real_value_{{ i }}": {{ previous[i]._16_00 }},
+            "date_{{ i }}": "{{ previous[i].date }}",
           {% endfor %}
         {% endif %}
     }
 ];
+var color_pallett = ['#ff5755', '#5ED35A', '#207479', '#A58B2C', '#E7A6E4', '#4B30B5', '#DCBB7A', '#CBEAAE', '#8EE1CB'];
 var chart = AmCharts.makeChart("chartdiv", {
   type: "serial",
   theme: "dark",
@@ -214,8 +215,8 @@ var chart = AmCharts.makeChart("chartdiv", {
     title: "前日終値比 (%)",
     gridAlpha: 0,
     axisAlpha: 0,
-    maximum: 5.0,
-    minimum: -5.0,
+    maximum: 6.0,
+    minimum: -6.0,
   },{
     id: "a2",
     title: "",
@@ -223,7 +224,7 @@ var chart = AmCharts.makeChart("chartdiv", {
     gridAlpha: 0,
     axisAlpha: 0,
     inside: true,
-    maximum: 5.1,
+    maximum: 5.0,
     minimum: -5.0,
   }],
   graphs: [{
@@ -240,7 +241,7 @@ var chart = AmCharts.makeChart("chartdiv", {
     alphaField:  "alpha",
   },{
     id: "g3",
-    title: "前回の動き",
+    title: "{{ previous[0].date }}の動き",
     valueField: "real_value_0",
     type: "line",
     valueAxis: "a1",
@@ -249,8 +250,8 @@ var chart = AmCharts.makeChart("chartdiv", {
     labelPosition: "right",
     balloonText: "前回:[[value]]%",
     lineThickness: 1,
-    legendValueText: "[[description]] : [[value]]%",
-    descriptionField: "timing",
+    legendValueText: " : [[value]]%",
+    descriptionField: "date_0",
     bullet: "square",
     bulletBorderColor: "#ff5755",
     bulletBorderThickness: 1,
@@ -262,22 +263,22 @@ var chart = AmCharts.makeChart("chartdiv", {
     {% for i in range(1, grp_num) %} 
       {
         id: "g{{i+3}}",
-        title: "過去({{i}}つ前)の動き",
+        title: "{{ previous[i].date }}の動き",
         valueField: "real_value_{{i}}",
         type: "line",
         valueAxis: "a1",
-        lineColor: "#{{i}}{{i}}{{i}}{{i}}f{{i}}",
+        lineColor: color_pallett[{{i}}],
         labelText: "[[value]]%",
         labelPosition: "right",
-        balloonText: "[[value]]%",
+        balloonText: "過去({{i}}つ前):[[value]]%",
         lineThickness: 1,
-        legendValueText: "[[description]] : [[value]]%",
-        descriptionField: "timing",
+        legendValueText: " : [[value]]%",
+        descriptionField: "date_{{i}}",
         bullet: "round",
         bulletBorderColor: "#786c56",
         bulletBorderThickness: 1,
         bulletBorderAlpha: 1,
-        bulletColor: "#{{i}}{{i}}{{i}}{{i}}f{{i}}",
+        bulletColor: color_pallett[{{i}}],
         dashLengthField: "dashLength",
         animationPlayed: true
       },
