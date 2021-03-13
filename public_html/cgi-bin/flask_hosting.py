@@ -217,6 +217,7 @@ def show_graph():
                     row['_12_30'] = row['12:30']
                     row['_13_30'] = row['13:30']
                     row['_16_00'] = row['16:00']
+                    row['date_description'] = row['date'] + 'の動き Fut:' + row['Nasdaq100Fut'] + '%,Tgt:' + row['target'] + '%,明日:' + row['tomorrow'] + ' (' + row['Memo'] + ')'
                     stats.append(row)
             previous = []
             for obj in reversed(stats):
@@ -320,6 +321,7 @@ def show_graph():
                     row['_12_30'] = row['12:30']
                     row['_13_30'] = row['13:30']
                     row['_16_00'] = row['16:00']
+                    row['date_description'] = row['date'] + 'の動き Fut:' + row['Nasdaq100Fut'] + '%,Tgt:' + row['target'] + '%,明日:' + row['tomorrow'] + ' (' + row['Memo'] + ')'
                     stats.append(row)
             previous = []
             for obj in reversed(stats):

@@ -241,7 +241,7 @@ var chart = AmCharts.makeChart("chartdiv", {
     alphaField:  "alpha",
   },{
     id: "g3",
-    title: "{{ previous[0].date }}の動き",
+    title: "{{ previous[0].date_description }}",
     valueField: "real_value_0",
     type: "line",
     valueAxis: "a1",
@@ -263,7 +263,7 @@ var chart = AmCharts.makeChart("chartdiv", {
     {% for i in range(1, grp_num) %} 
       {
         id: "g{{i+3}}",
-        title: "{{ previous[i].date }}の動き",
+        title: "{{ previous[i].date_description }}",
         valueField: "real_value_{{i}}",
         type: "line",
         valueAxis: "a1",
