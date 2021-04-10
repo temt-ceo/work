@@ -44,9 +44,9 @@
           <div class="form-group"><nobr>
             <span id="nobr-ask">本日の株価動きパターンを修正しますか？</span><wbr>
             <label for="type" style="display: inline-block;padding-right: 10px;">現在のパターン<span style="color:red;vertical-align:super;">*</span> :</label>
-            <input type="text" value="{{ recent.type }}" name="type" id="type" style="width:60px;display: inline-block;margin: 0 8px 0 2px;" required/>
+            <input type="text" value="{{ html_json.type }}" name="type" id="type" style="width:60px;display: inline-block;margin: 0 8px 0 2px;" required/>
             <input type="hidden" value="{{ html_json.ticker }}" name="ticker"/>
-            <input type="hidden" value="{{ recent.type }}" name="old_type"/>
+            <input type="hidden" value="{{ html_json.type }}" name="old_type"/>
             <input type="submit" value="Submit Form" class="submit" name="submit" id="submit" /></nobr>
         </div>
       </form>
@@ -72,7 +72,6 @@
 var chartData = [
     {
         "todays_data": {{ html_json._QQQ3 }},
-        "typeNumber": {{ recent.type }},
         "timing": "QQQ3",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
@@ -83,7 +82,6 @@ var chartData = [
     },
     {
         "todays_data": {{ html_json._NQ_F }},
-        "typeNumber": {{ recent.type }},
         "timing": "NQ=F",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
@@ -94,7 +92,6 @@ var chartData = [
     },
     {
         "todays_data": {{ html_json._8_38 }},
-        "typeNumber": {{ recent.type }},
         "timing": "8:30",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
@@ -105,7 +102,6 @@ var chartData = [
     },
     {
         "todays_data": {{ html_json._9_00 }},
-        "typeNumber": {{ recent.type }},
         "timing": "9:00",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
@@ -116,7 +112,6 @@ var chartData = [
     },
     {
         "todays_data": {{ html_json._9_26 }},
-        "typeNumber": {{ recent.type }},
         "timing": "9:25",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
@@ -127,7 +122,6 @@ var chartData = [
     },
     {
         "todays_data": {{ html_json._9_30 }},
-        "typeNumber": {{ recent.type }},
         "timing": "9:30",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
@@ -138,7 +132,6 @@ var chartData = [
     },
     {
         "todays_data": {{ html_json._9_35 }},
-        "typeNumber": {{ recent.type }},
         "timing": "9:35",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
@@ -149,7 +142,6 @@ var chartData = [
     },
     {
         "todays_data": 0,
-        "typeNumber": {{ recent.type }},
         "timing": "9:45",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
@@ -160,7 +152,6 @@ var chartData = [
     },
     {
         "todays_data": 0,
-        "typeNumber": {{ recent.type }},
         "timing": "10:45",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
@@ -171,7 +162,6 @@ var chartData = [
     },
     {
         "todays_data": 0,
-        "typeNumber": {{ recent.type }},
         "timing": "11:30",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
@@ -182,7 +172,6 @@ var chartData = [
     },
     {
         "todays_data": 0,
-        "typeNumber": {{ recent.type }},
         "timing": "13:30",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
@@ -193,7 +182,6 @@ var chartData = [
     },
     {
         "todays_data": 0,
-        "typeNumber": {{ recent.type }},
         "timing": "16:00",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
@@ -238,7 +226,7 @@ var chart = AmCharts.makeChart("chartdiv", {
     alphaField:  "alpha",
   },{
     id: "g3",
-    title: "{{ previous[0].date_description }}",
+    title: "{{ recent.date_description }}",
     valueField: "real_value_0",
     type: "line",
     valueAxis: "a1",

@@ -225,6 +225,7 @@ def show_graph():
                 json_str = data_file.readlines()
                 today_data = json.loads(json_str[0])
                 today_data['ticker'] = html_json['ticker']
+                today_data['type'] = predicted_type
             today_QQQ3 = float(today_data['_QQQ3'])
             today_NQ_F = float(today_data['_NQ_F'])
             today_9_26 = float(today_data['_9_26'])
@@ -236,7 +237,7 @@ def show_graph():
                     is_append = True
                     if obj['type'] == '':
                         is_append = False
-                    if obj['_QQQ3'] == '' or obj['_NQ_F'] == '':
+                    elif obj['QQQ3'] == '' or obj['Nasdaq100Fut'] == '':
                         if int(obj['type']) != predicted_type:
                             is_append = False
                     else:
@@ -285,7 +286,7 @@ def show_graph():
                     return flask.redirect("/")
 
             if len(previous) == 0:
-                html_json['message'] = '現在パターン別データの不足により表示できません。'
+                today_data['message'] = '現在パターン別データの不足により表示できません。'
                 recent = None
             else:
                 recent = previous[0]
@@ -385,6 +386,7 @@ def show_graph():
                 json_str = data_file.readlines()
                 today_data = json.loads(json_str[0])
                 today_data['ticker'] = html_json['ticker']
+                today_data['type'] = predicted_type
             today_QQQ3 = float(today_data['_QQQ3'])
             today_NQ_F = float(today_data['_NQ_F'])
             today_9_26 = float(today_data['_9_26'])
@@ -396,7 +398,7 @@ def show_graph():
                     is_append = True
                     if obj['type'] == '':
                         is_append = False
-                    if obj['_QQQ3'] == '' or obj['_NQ_F'] == '':
+                    elif obj['QQQ3'] == '' or obj['Nasdaq100Fut'] == '':
                         if int(obj['type']) != predicted_type:
                             is_append = False
                     else:
@@ -445,7 +447,7 @@ def show_graph():
                     return flask.redirect("/")
 
             if html_json['message'] == '' and len(previous) == 0:
-                html_json['message'] = '現在パターン別データの不足により表示できません。'
+                today_data['message'] = '現在パターン別データの不足により表示できません。'
                 recent = None
             else:
                 recent = previous[0]
