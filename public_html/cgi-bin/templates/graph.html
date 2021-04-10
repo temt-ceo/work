@@ -13,6 +13,12 @@
     <link rel="stylesheet" href="static_files/css/style_posted.css">
     <link rel="stylesheet" href="static_files/css/style.css">
     <style>
+        body {
+          padding-right: 10px;
+        }
+        #chartdiv {
+          height: 750px !important
+        }
         #nobr-ask {
           font-size: 18px;
           padding-right: 100px;
@@ -65,7 +71,29 @@
 
 var chartData = [
     {
-        "todays_data": {{ html_json.today_8_38 }},
+        "todays_data": {{ html_json._QQQ3 }},
+        "typeNumber": {{ recent.type }},
+        "timing": "QQQ3",
+        {% if grp_num > 0 %}
+          {% for i in range(0, grp_num) %}
+            "real_value_{{ i }}": {{ previous[i]._QQQ3 }},
+            "date_{{ i }}": "{{ previous[i].date }}",
+          {% endfor %}
+        {% endif %}
+    },
+    {
+        "todays_data": {{ html_json._NQ_F }},
+        "typeNumber": {{ recent.type }},
+        "timing": "NQ=F",
+        {% if grp_num > 0 %}
+          {% for i in range(0, grp_num) %}
+            "real_value_{{ i }}": {{ previous[i]._NQ_F }},
+            "date_{{ i }}": "{{ previous[i].date }}",
+          {% endfor %}
+        {% endif %}
+    },
+    {
+        "todays_data": {{ html_json._8_38 }},
         "typeNumber": {{ recent.type }},
         "timing": "8:30",
         {% if grp_num > 0 %}
@@ -76,7 +104,18 @@ var chartData = [
         {% endif %}
     },
     {
-        "todays_data": {{ html_json.today_9_26 }},
+        "todays_data": {{ html_json._9_00 }},
+        "typeNumber": {{ recent.type }},
+        "timing": "9:00",
+        {% if grp_num > 0 %}
+          {% for i in range(0, grp_num) %}
+            "real_value_{{ i }}": {{ previous[i]._9_00 }},
+            "date_{{ i }}": "{{ previous[i].date }}",
+          {% endfor %}
+        {% endif %}
+    },
+    {
+        "todays_data": {{ html_json._9_26 }},
         "typeNumber": {{ recent.type }},
         "timing": "9:25",
         {% if grp_num > 0 %}
@@ -87,12 +126,23 @@ var chartData = [
         {% endif %}
     },
     {
-        "todays_data": {{ html_json.today_9_30 }},
+        "todays_data": {{ html_json._9_30 }},
         "typeNumber": {{ recent.type }},
         "timing": "9:30",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
             "real_value_{{ i }}": {{ previous[i]._9_30 }},
+            "date_{{ i }}": "{{ previous[i].date }}",
+          {% endfor %}
+        {% endif %}
+    },
+    {
+        "todays_data": {{ html_json._9_35 }},
+        "typeNumber": {{ recent.type }},
+        "timing": "9:35",
+        {% if grp_num > 0 %}
+          {% for i in range(0, grp_num) %}
+            "real_value_{{ i }}": {{ previous[i]._9_35 }},
             "date_{{ i }}": "{{ previous[i].date }}",
           {% endfor %}
         {% endif %}
@@ -104,17 +154,6 @@ var chartData = [
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
             "real_value_{{ i }}": {{ previous[i]._9_45 }},
-            "date_{{ i }}": "{{ previous[i].date }}",
-          {% endfor %}
-        {% endif %}
-    },
-    {
-        "todays_data": {{ html_json.today_10_00 }},
-        "typeNumber": {{ recent.type }},
-        "timing": "10:00",
-        {% if grp_num > 0 %}
-          {% for i in range(0, grp_num) %}
-            "real_value_{{ i }}": {{ previous[i]._10_00 }},
             "date_{{ i }}": "{{ previous[i].date }}",
           {% endfor %}
         {% endif %}
@@ -133,43 +172,10 @@ var chartData = [
     {
         "todays_data": 0,
         "typeNumber": {{ recent.type }},
-        "timing": "11:00",
-        {% if grp_num > 0 %}
-          {% for i in range(0, grp_num) %}
-            "real_value_{{ i }}": {{ previous[i]._11_00 }},
-            "date_{{ i }}": "{{ previous[i].date }}",
-          {% endfor %}
-        {% endif %}
-    },
-    {
-        "todays_data": 0,
-        "typeNumber": {{ recent.type }},
-        "timing": "11:15",
-        {% if grp_num > 0 %}
-          {% for i in range(0, grp_num) %}
-            "real_value_{{ i }}": {{ previous[i]._11_15 }},
-            "date_{{ i }}": "{{ previous[i].date }}",
-          {% endfor %}
-        {% endif %}
-    },
-    {
-        "todays_data": 0,
-        "typeNumber": {{ recent.type }},
         "timing": "11:30",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
             "real_value_{{ i }}": {{ previous[i]._11_30 }},
-            "date_{{ i }}": "{{ previous[i].date }}",
-          {% endfor %}
-        {% endif %}
-    },
-    {
-        "todays_data": 0,
-        "typeNumber": {{ recent.type }},
-        "timing": "12:30",
-        {% if grp_num > 0 %}
-          {% for i in range(0, grp_num) %}
-            "real_value_{{ i }}": {{ previous[i]._12_30 }},
             "date_{{ i }}": "{{ previous[i].date }}",
           {% endfor %}
         {% endif %}
@@ -212,20 +218,11 @@ var chart = AmCharts.makeChart("chartdiv", {
 
   valueAxes: [{
     id: "a1",
-    title: "前日終値比 (%)",
+    //title: "前日終値比 (%)",
     gridAlpha: 0,
     axisAlpha: 0,
-    maximum: 6.0,
-    minimum: -6.0,
-  },{
-    id: "a2",
-    title: "",
-    position: "right",
-    gridAlpha: 0,
-    axisAlpha: 0,
-    inside: true,
     maximum: 5.0,
-    minimum: -5.0,
+    minimum: -5.0
   }],
   graphs: [{
     id: "g1",

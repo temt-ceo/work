@@ -30,7 +30,7 @@ def index(html_json=None):
             message = None
             outputs = None
             try:
-                inputs_cols = ["_8_38", "_9_26", "_9_30"]
+                inputs_cols = ["_QQQ3", "_NQ_F", "_8_38", "_9_00", "_9_26", "_9_30", "_9_35"]
                 for key, value in form_dict.items():
                     outputs = value
                     if key in inputs_cols:
@@ -177,52 +177,108 @@ def show_graph():
                 # getパラメータ改変検知
                 return flask.redirect("/")
 
-            # 本日のデータを読み込む
-            with open('saved_data/temp_future.csv', newline='', encoding="utf-8") as csvfile:
-                reader = csv.DictReader(csvfile, skipinitialspace=True)
-                today = date.today()
-                tomorrow = today + timedelta(days=1)
-
-                i = 0
-                for row in reader:
-                    if i == 0:
-                        if row['date'] == tomorrow.isoformat(): # 明日以降の動きのデータ(内の昨日のデータ)を参照しているため
-                            html_json['today_8_38'] = row['Y8:38']
-                            html_json['today_9_26'] = row['Y9:26']
-                            html_json['today_9_30'] = row['Y開']
-                            _10_00 = (float(row['Y活']) + float(row['Y開'])) / 2
-                            html_json['today_10_00'] = '{:.1f}'.format(_10_00)
-                        else:
-                            # データ未登録のため棒グラフは無し
-                            html_json['today_8_38'] = 0
-                            html_json['today_9_26'] = 0
-                            html_json['today_9_30'] = 0
-                            html_json['today_10_00'] = 0
-                    i = i + 1
-
             stats = []
             # 過去の実データを読み込む
             with open('saved_data/stats_{}.csv'.format(html_json['ticker']), newline='', encoding="utf-8") as csvfile:
                 reader = csv.DictReader(csvfile, skipinitialspace=True)
                 for row in reader:
+                    if row['QQQ3'] == '':
+                        row['_QQQ3'] = 0
+                    else:
+                        row['_QQQ3'] = row['QQQ3']
+                    if row['Nasdaq100Fut'] == '':
+                        row['_NQ_F'] = 0
+                    else:
+                        row['_NQ_F'] = row['Nasdaq100Fut']
                     row['_8_38'] = row['8:38']
+                    if row['9:00'] == '':
+                        row['_9_00'] = 0
+                    else:
+                        row['_9_00'] = row['9:00']
                     row['_9_26'] = row['9:26']
                     row['_9_30'] = row['9:30']
+                    if row['9:35'] == '':
+                        row['_9_35'] = 0
+                    else:
+                        row['_9_35'] = row['9:35']
                     row['_9_45'] = row['9:45']
-                    row['_10_00'] = row['10:00']
                     row['_10_45'] = row['10:45']
-                    row['_11_00'] = row['11:00']
-                    row['_11_15'] = row['11:15']
                     row['_11_30'] = row['11:30']
-                    row['_12_30'] = row['12:30']
                     row['_13_30'] = row['13:30']
                     row['_16_00'] = row['16:00']
-                    row['date_description'] = row['date'] + 'の動き Fut:' + row['Nasdaq100Fut'] + '%,Tgt:' + row['target'] + '%,明日:' + row['tomorrow'] + ' (' + row['Memo'] + ')'
+                    pypl_updown = ''
+                    if row['9:00'] != '':
+                        ed = 3
+                        if float(row['_9_45']) - float(row['_9_00']) < 0:
+                            ed = 4
+                        if row['_9_45'] > row['_9_00']:
+                            pypl_updown = '↗︎' + str(float(row['_9_45']) - float(row['_9_00']))[0:ed]
+                        elif row['_9_45'] == row['_9_00']:
+                            pypl_updown = '→0.0'
+                        else:
+                            pypl_updown = '↘︎' + str(float(row['_9_45']) - float(row['_9_00']))[0:ed]
+                    row['date_description'] = 'Type:' + row['type'] + ' 成行:' + pypl_updown + row['成行']  + ' MM:' + row['Max,Min'] + ' ' + row['target'] + row['Memo']
                     stats.append(row)
+
+            # 本日のデータを読み込む
+            with open('saved_data/saved_form_data.txt', 'r', encoding="utf-8") as data_file:
+                json_str = data_file.readlines()
+                today_data = json.loads(json_str[0])
+                today_data['ticker'] = html_json['ticker']
+            today_QQQ3 = float(today_data['_QQQ3'])
+            today_NQ_F = float(today_data['_NQ_F'])
+            today_9_26 = float(today_data['_9_26'])
+            today_9_30 = float(today_data['_9_30'])
+
             previous = []
             for obj in reversed(stats):
                 try:
-                    if obj['type'] != '' and int(obj['type']) == predicted_type: 
+                    is_append = True
+                    if obj['type'] == '':
+                        is_append = False
+                    if obj['_QQQ3'] == '' or obj['_NQ_F'] == '':
+                        if int(obj['type']) != predicted_type:
+                            is_append = False
+                    else:
+                        penalize = 0
+                        if len(obj['target']) > 2:
+                            if (today_data['price'] == '高い' and obj['target'][-2:] == '安い') or (today_data['price'] == '安い' and obj['target'][-2:] == '高い'):
+                               penalize = 0.2
+                               obj['date_description'] = '✖️' + obj['date_description']
+                            elif today_data['price'] != obj['target'][-2:]:
+                                penalize = 0.1
+                                obj['date_description'] = '▲' + obj['date_description']
+
+                        if today_QQQ3 < -2.5 and float(obj['_QQQ3']) > (-1.0 - penalize):
+                            is_append = False
+                        elif today_QQQ3 > 2.5 and float(obj['_QQQ3']) < (1.0 + penalize):
+                            is_append = False
+                        elif float(obj['_QQQ3']) < today_QQQ3 - (1.5 - penalize) or float(obj['_QQQ3']) > today_QQQ3 + (1.5 - penalize):
+                            is_append = False
+
+                        if today_NQ_F < -1.0 and float(obj['_NQ_F']) > (-0.5 - penalize):
+                            is_append = False
+                        elif today_NQ_F > 1.0 and float(obj['_NQ_F']) < (0.5 + penalize):
+                            is_append = False
+                        elif float(obj['_NQ_F']) < today_NQ_F - (0.5 - penalize) or float(obj['_NQ_F']) > today_NQ_F + (0.5 - penalize):
+                            is_append = False
+
+                        if obj['_9_26'] != '':
+                            if today_9_26 < -1.0 and float(obj['_9_26']) > (-0.5 - penalize):
+                                is_append = False
+                            elif today_9_26 > 1.0 and float(obj['_9_26']) < (0.5 + penalize):
+                                is_append = False
+                            elif float(obj['_9_26']) < today_9_26 - (0.5 - penalize) or float(obj['_9_26']) > today_9_26 + (0.5 - penalize):
+                                is_append = False
+
+                        if obj['_9_30'] != '':
+                            if today_9_30 < -1.0 and float(obj['_9_30']) > (-0.5 - penalize):
+                                is_append = False
+                            elif today_9_30 > 1.0 and float(obj['_9_30']) < (0.5 + penalize):
+                                is_append = False
+                            elif float(obj['_9_30']) < today_9_30 - (0.5 - penalize) or float(obj['_9_30']) > today_9_30 + (0.5 - penalize):
+                                is_append = False
+                    if is_append is True:
                         previous.append(obj)
                 except ValueError:
                     # CSV値不備
@@ -236,7 +292,7 @@ def show_graph():
             grp_num = len(previous)
             if grp_num > 9:
                 grp_num = 9
-            return render_template('graph.html', stats=stats, previous=previous, html_json=html_json, recent=recent, grp_num=grp_num)
+            return render_template('graph.html', stats=stats, previous=previous, html_json=today_data, recent=recent, grp_num=grp_num)
         except Exception as e:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             traceback.print_tb(exc_traceback, limit=1, file=sys.stdout)
@@ -281,52 +337,108 @@ def show_graph():
             if html_json['message'] != '':
                 predicted_type = int(form_dict['old_type'])
 
-            # 本日のデータを読み込む
-            with open('saved_data/temp_future.csv', newline='', encoding="utf-8") as csvfile:
-                reader = csv.DictReader(csvfile, skipinitialspace=True)
-                today = date.today()
-                tomorrow = today + timedelta(days=1)
-
-                i = 0
-                for row in reader:
-                    if i == 0:
-                        if row['date'] == tomorrow.isoformat(): # 明日以降の動きのデータ(内の昨日のデータ)を参照しているため
-                            html_json['today_8_38'] = row['Y8:38']
-                            html_json['today_9_26'] = row['Y9:26']
-                            html_json['today_9_30'] = row['Y開']
-                            _10_00 = (float(row['Y活']) + float(row['Y開'])) / 2
-                            html_json['today_10_00'] = '{:.1f}'.format(_10_00)
-                        else:
-                            # データ未登録のため棒グラフは無し
-                            html_json['today_8_38'] = 0
-                            html_json['today_9_26'] = 0
-                            html_json['today_9_30'] = 0
-                            html_json['today_10_00'] = 0
-                    i = i + 1
-
             stats = []
             # 過去の実データを読み込む
             with open('saved_data/stats_{}.csv'.format(html_json['ticker']), newline='', encoding="utf-8") as csvfile:
                 reader = csv.DictReader(csvfile, skipinitialspace=True)
                 for row in reader:
+                    if row['QQQ3'] == '':
+                        row['_QQQ3'] = 0
+                    else:
+                        row['_QQQ3'] = row['QQQ3']
+                    if row['Nasdaq100Fut'] == '':
+                        row['_NQ_F'] = 0
+                    else:
+                        row['_NQ_F'] = row['Nasdaq100Fut']
                     row['_8_38'] = row['8:38']
+                    if row['9:00'] == '':
+                        row['_9_00'] = 0
+                    else:
+                        row['_9_00'] = row['9:00']
                     row['_9_26'] = row['9:26']
                     row['_9_30'] = row['9:30']
+                    if row['9:35'] == '':
+                        row['_9_35'] = 0
+                    else:
+                        row['_9_35'] = row['9:35']
                     row['_9_45'] = row['9:45']
-                    row['_10_00'] = row['10:00']
                     row['_10_45'] = row['10:45']
-                    row['_11_00'] = row['11:00']
-                    row['_11_15'] = row['11:15']
                     row['_11_30'] = row['11:30']
-                    row['_12_30'] = row['12:30']
                     row['_13_30'] = row['13:30']
                     row['_16_00'] = row['16:00']
-                    row['date_description'] = row['date'] + 'の動き Fut:' + row['Nasdaq100Fut'] + '%,Tgt:' + row['target'] + '%,明日:' + row['tomorrow'] + ' (' + row['Memo'] + ')'
+                    pypl_updown = ''
+                    if row['9:00'] != '':
+                        ed = 3
+                        if float(row['_9_45']) - float(row['_9_00']) < 0:
+                            ed = 4
+                        if row['_9_45'] > row['_9_00']:
+                            pypl_updown = '↗︎' + str(float(row['_9_45']) - float(row['_9_00']))[0:ed]
+                        elif row['_9_45'] == row['_9_00']:
+                            pypl_updown = '→0.0'
+                        else:
+                            pypl_updown = '↘︎' + str(float(row['_9_45']) - float(row['_9_00']))[0:ed]
+                    row['date_description'] = 'Type:' + row['type'] + ' 成行:' + pypl_updown + row['成行']  + ' MM:' + row['Max,Min'] + ' ' + row['target'] + row['Memo']
                     stats.append(row)
+
+            # 本日のデータを読み込む
+            with open('saved_data/saved_form_data.txt', 'r', encoding="utf-8") as data_file:
+                json_str = data_file.readlines()
+                today_data = json.loads(json_str[0])
+                today_data['ticker'] = html_json['ticker']
+            today_QQQ3 = float(today_data['_QQQ3'])
+            today_NQ_F = float(today_data['_NQ_F'])
+            today_9_26 = float(today_data['_9_26'])
+            today_9_30 = float(today_data['_9_30'])
+
             previous = []
             for obj in reversed(stats):
                 try:
-                    if obj['type'] != '' and int(obj['type']) == predicted_type: 
+                    is_append = True
+                    if obj['type'] == '':
+                        is_append = False
+                    if obj['_QQQ3'] == '' or obj['_NQ_F'] == '':
+                        if int(obj['type']) != predicted_type:
+                            is_append = False
+                    else:
+                        penalize = 0
+                        if len(obj['target']) > 2:
+                            if (today_data['price'] == '高い' and obj['target'][-2:] == '安い') or (today_data['price'] == '安い' and obj['target'][-2:] == '高い'):
+                               penalize = 0.2
+                               obj['date_description'] = '✖️' + obj['date_description']
+                            elif today_data['price'] != obj['target'][-2:]:
+                                penalize = 0.1
+                                obj['date_description'] = '▲' + obj['date_description']
+
+                        if today_QQQ3 < -2.5 and float(obj['_QQQ3']) > (-1.0 - penalize):
+                            is_append = False
+                        elif today_QQQ3 > 2.5 and float(obj['_QQQ3']) < (1.0 + penalize):
+                            is_append = False
+                        elif float(obj['_QQQ3']) < today_QQQ3 - (1.5 - penalize) or float(obj['_QQQ3']) > today_QQQ3 + (1.5 - penalize):
+                            is_append = False
+
+                        if today_NQ_F < -1.0 and float(obj['_NQ_F']) > (-0.5 - penalize):
+                            is_append = False
+                        elif today_NQ_F > 1.0 and float(obj['_NQ_F']) < (0.5 + penalize):
+                            is_append = False
+                        elif float(obj['_NQ_F']) < today_NQ_F - (0.5 - penalize) or float(obj['_NQ_F']) > today_NQ_F + (0.5 - penalize):
+                            is_append = False
+
+                        if obj['_9_26'] != '':
+                            if today_9_26 < -1.0 and float(obj['_9_26']) > (-0.5 - penalize):
+                                is_append = False
+                            elif today_9_26 > 1.0 and float(obj['_9_26']) < (0.5 + penalize):
+                                is_append = False
+                            elif float(obj['_9_26']) < today_9_26 - (0.5 - penalize) or float(obj['_9_26']) > today_9_26 + (0.5 - penalize):
+                                is_append = False
+
+                        if obj['_9_30'] != '':
+                            if today_9_30 < -1.0 and float(obj['_9_30']) > (-0.5 - penalize):
+                                is_append = False
+                            elif today_9_30 > 1.0 and float(obj['_9_30']) < (0.5 + penalize):
+                                is_append = False
+                            elif float(obj['_9_30']) < today_9_30 - (0.5 - penalize) or float(obj['_9_30']) > today_9_30 + (0.5 - penalize):
+                                is_append = False
+                    if is_append is True:
                         previous.append(obj)
                 except ValueError:
                     # CSV値不備
@@ -340,7 +452,7 @@ def show_graph():
             grp_num = len(previous)
             if grp_num > 9:
                 grp_num = 9
-            return render_template('graph.html', stats=stats, previous=previous, html_json=html_json, recent=recent, grp_num=grp_num)
+            return render_template('graph.html', stats=stats, previous=previous, html_json=today_data, recent=recent, grp_num=grp_num)
 
         except Exception as e:
             exc_type, exc_value, exc_traceback = sys.exc_info()

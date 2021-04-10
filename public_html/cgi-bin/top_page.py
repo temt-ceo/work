@@ -16,10 +16,14 @@ def show_top_page(form_dict=None, from_page=None, message=None):
             json_str = data_file.readlines()
             html_json = json.loads(json_str[0])
             html_json['date'] = today.isoformat()
+            html_json['_QQQ3'] = form_dict['_QQQ3']
+            html_json['_NQ_F'] = form_dict['_NQ_F']
             html_json['_8_38'] = form_dict['_8_38']
+            html_json['_9_00'] = form_dict['_9_00']
             html_json['_9_26'] = form_dict['_9_26']
             html_json['_9_30'] = form_dict['_9_30']
-            html_json['flag'] = form_dict['flag']
+            html_json['_9_35'] = form_dict['_9_35']
+            html_json['price'] = form_dict['price']
             if 'early_check' in form_dict:
                 html_json['early_check'] = form_dict['early_check']
             else:
@@ -39,10 +43,14 @@ def show_top_page(form_dict=None, from_page=None, message=None):
 
     # 保存ずみのフォーム入力情報が古い場合は初期化する
     if html_json['date'] != today.isoformat() and html_json['date'] != yesterday.isoformat():
+        html_json['_QQQ3'] = ''
+        html_json['_NQ_F'] = ''
         html_json['_8_38'] = ''
+        html_json['_9_00'] = ''
         html_json['_9_26'] = ''
         html_json['_9_30'] = ''
-        html_json['flag'] = 0
+        html_json['_9_35'] = ''
+        html_json['price'] = 0
         html_json['early_check'] = ''
 
     # CSV登録データを呼び出す
@@ -250,7 +258,7 @@ def predict_today_result(form_dict, html_json, real_datas):
     real_datas[-1]['B終'] = real_datas[-2]['Y終']
     real_datas[-1]['8:38'] = form_dict['_8_38']
     real_datas[-1]['9:26'] = form_dict['_9_26']
-    real_datas[-1]['flag'] = form_dict['flag']
+    real_datas[-1]['flag'] = 0 # form_dict['flag']
     real_datas[-1]['9:30'] = form_dict['_9_30']
     real_datas[-1]['活度'] = ''
     real_datas[-1]['max'] = ''

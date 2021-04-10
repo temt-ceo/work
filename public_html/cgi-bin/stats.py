@@ -53,7 +53,7 @@ def show_stats(form_dict=None, html_json=None):
         temp[0]['B終'] = ''
         temp[0]['8:38'] = '' # 必須だが後で入力する
         temp[0]['9:26'] = '' # 必須だが後で入力する
-        temp[0]['flag'] = temp[0]['flag'] # 今日と明日は同じ流動性と仮定する
+        temp[0]['flag'] = 0 # temp[0]['flag'] # 今日と明日は同じ流動性と仮定する
         temp[0]['9:30'] = '' # 必須だが後で入力する
         temp[0]['活度'] = '' # y値の１つだから使用しない
         temp[0]['max'] = ''

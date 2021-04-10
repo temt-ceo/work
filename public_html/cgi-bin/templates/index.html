@@ -93,18 +93,38 @@
                        </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="_8_38">時間外【市場開始１時間前】<span style="color:red;vertical-align:super;">*</span> :</label>
-                                <input type="text" value="{{ html_json._8_38 }}" name="_8_38" id="_8_38" required/>
+                                <label for="_QQQ3">QQQ3.MI<span style="color:red;vertical-align:super;">*</span> :</label>
+                                <input type="text" value="{{ html_json._QQQ3 }}" name="_QQQ3" id="_QQQ3" required/>
                             </div>
                             <div class="form-group">
-                                <label for="_9_26">時間外【市場開始5分前】<span style="color:red;vertical-align:super;">*</span> :</label>
-                                <input type="text" value="{{ html_json._9_26 }}" name="_9_26" id="_9_26" required/>
+                                <label for="_NQ_F">NQ=F<span style="color:red;vertical-align:super;">*</span> :</label>
+                                <input type="text" value="{{ html_json._NQ_F }}" name="_NQ_F" id="_NQ_F" required/>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
+                                <label for="_8_38">時間外【市場開始１時間前】<span style="color:red;vertical-align:super;">*</span> :</label>
+                                <input type="text" value="{{ html_json._8_38 }}" name="_8_38" id="_8_38" required/>
+                            </div>
+                            <div class="form-group">
+                                <label for="_9_00">9:00 :</label>
+                                <input type="text" value="{{ html_json._9_00 }}" name="_9_00" id="_9_00" required/>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="_9_26">時間外【市場開始5分前】<span style="color:red;vertical-align:super;">*</span> :</label>
+                                <input type="text" value="{{ html_json._9_26 }}" name="_9_26" id="_9_26" required/>
+                            </div>
+                            <div class="form-group">
                                 <label for="_9_30">9:30(始値)<span style="color:red;vertical-align:super;">*</span>:</label>
                                 <input type="text" value="{{ html_json._9_30 }}" name="_9_30" id="_9_30" required/>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="_9_35">9:35 :</label>
+                                <input type="text" value="{{ html_json._9_35 }}" name="_9_35" id="_9_35"/>
                             </div>
                             <div class="form-group" style="border: solid; margin: 20px 0; border-color: antiquewhite;">
                                 <label for="early_check" style="float: left;margin-top: 4%; margin-left: 2%;">開始１時間前の早期予測:</label>
@@ -112,12 +132,12 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="flag">流動性に影響するNews</label>
+                            <label for="price">基準</label>
                             <div class="form-select">
-                                <select name="flag" id="flag">
-                                    <option value="0" {% if html_json.flag=='0' %} selected="selected"{% endif %}>なし</option>
-                                    <option value="1" {% if html_json.flag=='1' %} selected="selected"{% endif %}>下がる要因のNewsがある</option>
-                                    <option value="2" {% if html_json.flag=='2' %} selected="selected"{% endif %}>月末/祝日など流動性に影響がある</option>
+                                <select name="price" id="price">
+                                    <option value="中立" {% if html_json.price=='中立' %} selected="selected"{% endif %}>中立</option>
+                                    <option value="安い" {% if html_json.price=='安い' %} selected="selected"{% endif %}>安い</option>
+                                    <option value="高い" {% if html_json.price=='高い' %} selected="selected"{% endif %}>高い</option>
                                 </select>
                                 <span class="select-icon"><i class="zmdi zmdi-chevron-down"></i></span>
                             </div>
