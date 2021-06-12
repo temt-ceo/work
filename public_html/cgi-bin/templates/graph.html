@@ -101,16 +101,6 @@ var chartData = [
         {% endif %}
     },
     {
-        "todays_data": {{ html_json._9_00 }},
-        "timing": "9:00",
-        {% if grp_num > 0 %}
-          {% for i in range(0, grp_num) %}
-            "real_value_{{ i }}": {{ previous[i]._9_00 }},
-            "date_{{ i }}": "{{ previous[i].date }}",
-          {% endfor %}
-        {% endif %}
-    },
-    {
         "todays_data": {{ html_json._9_26 }},
         "timing": "9:25",
         {% if grp_num > 0 %}
@@ -126,16 +116,6 @@ var chartData = [
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
             "real_value_{{ i }}": {{ previous[i]._9_30 }},
-            "date_{{ i }}": "{{ previous[i].date }}",
-          {% endfor %}
-        {% endif %}
-    },
-    {
-        "todays_data": {{ html_json._9_35 }},
-        "timing": "9:35",
-        {% if grp_num > 0 %}
-          {% for i in range(0, grp_num) %}
-            "real_value_{{ i }}": {{ previous[i]._9_35 }},
             "date_{{ i }}": "{{ previous[i].date }}",
           {% endfor %}
         {% endif %}
@@ -207,6 +187,8 @@ var chart = AmCharts.makeChart("chartdiv", {
   valueAxes: [{
     id: "a1",
     //title: "前日終値比 (%)",
+    labelsEnabled: false,
+    fontSize: 8,
     gridAlpha: 0,
     axisAlpha: 0,
     maximum: 5.0,
@@ -216,10 +198,12 @@ var chart = AmCharts.makeChart("chartdiv", {
     id: "g1",
     valueField:  "todays_data",
     title:  "本日のデータ",
+    // labelText: "[[value]]",
+    fontSize: 6,
     type:  "column",
     fillAlphas:  0.9,
     valueAxis:  "a1",
-    balloonText:  "[[value]] %",
+    balloonText:  "[[value]]%",
     legendValueText:  "[[description]] : [[value]]%",
     descriptionField: "timing",
     lineColor:  "#263138",
@@ -231,11 +215,12 @@ var chart = AmCharts.makeChart("chartdiv", {
     type: "line",
     valueAxis: "a1",
     lineColor: "#ff5755",
-    labelText: "[[value]]%",
+    labelText: "[[value]]",
+    fontSize: 6,
     labelPosition: "right",
-    balloonText: "前回:[[value]]%",
+    balloonText: "[[value]]%",
     lineThickness: 1,
-    legendValueText: " : [[value]]%",
+    legendValueText: ":[[value]]%",
     descriptionField: "date_0",
     bullet: "square",
     bulletBorderColor: "#ff5755",
@@ -253,11 +238,12 @@ var chart = AmCharts.makeChart("chartdiv", {
         type: "line",
         valueAxis: "a1",
         lineColor: color_pallett[{{i}}],
-        labelText: "[[value]]%",
+        labelText: "[[value]]",
+        fontSize: 6,
         labelPosition: "right",
-        balloonText: "過去({{i}}つ前):[[value]]%",
+        balloonText: "[[value]]%",
         lineThickness: 1,
-        legendValueText: " : [[value]]%",
+        legendValueText: ":[[value]]%",
         descriptionField: "date_{{i}}",
         bullet: "round",
         bulletBorderColor: "#786c56",

@@ -8,7 +8,7 @@ def do_create_csv(form_dict):
     today = date.today()
     yesterday = today - timedelta(days=1)
     csv_columns = ["date", "Y開", "Y終", "Y活", "Yx", "Yn", "B5", "Y5", "Px", "Pn", "dis", "B開", "B終", "8:38", "9:26", "flag", "9:30", "活度", "max", "min", "down", "終値", "5日差", "type"]
-    inputs_cols = ["type", "_8_38", "_9_26", "_9_30", "_10_00", "_13_30", "_16_00", "max", "min"]
+    inputs_cols = ["type", "_8_38", "_9_26", "_9_30", "_10_00", "_13_30", "_16_00"]
 
     real_datas = []
     html_json = {}
@@ -50,8 +50,8 @@ def do_create_csv(form_dict):
     real_data['Y開'] = real_datas[prev_row]['9:30']
     real_data['Y終'] = real_datas[prev_row]['終値']
     real_data['Y活'] = real_datas[prev_row]['活度']
-    real_data['Yx'] = real_datas[prev_row]['max']
-    real_data['Yn'] = real_datas[prev_row]['min']
+    real_data['Yx'] = ''#real_datas[prev_row]['max']
+    real_data['Yn'] = ''#real_datas[prev_row]['min']
     d1 = int(form_data['_16_00'] * 10)
     d2 = int(float(real_datas[prev_row]['終値']) * 10)
     d3 = int(float(real_datas[day2ago]['終値']) * 10)
@@ -85,8 +85,8 @@ def do_create_csv(form_dict):
     real_data['flag'] = form_dict['flag']
     real_data['9:30'] = form_data['_9_30']
     real_data['活度'] = ((int(form_data['_10_00'] * 10) * 2) - int(form_data['_9_30'] * 10)) / 10
-    real_data['max'] = form_data['max']
-    real_data['min'] = form_data['min']
+    real_data['max'] = ''#form_data['max']
+    real_data['min'] = ''#form_data['min']
     real_data['down'] = (int(lowest * 10) - int(form_data['_9_26'] * 10)) / 10
     real_data['終値'] = form_data['_16_00']
     real_data['5日差'] = '{:.1f}'.format((d1 + d2 + d3 + d4 + d5) / 10)

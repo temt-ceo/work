@@ -49,8 +49,6 @@
                                 <span style="margin-right: 8px;">前日活性度: <u style="color:red;font-size:12px;">{% if html_json.pre_vitality[0] !='-' %}+{% endif %}{{ html_json.pre_vitality }}</u>%</span><br>
                                 <span style="margin-right: 8px;">5日間移動平均: <u style="color:red;font-size:12px;">{% if html_json._5days_volume[0] !='-' %}+{% endif %}{{ html_json._5days_volume }}</u>%,</span>
                                 <span style="margin-right: 8px;">(前日比: <u style="color:red;font-size:12px;">{{ html_json._5days_diff }}</u>%)</span><br>
-                                <span style="margin-right: 8px;">前日の高値: <u style="color:red;font-size:12px;">{% if html_json.pre_highest[0] !='-' %}+{% endif %}{{ html_json.pre_highest }}</u>%,</span>
-                                <span>前日の安値: <u style="color:red;font-size:12px;">{% if html_json.pre_lowest[0] !='-' %}+{% endif %}{{ html_json.pre_lowest }}</u>%</span><br>
                             </div>
                             <label style="font-size: 13px"><span>昨日の予測結果：</span></label>
                             <div style="margin-left: 20px;">
@@ -117,15 +115,11 @@
                                 <input type="text" value="{{ html_json._9_26 }}" name="_9_26" id="_9_26" required/>
                             </div>
                             <div class="form-group">
-                                <label for="_9_30">9:30(始値)<span style="color:red;vertical-align:super;">*</span>:</label>
-                                <input type="text" value="{{ html_json._9_30 }}" name="_9_30" id="_9_30" required/>
+                                <label for="_9_30">9:30(始値):</label>
+                                <input type="text" value="{{ html_json._9_30 }}" name="_9_30" id="_9_30"/>
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="form-group">
-                                <label for="_9_35">9:35 :</label>
-                                <input type="text" value="{{ html_json._9_35 }}" name="_9_35" id="_9_35"/>
-                            </div>
                             <div class="form-group" style="border: solid; margin: 20px 0; border-color: antiquewhite;">
                                 <label for="early_check" style="float: left;margin-top: 4%; margin-left: 2%;">開始１時間前の早期予測:</label>
                                 <input type="checkbox" id="early_check" name="early_check" value="checked"{% if html_json.early_check=='checked' %} checked="checked"{% endif %} style="width: 5%;margin-top:15px;margin-right:4%;float: right;">
@@ -136,6 +130,8 @@
                             <div class="form-select">
                                 <select name="price" id="price">
                                     <option value="中立" {% if html_json.price=='中立' %} selected="selected"{% endif %}>中立</option>
+                                    <option value="安め" {% if html_json.price=='安め' %} selected="selected"{% endif %}>安め</option>
+                                    <option value="高め" {% if html_json.price=='高め' %} selected="selected"{% endif %}>高め</option>
                                     <option value="安い" {% if html_json.price=='安い' %} selected="selected"{% endif %}>安い</option>
                                     <option value="高い" {% if html_json.price=='高い' %} selected="selected"{% endif %}>高い</option>
                                 </select>

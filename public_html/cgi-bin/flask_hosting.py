@@ -40,6 +40,10 @@ def index(html_json=None):
             # 入力不備あり
             if message is not None:
                 form_dict = None
+
+            if form_dict["_9_30"] == '':
+                form_dict["_9_30"] = form_dict["_9_26"]
+
             return show_top_page(form_dict=form_dict, message=message)
     except Exception as e:
         exc_type, exc_value, exc_traceback = sys.exc_info()
@@ -215,28 +219,28 @@ def show_graph():
 
                         if row['_9_35'] != '':
                             if float(row['_9_35']) > float(row['_9_00']):
-                                pypl_updown = '(' + row['_9_00'] + ':' + str(float(row['_9_35']) - float(row['_9_00']))[0:3]
+                                pypl_updown = '(' + row['_9_00'] + '↗︎'
                             elif float(row['_9_35']) == float(row['_9_00']):
-                                pypl_updown = '(' + row['_9_00'] + ':' + '0.0'
+                                pypl_updown = '(' + row['_9_00'] + '→'
                             else:
-                                pypl_updown = '(' + row['_9_00'] + ':' + str(float(row['_9_35']) - float(row['_9_00']))[0:4]
+                                pypl_updown = '(' + row['_9_00'] + '↘︎'
 
                             if float(row['_9_45']) > float(row['_9_35']):
-                                pypl_updown = pypl_updown + "," + str(float(row['_9_45']) - float(row['_9_35']))[0:3]
+                                pypl_updown = pypl_updown + "↗︎"
                             elif float(row['_9_45']) == float(row['_9_35']):
-                                pypl_updown = pypl_updown + ',0.0'
+                                pypl_updown = pypl_updown + '→'
                             else:
-                                pypl_updown = pypl_updown + "," + str(float(row['_9_45']) - float(row['_9_35']))[0:4]
+                                pypl_updown = pypl_updown + "↘︎"
 
                         if row['_10_00'] != '':
                             if float(row['_10_00']) > float(row['_9_45']):
-                                pypl_updown = pypl_updown + "," + str(float(row['_10_00']) - float(row['_9_45']))[0:3]
+                                pypl_updown = pypl_updown + "↗︎) "
                             elif float(row['_10_00']) == float(row['_9_45']):
-                                pypl_updown = pypl_updown + ',0.0'
+                                pypl_updown = pypl_updown + '→) '
                             else:
-                                pypl_updown = pypl_updown + "," + str(float(row['_10_00']) - float(row['_9_45']))[0:4]
+                                pypl_updown = pypl_updown + "↘︎) "
 
-                    row['date_description'] = row['type'] + ' [' + row['_9_26'] + "]"+ row['target'] + row['Memo']+ '（' + zm_momentum + '）' + row['momentum'] + pypl_updown + ") " + row['Max,Min']
+                    row['date_description'] = row['type'] + ' [' + row['_9_26'] + "]"+ row['target'] + row['Memo']+ '（' + zm_momentum + row['基準'] + '）' + row['momentum'] + pypl_updown + row['Max,Min']
                     stats.append(row)
 
             # 本日のデータを読み込む
@@ -263,11 +267,13 @@ def show_graph():
                         penalize = 0
                         if len(obj['target']) > 2:
                             if (today_data['price'] == '高い' and obj['target'][-2:] == '安い') or (today_data['price'] == '安い' and obj['target'][-2:] == '高い'):
-                               penalize = 0.2
-                               obj['date_description'] = '✖️' + obj['date_description']
-                            elif today_data['price'] != obj['target'][-2:]:
-                                penalize = 0.1
-                                obj['date_description'] = '▲' + obj['date_description']
+                               penalize = 0.1
+                               obj['date_description'] = '▲' + obj['date_description']
+
+                        if today_data['type'] != obj['type'][-2:]:
+                            penalize = penalize + 0.1
+                        else:
+                            penalize = penalize - 0.2
 
                         if today_QQQ3 < -2.5 and float(obj['_QQQ3']) > (-1.0 - penalize):
                             is_append = False
@@ -281,6 +287,12 @@ def show_graph():
                         elif today_NQ_F > 1.0 and float(obj['_NQ_F']) < (0.5 + penalize):
                             is_append = False
                         elif float(obj['_NQ_F']) < today_NQ_F - (0.5 - penalize) or float(obj['_NQ_F']) > today_NQ_F + (0.5 - penalize):
+                            is_append = False
+
+                        if (today_9_26 < today_8_38 and float(obj['_9_26']) > float(obj['_8_38'])) or (today_9_26 > today_8_38 and float(obj['_9_26']) < float(obj['_8_38'])):
+                            is_append = False
+
+                        if (today_9_26 < 0 and float(obj['_9_26']) > 0) or (today_9_26 > 0 and float(obj['_9_26']) < 0):
                             is_append = False
 
                         if obj['_8_38'] != '':
@@ -396,28 +408,28 @@ def show_graph():
 
                         if row['_9_35'] != '':
                             if float(row['_9_35']) > float(row['_9_00']):
-                                pypl_updown = '(' + row['_9_00'] + ':' + str(float(row['_9_35']) - float(row['_9_00']))[0:3]
+                                pypl_updown = '(' + row['_9_00'] + '↗︎'
                             elif float(row['_9_35']) == float(row['_9_00']):
-                                pypl_updown = '(' + row['_9_00'] + ':' + '0.0'
+                                pypl_updown = '(' + row['_9_00'] + '→'
                             else:
-                                pypl_updown = '(' + row['_9_00'] + ':' + str(float(row['_9_35']) - float(row['_9_00']))[0:4]
+                                pypl_updown = '(' + row['_9_00'] + '↘︎'
 
                             if float(row['_9_45']) > float(row['_9_35']):
-                                pypl_updown = pypl_updown + "," + str(float(row['_9_45']) - float(row['_9_35']))[0:3]
+                                pypl_updown = pypl_updown + "↗︎"
                             elif float(row['_9_45']) == float(row['_9_35']):
-                                pypl_updown = pypl_updown + ',0.0'
+                                pypl_updown = pypl_updown + '→'
                             else:
-                                pypl_updown = pypl_updown + "," + str(float(row['_9_45']) - float(row['_9_35']))[0:4]
+                                pypl_updown = pypl_updown + "↘︎"
 
                         if row['_10_00'] != '':
                             if float(row['_10_00']) > float(row['_9_45']):
-                                pypl_updown = pypl_updown + "," + str(float(row['_10_00']) - float(row['_9_45']))[0:3]
+                                pypl_updown = pypl_updown + "↗︎) "
                             elif float(row['_10_00']) == float(row['_9_45']):
-                                pypl_updown = pypl_updown + ',0.0'
+                                pypl_updown = pypl_updown + '→) '
                             else:
-                                pypl_updown = pypl_updown + "," + str(float(row['_10_00']) - float(row['_9_45']))[0:4]
+                                pypl_updown = pypl_updown + "↘︎) "
 
-                    row['date_description'] = row['type'] + ' [' + row['_9_26'] + "]"+ row['target'] + row['Memo']+ '（' + zm_momentum + '）' + row['momentum'] + pypl_updown + ") " + row['Max,Min']
+                    row['date_description'] = row['type'] + ' [' + row['_9_26'] + "]"+ row['target'] + row['Memo']+ '（' + zm_momentum + row['基準'] + '）' + row['momentum'] + pypl_updown + row['Max,Min']
                     stats.append(row)
 
             # 本日のデータを読み込む
@@ -444,11 +456,13 @@ def show_graph():
                         penalize = 0
                         if len(obj['target']) > 2:
                             if (today_data['price'] == '高い' and obj['target'][-2:] == '安い') or (today_data['price'] == '安い' and obj['target'][-2:] == '高い'):
-                               penalize = 0.2
-                               obj['date_description'] = '✖️' + obj['date_description']
-                            elif today_data['price'] != obj['target'][-2:]:
-                                penalize = 0.1
-                                obj['date_description'] = '▲' + obj['date_description']
+                               penalize = 0.1
+                               obj['date_description'] = '▲' + obj['date_description']
+
+                        if today_data['type'] != obj['type'][-2:]:
+                            penalize = penalize + 0.1
+                        else:
+                            penalize = penalize - 0.2
 
                         if today_QQQ3 < -2.5 and float(obj['_QQQ3']) > (-1.0 - penalize):
                             is_append = False
@@ -462,6 +476,12 @@ def show_graph():
                         elif today_NQ_F > 1.0 and float(obj['_NQ_F']) < (0.5 + penalize):
                             is_append = False
                         elif float(obj['_NQ_F']) < today_NQ_F - (0.5 - penalize) or float(obj['_NQ_F']) > today_NQ_F + (0.5 - penalize):
+                            is_append = False
+
+                        if (today_9_26 < today_8_38 and float(obj['_9_26']) > float(obj['_8_38'])) or (today_9_26 > today_8_38 and float(obj['_9_26']) < float(obj['_8_38'])):
+                            is_append = False
+
+                        if (today_9_26 < 0 and float(obj['_9_26']) > 0) or (today_9_26 > 0 and float(obj['_9_26']) < 0):
                             is_append = False
 
                         if obj['_8_38'] != '':

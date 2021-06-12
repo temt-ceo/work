@@ -22,7 +22,6 @@ def show_top_page(form_dict=None, from_page=None, message=None):
             html_json['_9_00'] = form_dict['_9_00']
             html_json['_9_26'] = form_dict['_9_26']
             html_json['_9_30'] = form_dict['_9_30']
-            html_json['_9_35'] = form_dict['_9_35']
             html_json['price'] = form_dict['price']
             if 'early_check' in form_dict:
                 html_json['early_check'] = form_dict['early_check']
@@ -49,7 +48,6 @@ def show_top_page(form_dict=None, from_page=None, message=None):
         html_json['_9_00'] = ''
         html_json['_9_26'] = ''
         html_json['_9_30'] = ''
-        html_json['_9_35'] = ''
         html_json['price'] = 0
         html_json['early_check'] = ''
 
