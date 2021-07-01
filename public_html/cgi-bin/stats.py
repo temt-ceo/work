@@ -12,7 +12,7 @@ def show_stats(form_dict=None, html_json=None):
 
     # 統計データ（過去データ表用）
     eval_df = pd.read_csv('saved_data/real_data.csv')
-    pred_type, real_type = predicting(eval_df[4:], 'type') # 4件目まではトレーニングされている
+    pred_type, real_type = predicting(eval_df[-30:], 'type') # 4件目まではトレーニングされている
     html_json['predicted_type'] = pred_type
     html_json['real_type'] = real_type
     html_json['past_data_closed_at'] = ''

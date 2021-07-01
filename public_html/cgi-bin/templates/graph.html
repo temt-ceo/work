@@ -101,6 +101,16 @@ var chartData = [
         {% endif %}
     },
     {
+        "todays_data": {{ html_json._9_00_sq }},
+        "timing": "9:00SQ",
+        {% if grp_num > 0 %}
+          {% for i in range(0, grp_num) %}
+            "real_value_{{ i }}": {{ previous[i]._9_00_sq }},
+            "date_{{ i }}": "{{ previous[i].date }}",
+          {% endfor %}
+        {% endif %}
+    },
+    {
         "todays_data": {{ html_json._9_26 }},
         "timing": "9:25",
         {% if grp_num > 0 %}
@@ -111,7 +121,7 @@ var chartData = [
         {% endif %}
     },
     {
-        "todays_data": {{ html_json._9_30 }},
+        "todays_data": 0,
         "timing": "9:30",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
@@ -171,7 +181,7 @@ var chartData = [
         {% endif %}
     }
 ];
-var color_pallett = ['#ff5755', '#5ED35A', '#207479', '#A58B2C', '#E7A6E4', '#4B30B5', '#DCBB7A', '#CBEAAE', '#8EE1CB'];
+var color_pallett = ['#F9DFDC', '#5ED35A', '#0C4271', '#C84B31', '#E7A6E4', '#4B30B5', '#FF00C8', '#FFC107', '#8EE1CB', '#ff5755'];
 var chart = AmCharts.makeChart("chartdiv", {
   type: "serial",
   theme: "dark",
@@ -214,7 +224,7 @@ var chart = AmCharts.makeChart("chartdiv", {
     valueField: "real_value_0",
     type: "line",
     valueAxis: "a1",
-    lineColor: "#ff5755",
+    lineColor: "#F9DFDC",
     labelText: "[[value]]",
     fontSize: 6,
     labelPosition: "right",
@@ -222,10 +232,10 @@ var chart = AmCharts.makeChart("chartdiv", {
     lineThickness: 1,
     legendValueText: ":[[value]]%",
     descriptionField: "date_0",
-    bullet: "square",
-    bulletBorderColor: "#ff5755",
+    bullet: "none",
+    bulletBorderColor: "#F9DFDC",
     bulletBorderThickness: 1,
-    bulletBorderAlpha: 1,
+    bulletBorderAlpha: 0.5,
     dashLengthField: "dashLength",
     animationPlayed: true
   },
@@ -245,10 +255,10 @@ var chart = AmCharts.makeChart("chartdiv", {
         lineThickness: 1,
         legendValueText: ":[[value]]%",
         descriptionField: "date_{{i}}",
-        bullet: "round",
+        bullet: "none",
         bulletBorderColor: "#786c56",
         bulletBorderThickness: 1,
-        bulletBorderAlpha: 1,
+        bulletBorderAlpha: 0.5,
         bulletColor: color_pallett[{{i}}],
         dashLengthField: "dashLength",
         animationPlayed: true

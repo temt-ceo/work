@@ -1,4 +1,4 @@
-import sys, traceback, json, csv, shutil, pickle, array
+import sys, traceback, json, csv, shutil, pickle, array, re
 import flask
 from flask import Flask, request, render_template, json
 from werkzeug.exceptions import HTTPException
@@ -30,7 +30,7 @@ def index(html_json=None):
             message = None
             outputs = None
             try:
-                inputs_cols = ["_QQQ3", "_NQ_F", "_8_38", "_9_00", "_9_26"]
+                inputs_cols = ["_QQQ3", "_NQ_F", "_8_38", "_9_00", "_9_00_sq", "_9_26"]
                 for key, value in form_dict.items():
                     outputs = value
                     if key in inputs_cols:
@@ -41,8 +41,7 @@ def index(html_json=None):
             if message is not None:
                 form_dict = None
 
-            if form_dict["_9_30"] == '':
-                form_dict["_9_30"] = form_dict["_9_26"]
+            form_dict["_9_30"] = form_dict["_9_26"]
 
             return show_top_page(form_dict=form_dict, message=message)
     except Exception as e:
@@ -185,7 +184,18 @@ def show_graph():
             # 過去の実データを読み込む
             with open('saved_data/stats_{}.csv'.format(html_json['ticker']), newline='', encoding="utf-8") as csvfile:
                 reader = csv.DictReader(csvfile, skipinitialspace=True)
-                for row in reader:
+                sum_criteria = []
+                list_csv = list(reader)
+                for row in list_csv:
+                    row['基準合計'] = ''
+                    criteria = re.search(r'^-?\d+', row['基準momemtum'])
+                    if criteria:
+                        sum_criteria.append(int(criteria[0]))
+                        if len(sum_criteria) == 10:
+                            row['基準合計'] = str(sum(sum_criteria))
+                            sum_criteria = sum_criteria[1:]
+
+                for row in list_csv:
                     if row['QQQ3'] == '':
                         row['_QQQ3'] = 0
                     else:
@@ -199,6 +209,10 @@ def show_graph():
                         row['_9_00'] = 0
                     else:
                         row['_9_00'] = row['9:00']
+                    if row['sq9:00'] == '':
+                        row['_9_00_sq'] = 0
+                    else:
+                        row['_9_00_sq'] = row['sq9:00']
                     row['_9_26'] = row['9:26']
                     row['_9_30'] = row['9:30']
                     if row['9:35'] == '':
@@ -211,19 +225,22 @@ def show_graph():
                     row['_11_30'] = row['11:30']
                     row['_13_30'] = row['13:30']
                     row['_16_00'] = row['16:00']
-                    zm_momentum = row['tomorrow'][0:1]
-                    if zm_momentum == "-":
-                        zm_momentum = row['tomorrow'][0:2]
+
+                    zm_momentum = ''
+                    criteria = re.search(r'^-?\d+', row['基準momemtum'])
+                    if criteria:
+                        zm_momentum = criteria[0]
+
                     pypl_updown = ''
                     if row['9:00'] != '':
 
                         if row['_9_35'] != '':
                             if float(row['_9_35']) > float(row['_9_00']):
-                                pypl_updown = '(' + row['_9_00'] + '↗︎'
+                                pypl_updown = '(↗︎'
                             elif float(row['_9_35']) == float(row['_9_00']):
-                                pypl_updown = '(' + row['_9_00'] + '→'
+                                pypl_updown = '(→'
                             else:
-                                pypl_updown = '(' + row['_9_00'] + '↘︎'
+                                pypl_updown = '(↘︎'
 
                             if float(row['_9_45']) > float(row['_9_35']):
                                 pypl_updown = pypl_updown + "↗︎"
@@ -234,13 +251,14 @@ def show_graph():
 
                         if row['_10_00'] != '':
                             if float(row['_10_00']) > float(row['_9_45']):
-                                pypl_updown = pypl_updown + "↗︎) "
+                                pypl_updown = pypl_updown + "↗︎"
                             elif float(row['_10_00']) == float(row['_9_45']):
-                                pypl_updown = pypl_updown + '→) '
+                                pypl_updown = pypl_updown + '→'
                             else:
-                                pypl_updown = pypl_updown + "↘︎) "
+                                pypl_updown = pypl_updown + "↘︎"
+                            pypl_updown = pypl_updown + '{:.1f}'.format(float(row['_10_00']) - float(row['_9_00'])) + ") "
 
-                    row['date_description'] = row['type'] + ' [' + row['_9_26'] + "]"+ row['target'] + row['Memo']+ '（' + zm_momentum + row['基準'] + '）' + row['momentum'] + pypl_updown + row['Max,Min']
+                    row['date_description'] = row['type'] + row['AI1'] + ' [' + row['_9_26'] + "]"+ row['target'] + row['Memo'] + zm_momentum + row['基準'] + row['基準合計'] + row['momentum'] + pypl_updown
                     stats.append(row)
 
             # 本日のデータを読み込む
@@ -323,8 +341,8 @@ def show_graph():
             else:
                 recent = previous[0]
             grp_num = len(previous)
-            if grp_num > 9:
-                grp_num = 9
+            if grp_num > 10:
+                grp_num = 10
             return render_template('graph.html', stats=stats, previous=previous, html_json=today_data, recent=recent, grp_num=grp_num)
         except Exception as e:
             exc_type, exc_value, exc_traceback = sys.exc_info()
@@ -374,7 +392,19 @@ def show_graph():
             # 過去の実データを読み込む
             with open('saved_data/stats_{}.csv'.format(html_json['ticker']), newline='', encoding="utf-8") as csvfile:
                 reader = csv.DictReader(csvfile, skipinitialspace=True)
-                for row in reader:
+
+                sum_criteria = []
+                list_csv = list(reader)
+                for row in list_csv:
+                    row['基準合計'] = ''
+                    criteria = re.search(r'^-?\d+', row['基準momemtum'])
+                    if criteria:
+                        sum_criteria.append(int(criteria[0]))
+                        if len(sum_criteria) == 10:
+                            row['基準合計'] = str(sum(sum_criteria))
+                            sum_criteria = sum_criteria[1:]
+
+                for row in list_csv:
                     if row['QQQ3'] == '':
                         row['_QQQ3'] = 0
                     else:
@@ -388,6 +418,10 @@ def show_graph():
                         row['_9_00'] = 0
                     else:
                         row['_9_00'] = row['9:00']
+                    if row['sq9:00'] == '':
+                        row['_9_00_sq'] = 0
+                    else:
+                        row['_9_00_sq'] = row['sq9:00']
                     row['_9_26'] = row['9:26']
                     row['_9_30'] = row['9:30']
                     if row['9:35'] == '':
@@ -400,19 +434,22 @@ def show_graph():
                     row['_11_30'] = row['11:30']
                     row['_13_30'] = row['13:30']
                     row['_16_00'] = row['16:00']
-                    zm_momentum = row['tomorrow'][0:1]
-                    if zm_momentum == "-":
-                        zm_momentum = row['tomorrow'][0:2]
+
+                    zm_momentum = ''
+                    criteria = re.search(r'^-?\d+', row['基準momemtum'])
+                    if criteria:
+                        zm_momentum = criteria[0]
+
                     pypl_updown = ''
                     if row['9:00'] != '':
 
                         if row['_9_35'] != '':
                             if float(row['_9_35']) > float(row['_9_00']):
-                                pypl_updown = '(' + row['_9_00'] + '↗︎'
+                                pypl_updown = '(↗︎'
                             elif float(row['_9_35']) == float(row['_9_00']):
-                                pypl_updown = '(' + row['_9_00'] + '→'
+                                pypl_updown = '(→'
                             else:
-                                pypl_updown = '(' + row['_9_00'] + '↘︎'
+                                pypl_updown = '(↘︎'
 
                             if float(row['_9_45']) > float(row['_9_35']):
                                 pypl_updown = pypl_updown + "↗︎"
@@ -423,13 +460,14 @@ def show_graph():
 
                         if row['_10_00'] != '':
                             if float(row['_10_00']) > float(row['_9_45']):
-                                pypl_updown = pypl_updown + "↗︎) "
+                                pypl_updown = pypl_updown + "↗︎"
                             elif float(row['_10_00']) == float(row['_9_45']):
-                                pypl_updown = pypl_updown + '→) '
+                                pypl_updown = pypl_updown + '→'
                             else:
-                                pypl_updown = pypl_updown + "↘︎) "
+                                pypl_updown = pypl_updown + "↘︎"
+                            pypl_updown = pypl_updown + '{:.1f}'.format(float(row['_10_00']) - float(row['_9_00'])) + ") "
 
-                    row['date_description'] = row['type'] + ' [' + row['_9_26'] + "]"+ row['target'] + row['Memo']+ '（' + zm_momentum + row['基準'] + '）' + row['momentum'] + pypl_updown + row['Max,Min']
+                    row['date_description'] = row['type'] + row['AI1'] + ' [' + row['_9_26'] + "]"+ row['target'] + row['Memo'] + zm_momentum + row['基準'] + row['基準合計'] + row['momentum'] + pypl_updown
                     stats.append(row)
 
             # 本日のデータを読み込む
@@ -512,8 +550,8 @@ def show_graph():
             else:
                 recent = previous[0]
             grp_num = len(previous)
-            if grp_num > 9:
-                grp_num = 9
+            if grp_num > 10:
+                grp_num = 10
             return render_template('graph.html', stats=stats, previous=previous, html_json=today_data, recent=recent, grp_num=grp_num)
 
         except Exception as e:

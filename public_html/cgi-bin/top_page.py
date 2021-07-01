@@ -20,6 +20,7 @@ def show_top_page(form_dict=None, from_page=None, message=None):
             html_json['_NQ_F'] = form_dict['_NQ_F']
             html_json['_8_38'] = form_dict['_8_38']
             html_json['_9_00'] = form_dict['_9_00']
+            html_json['_9_00_sq'] = form_dict['_9_00_sq']
             html_json['_9_26'] = form_dict['_9_26']
             html_json['_9_30'] = form_dict['_9_30']
             html_json['price'] = form_dict['price']
@@ -46,6 +47,7 @@ def show_top_page(form_dict=None, from_page=None, message=None):
         html_json['_NQ_F'] = ''
         html_json['_8_38'] = ''
         html_json['_9_00'] = ''
+        html_json['_9_00_sq'] = ''
         html_json['_9_26'] = ''
         html_json['_9_30'] = ''
         html_json['price'] = 0
