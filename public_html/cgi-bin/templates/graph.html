@@ -101,21 +101,21 @@ var chartData = [
         {% endif %}
     },
     {
-        "todays_data": {{ html_json._9_00_sq }},
-        "timing": "9:00SQ",
+        "todays_data": {{ html_json._9_26 }},
+        "timing": "9:00",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
-            "real_value_{{ i }}": {{ previous[i]._9_00_sq }},
+            "real_value_{{ i }}": {{ previous[i]._9_00_zm }},
             "date_{{ i }}": "{{ previous[i].date }}",
           {% endfor %}
         {% endif %}
     },
     {
-        "todays_data": {{ html_json._9_26 }},
-        "timing": "9:25",
+        "todays_data": {{ html_json._9_00_sq }},
+        "timing": "9:00SQ",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
-            "real_value_{{ i }}": {{ previous[i]._9_26 }},
+            "real_value_{{ i }}": {{ previous[i]._9_00_sq }},
             "date_{{ i }}": "{{ previous[i].date }}",
           {% endfor %}
         {% endif %}
@@ -132,10 +132,10 @@ var chartData = [
     },
     {
         "todays_data": 0,
-        "timing": "9:45",
+        "timing": "10:00",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
-            "real_value_{{ i }}": {{ previous[i]._9_45 }},
+            "real_value_{{ i }}": {{ previous[i]._10_00 }},
             "date_{{ i }}": "{{ previous[i].date }}",
           {% endfor %}
         {% endif %}
