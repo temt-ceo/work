@@ -95,4 +95,4 @@ git push origin HEAD:main
 
 
 ```
-#### LinkedIn Web Page:　https://jp.linkedin.com/in/tahara-takashi-em-technology
+#### LinkedIn Web Page:　https://linkedin.com/in/tahara-takashi-em-technology
