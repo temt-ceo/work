@@ -191,6 +191,7 @@ def show_graph():
                     criteria = re.search(r'^-?\d+', row['基準momemtum'])
                     if criteria:
                         sum_criteria.append(int(criteria[0]))
+                        # 10日合計
                         if len(sum_criteria) == 10:
                             row['基準合計'] = str(sum(sum_criteria))
                             sum_criteria = sum_criteria[1:]
@@ -242,11 +243,11 @@ def show_graph():
 
                         if row['_9_35'] != '':
                             if float(row['_9_35']) > float(row['_9_00']):
-                                pypl_updown = '(' + row['momentum'] + '↗︎'
+                                pypl_updown = '(' + '↗︎'
                             elif float(row['_9_35']) == float(row['_9_00']):
-                                pypl_updown = '(' + row['momentum'] + '→'
+                                pypl_updown = '(' + '→'
                             else:
-                                pypl_updown = '(' + row['momentum'] + '↘︎'
+                                pypl_updown = '(' + '↘︎'
 
                         if row['_10_00'] != '':
                             if float(row['_10_00']) > float(row['_9_35']):
@@ -255,9 +256,13 @@ def show_graph():
                                 pypl_updown = pypl_updown + '→'
                             else:
                                 pypl_updown = pypl_updown + "↘︎"
-                            pypl_updown = pypl_updown + '{:.1f}'.format(float(row['_10_00']) - float(row['_9_00'])) + ") "
+                            # pypl_updown = pypl_updown + '{:.1f}'.format(float(row['_10_00']) - float(row['_9_00'])) + ") "
+                            pypl_updown = pypl_updown + ")"
 
-                    row['date_description'] = row['type'] + row['AI1'] + ' [' + row['_9_00_zm'] + "]"+ row['target'] + row['Memo'] + zm_momentum + row['基準'] + row['基準合計'] + pypl_updown
+                    if row['date'] != '':
+                        row['date'] = str(int(row['date'][5:7])) + '/' + str(int(row['date'][8:10]))
+
+                    row['date_description'] = '[' + row['date'] + '] ' + row['type'] + '(' + row['AI1'] + ')' + pypl_updown + ' ' + zm_momentum + row['基準'] + ' ' + row['target'] + row['Memo']# + row['基準合計']
                     stats.append(row)
 
             # 本日のデータを読み込む
@@ -399,6 +404,7 @@ def show_graph():
                     criteria = re.search(r'^-?\d+', row['基準momemtum'])
                     if criteria:
                         sum_criteria.append(int(criteria[0]))
+                        # 10日合計
                         if len(sum_criteria) == 10:
                             row['基準合計'] = str(sum(sum_criteria))
                             sum_criteria = sum_criteria[1:]
@@ -449,11 +455,11 @@ def show_graph():
 
                         if row['_9_35'] != '':
                             if float(row['_9_35']) > float(row['_9_00']):
-                                pypl_updown = '(' + row['momentum'] + '↗︎'
+                                pypl_updown = '(' + '↗︎'
                             elif float(row['_9_35']) == float(row['_9_00']):
-                                pypl_updown = '(' + row['momentum'] + '→'
+                                pypl_updown = '(' + '→'
                             else:
-                                pypl_updown = '(' + row['momentum'] + '↘︎'
+                                pypl_updown = '(' + '↘︎'
 
                         if row['_10_00'] != '':
                             if float(row['_10_00']) > float(row['_9_35']):
@@ -462,9 +468,13 @@ def show_graph():
                                 pypl_updown = pypl_updown + '→'
                             else:
                                 pypl_updown = pypl_updown + "↘︎"
-                            pypl_updown = pypl_updown + '{:.1f}'.format(float(row['_10_00']) - float(row['_9_00'])) + ") "
+                            # pypl_updown = pypl_updown + '{:.1f}'.format(float(row['_10_00']) - float(row['_9_00'])) + ") "
+                            pypl_updown = pypl_updown + ")"
 
-                    row['date_description'] = row['type'] + row['AI1'] + ' [' + row['_9_00_zm'] + "]"+ row['target'] + row['Memo'] + zm_momentum + row['基準'] + row['基準合計'] + pypl_updown
+                    if row['date'] != '':
+                        row['date'] = str(int(row['date'][5:7])) + '/' + str(int(row['date'][8:10]))
+
+                    row['date_description'] = '[' + row['date'] + '] ' + row['type'] + '(' + row['AI1'] + ')' + pypl_updown + ' ' + zm_momentum + row['基準'] + ' ' + row['target'] + row['Memo']# + row['基準合計']
                     stats.append(row)
 
             # 本日のデータを読み込む
