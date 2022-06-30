@@ -65,17 +65,22 @@ def show_top_page(form_dict=None, from_page=None, message=None):
     ################
     eval_df = pd.read_csv('saved_data/real_data.csv')
     # パターンの予測
-    pred_type, real_type = predicting(eval_df[-1:], 'type')
-    # html_json['predicted_type'] = pred_type[-1]
-    # html_json['real_type'] = real_type[-1]
-    html_json['predicted_type'] = ''
-    html_json['real_type'] = ''
-    # # 高値の位置予測
-    # eval_df['type'] = pd.Series([pred_type])
-    # pred_hpos, real_hpos = predicting(eval_df[-1:], 'High Position')
-    # pos_to_time = list(zip([1,2,3,4],['9:30','10:00','13:30','16:00']))
-    # html_json['pre_high_pos'] = pos_to_time[pred_hpos[-1] - 1][1]
-    # html_json['real_high_pos'] = pos_to_time[real_hpos[-1] - 1][1]
+    pred_type, real_type = predicting(eval_df[-21:], 'Type')
+    html_json['predicted_type'] = pred_type[-1]
+    html_json['real_type'] = real_type[-1]
+
+    low_range = ['nodata', -5.8, -4.4, -3.2, -2.2, -1.6, -0.8, 0.2, 1.0]
+    high_range = ['nodata', '-2.5','-1.2','-0.5','0.1','1.6','3.3','4.5','5.6']
+
+    # 底値の予測
+    pred_low, real_low = predicting(eval_df[-21:], 'LowType')
+    html_json['pre_low_pos'] = str(pred_low[-1]) + '【' + str(low_range[pred_low[-1]]) + '】'
+    html_json['real_low_pos'] = str(real_low[-1]) + '【' + str(low_range[real_low[-1]]) + '】'
+
+    # 高値の予測
+    pred_high, real_high = predicting(eval_df[-21:], 'HighType')
+    html_json['pre_high_pos'] = str(pred_high[-1]) + '【' + str(high_range[pred_high[-1]]) + '】'
+    html_json['real_high_pos'] = str(real_high[-1]) + '【' + str(high_range[real_high[-1]]) + '】'
 
     # Formで入力した情報から今日の動きを予測する
     if form_dict is not None:
@@ -88,7 +93,7 @@ def data_cleaning(df):
     # カラム名変更
     for col in df.columns:
         if col == 'zm9:00':
-            df['8:30->9:00'] = df[col].str.replace(r'\.\.', '.').astype(float) - df['8:30']
+            df['8:30->9:00'] = df[col].astype(float) - df['8:30']
         elif col == 'QQQ3':
             df['QQQ3/3'] = round(df[col] / 3, 2)
         elif col == 'Nasdaq100Fut':
@@ -105,8 +110,8 @@ def data_cleaning(df):
         elif col == '成行':
             df[col] = df[col].str.replace(r'^(→|↘|↗︎)(.*)', r'\2')
             new = df[col].str.split(pat="→|↘|↗︎", expand=True)
-            df['成行QQQ3'] = new[0].str.replace(r'(.*)%$', r'\1').astype(float)
-            df['成行NQ=F'] = new[1].str.replace(r'(.*)%$', r'\1').astype(float)
+            df['成行QQQ3'] = new[0].str.replace(r'[^\x00-\x7F]+', '').astype(float)
+            df['成行NQ=F'] = new[1].str.replace(r'[^\x00-\x7F]+', '').astype(float)
         elif col == '基準momemtum':
             split_data = df[col].str.split(pat="@", expand=True)
             df['Momentum'] = split_data[0].astype(int)
@@ -128,13 +133,13 @@ def data_cleaning(df):
             df['High'] = df[col].str.split(pat="(", expand=True)[0].str.replace(r'(%|⇨)', '').astype(float)
     df = df[['8:30', '8:30->9:00', 'QQQ3/3', 'NQ=F', 'sq(9:00)', '16:00', '基準(5段階)', '成行QQQ3', '成行NQ=F', 'Momentum', 'PER', 'PERTarget', 'Type', 'Low', 'LowType', 'High', 'HighType']]
 
-
     # for col in df.columns:
     #     # 数値データの値タイプ変更
     #     if col == 'Alert Level':
     #         df[col] = df[col].apply(int)
     #     else:
     #         df[col] = df[col].apply(float)
+
 
 def predicting(eval_df, target, predict_only=False):
 
@@ -149,35 +154,6 @@ def predicting(eval_df, target, predict_only=False):
         X_norm = X
         return X_norm
 
-    # eval_df['Compare 5Days'] = eval_df['5Days Volume'] - eval_df['5Days Volume Pre']
-    # eval_df.drop('5Days Volume Pre', axis=1, inplace=True)
-    # def apply_pre_market_pattern(df):
-    #     # 堅調
-    #     if df['PreMarket 926'] > df['PreMarket 838'] + 0.1:
-    #         # 始値でもさらに上昇に転じる
-    #         if df['Start'] > df['PreMarket 926']:
-    #             return 1
-    #         # 始値では下がる
-    #         else:
-    #             return 2
-    #     # 軟調
-    #     elif df['PreMarket 838'] > df['PreMarket 926'] + 0.1:
-    #         # 始値では上昇に転じる
-    #         if df['Start'] > df['PreMarket 926']:
-    #             return 5
-    #         # 始値でもさらに下がる
-    #         else:
-    #             return 6
-    #     # 不定
-    #     else:
-    #         # 始値が上昇する
-    #         if df['Start'] > df['PreMarket 926']:
-    #             return 3
-    #         # 始値が下落する
-    #         else:
-    #             return 4
-    # eval_df['PreMarket Pattern'] = eval_df.apply(apply_pre_market_pattern, axis=1)
-    # eval_df.drop('PreMarket 926', axis=1, inplace=True)
 
     # # one hot化
     # def preprocess(df):
@@ -196,41 +172,160 @@ def predicting(eval_df, target, predict_only=False):
     #         df = df.drop(column, axis=1)
     #         df = pd.concat([df, one_hot], axis=1)
     #     return df
-    # # 前処理
-    # preprocessed_df = preprocess(eval_df)
 
-    # # 予測に必要となるカラムのみ保持
-    # X_test = preprocessed_df[['Pre End', 'Pre Vitality', '5Days Volume', 'PreMarket 838', 'Alert_0', 'Alert_1', 'Alert_2', 'Start', 'Compare 5Days', 'PreMarket Pattern_1', 'PreMarket Pattern_2', 'PreMarket Pattern_3', 'PreMarket Pattern_4', 'PreMarket Pattern_5', 'PreMarket Pattern_6']]
+    # 前処理
+    def preprocess(df):
+        #
+        #
+        # 必要なInputを全て用意する
+        #
+        #
+        T1_ago_16 = 0
+        T1_ago_nariQ = 0
+        T1_ago_nariF= 0
+        T1_ago_basis = 0
+        T1_ago_momentum = 0
+        T2_ago_16 = 0
+        T3_ago_sum_16 = 0
+        T3_ago_sum_M = 0
+        T5_ago_sum_16 = 0
+        T5_ago_sum_N = 0
 
-    # # Y値
-    # if predict_only is False:
-    #     y_test = preprocessed_df[[target]]
-    #     y_test[target] = y_test[target].apply(int)
-    #     real_type = pd.Series(y_test[target].values).array
-    # else:
-    #     real_type = None
+        sum5_16 = None
+        sum4_16 = 0
+        sum3_16 = 0
+        sum2_16 = 0
+        sum1_16 = 0
+        sum3_M = None
+        sum2_M = 0
+        sum1_M = 0
+        sum5_N = None
+        sum4_N = 0
+        sum3_N = 0
+        sum2_N = 0
+        sum1_N = 0
+        for i, row in df.iterrows():
+            sum5_16 = sum4_16 + row['16:00']
+            sum4_16 = sum3_16 + row['16:00']
+            sum3_16 = sum2_16 + row['16:00']
+            sum2_16 = sum1_16 + row['16:00']
+            sum1_16 = row['16:00']
+            if pd.isna(row['成行QQQ3']) is False:
+                sum5_N = sum4_N + (row['成行QQQ3'] + row['成行NQ=F']) / 2
+                sum4_N = sum3_N + (row['成行QQQ3'] + row['成行NQ=F']) / 2
+                sum3_N = sum2_N + (row['成行QQQ3'] + row['成行NQ=F']) / 2
+                sum2_N = sum1_N + (row['成行QQQ3'] + row['成行NQ=F']) / 2
+                sum1_N = (row['成行QQQ3'] + row['成行NQ=F']) / 2
 
-    # # Modelを読み込む
-    # model = None
-    # if target == 'type':
-    #     # with open('saved_data/model/stock_data_model_v2_type.pkl', 'rb') as file:
-    #     with open('saved_data/model/stock_data_model_v102.pkl', 'rb') as file:
-    #         model = pickle.load(file)
-    # elif target == 'LowType':
-    #     with open('saved_data/model/stock_data_model_v2_low.pkl', 'rb') as file:
-    #         model = pickle.load(file)
-    # elif target == 'HighType':
-    #     with open('saved_data/model/stock_data_model_v2_high.pkl', 'rb') as file:
-    #         model = pickle.load(file)
-    # elif target == 'High Position':
-    #     with open('saved_data/model/stock_data_model_rf_highpos.pkl', 'rb') as file:
-    #         model = pickle.load(file)
+            sum3_M = sum2_M + row['Momentum']
+            sum2_M = sum1_M + row['Momentum']
+            sum1_M = row['Momentum']
+            df.at[i, '昨日の終値'] = T1_ago_16 # Input(昨日の終値)
+            df.at[i, '昨日の基準'] = T1_ago_basis # Input(昨日の基準)
+            df.at[i, '昨日の成行QQQ3'] = T1_ago_nariQ # Input(昨日の成行QQQ3)
+            df.at[i, '昨日の成行NQ=F'] = T1_ago_nariF # Input(昨日の成行NQ=F)
+            df.at[i, '昨日のMomentum'] = T1_ago_momentum # Input(昨日のMomentum)
+            df.at[i, '一昨日の終値'] = T2_ago_16 # Input(一昨日の終値)
+            df.at[i, '終値３日変化量'] = round(T3_ago_sum_16 / 3, 2) # Input(終値３日変化量)
+            df.at[i, 'Momentum3日変化量'] = round(T3_ago_sum_M / 3, 2) # Input(Momentum3日変化量)
+            df.at[i, '終値5日変化量'] = round(T5_ago_sum_16 / 5, 2) # Input(終値5日変化量)
+            if T5_ago_sum_N is not None:
+                df.at[i, '成行５日変化量'] = round(T5_ago_sum_N / 5, 2) # Input(成行5日変化量)
+            else:
+                df.at[i, '成行５日変化量'] = 0 # Input(成行5日変化量)
+            df.at[i, 'PER計算'] = float(row['PERTarget']) / float(row['PER']) # Input(PER20日変化率)
 
-    # # 予測
-    # pred_type = model.predict(X_test)
+            # 予測結果をクラス化する
+            if df.at[i, 'Low'] <= -5.6:
+                df.at[i, 'LowType'] = 1
+            elif df.at[i, 'Low'] <= -4.2:
+                df.at[i, 'LowType'] = 2
+            elif df.at[i, 'Low'] <= -3.0:
+                df.at[i, 'LowType'] = 3
+            elif df.at[i, 'Low'] <= -2.0:
+                df.at[i, 'LowType'] = 4
+            elif df.at[i, 'Low'] <= -1.4:
+                df.at[i, 'LowType'] = 5
+            elif df.at[i, 'Low'] <= -0.6:
+                df.at[i, 'LowType'] = 6
+            elif df.at[i, 'Low'] <= 0.4:
+                df.at[i, 'LowType'] = 7
+            else:
+                df.at[i, 'LowType'] = 8
 
-    # return pred_type, real_type
-    return 1, 0
+            if df.at[i, 'High'] < -1.4:
+                df.at[i, 'HighType'] = 1
+            elif df.at[i, 'High'] < -0.7:
+                df.at[i, 'HighType'] = 2
+            elif df.at[i, 'High'] < -0.1:
+                df.at[i, 'HighType'] = 3
+            elif df.at[i, 'High'] < 1.4:
+                df.at[i, 'HighType'] = 4
+            elif df.at[i, 'High'] < 3.1:
+                df.at[i, 'HighType'] = 5
+            elif df.at[i, 'High'] < 4.3:
+                df.at[i, 'HighType'] = 6
+            elif df.at[i, 'High'] < 5.4:
+                df.at[i, 'HighType'] = 7
+            else:
+                df.at[i, 'HighType'] = 8
+
+            T5_ago_sum_16 = sum5_16
+            T5_ago_sum_N = sum5_N
+            T3_ago_sum_16 = sum3_16
+            T3_ago_sum_M = sum3_M
+            T2_ago_16 = T1_ago_16
+            T1_ago_16 = row['16:00']
+            T1_ago_nariQ = row['成行QQQ3']
+            T1_ago_nariF= row['成行NQ=F']
+            T1_ago_basis = row['基準(5段階)']
+            T1_ago_momentum = row['Momentum']
+
+        for i, row in df.iterrows():
+            if i == -1:
+                df.at[i, 'PER20日変化率'] = df.at[i, 'PER計算'] / df.at[i - 20, 'PER計算'] # Input(PER計算)
+            else:
+                df.at[i, 'PER20日変化率'] = 0.0
+
+        # 必要な項目 + 予測結果のみ
+        all_df = df[['8:30', '8:30->9:00', 'QQQ3/3', 'NQ=F', 'sq(9:00)', '昨日の終値', '基準(5段階)', '昨日の基準', '昨日の成行QQQ3', '昨日の成行NQ=F', 'Momentum', '昨日のMomentum', '一昨日の終値', '終値３日変化量', 'Momentum3日変化量', '終値5日変化量', '成行５日変化量', 'PER20日変化率', 'Type', 'Low', 'LowType', 'High', 'HighType']]
+        return all_df
+
+    preprocessed_df = preprocess(eval_df)
+
+    # 予測に必要となるカラムのみ保持
+    X_test = []
+
+    # Y値
+    if predict_only is False:
+        y_test = preprocessed_df[[target]]
+        y_test[target] = y_test[target].apply(int)
+        real_type = pd.Series(y_test[target].values).array
+    else:
+        real_type = None
+
+    # Modelを読み込む
+    model = None
+    if target == 'Type':
+        # 予測に必要となるカラムのみ保持
+        X_test = preprocessed_df[-1:][['8:30', '8:30->9:00', 'QQQ3/3', 'NQ=F', 'sq(9:00)', '昨日の終値', '昨日の基準', '昨日の成行QQQ3', '昨日の成行NQ=F', '昨日のMomentum', '一昨日の終値', '終値３日変化量', 'Momentum3日変化量', '終値5日変化量', '成行５日変化量', 'PER20日変化率']]
+        with open('saved_data/model/stock_data_model_v2_type.pkl', 'rb') as file:
+            model = pickle.load(file)
+    elif target == 'LowType':
+        # 予測に必要となるカラムのみ保持
+        X_test = preprocessed_df[-1:][['8:30', '8:30->9:00', 'QQQ3/3', 'NQ=F', 'sq(9:00)', '昨日の終値', '昨日の基準', '昨日の成行QQQ3', '昨日の成行NQ=F', '昨日のMomentum', '一昨日の終値', '終値３日変化量', 'Momentum3日変化量', '終値5日変化量', '成行５日変化量', 'PER20日変化率']]
+        with open('saved_data/model/stock_data_model_v2_low.pkl', 'rb') as file:
+            model = pickle.load(file)
+    elif target == 'HighType':
+        # 予測に必要となるカラムのみ保持
+        X_test = preprocessed_df[-1:][['8:30', '8:30->9:00', 'QQQ3/3', 'NQ=F', 'sq(9:00)', '昨日の終値', '昨日の基準', '昨日の成行QQQ3', '昨日の成行NQ=F', '昨日のMomentum', '一昨日の終値', '終値３日変化量', 'Momentum3日変化量', '終値5日変化量', '成行５日変化量', 'PER20日変化率']]
+        with open('saved_data/model/stock_data_model_v2_high.pkl', 'rb') as file:
+            model = pickle.load(file)
+
+    # 予測
+    pred_type = model.predict(X_test)
+
+    return pred_type, real_type
 
 def predict_today_result(form_dict, html_json, real_datas):
     today = date.today()
