@@ -66,8 +66,10 @@ def show_top_page(form_dict=None, from_page=None, message=None):
     eval_df = pd.read_csv('saved_data/real_data.csv')
     # パターンの予測
     pred_type, real_type = predicting(eval_df[-1:], 'type')
-    html_json['predicted_type'] = pred_type[-1]
-    html_json['real_type'] = real_type[-1]
+    # html_json['predicted_type'] = pred_type[-1]
+    # html_json['real_type'] = real_type[-1]
+    html_json['predicted_type'] = ''
+    html_json['real_type'] = ''
     # # 高値の位置予測
     # eval_df['type'] = pd.Series([pred_type])
     # pred_hpos, real_hpos = predicting(eval_df[-1:], 'High Position')
@@ -81,76 +83,63 @@ def show_top_page(form_dict=None, from_page=None, message=None):
         html_json['message'] = '今日の予測結果が表示されました。'
         html_json['message2'] = 'グラフ表示のリンクが有効化されました。'
     return render_template('index.html', html_json=html_json)
-def data_cleaning(df, _type=None):
-    if _type is not None:
-        df['type'] = _type
-    
+
+def data_cleaning(df):
     # カラム名変更
     for col in df.columns:
-        _col = col
-        if _type is not None:
-            _col = col[2:-1]
-        if _col == 'Y開':
-            df.rename(columns={col: 'Pre Start'}, inplace=True)
-        elif _col == 'Y終':
-            df.rename(columns={col: 'Pre End'}, inplace=True)
-        elif _col == 'Y活':
-            df.rename(columns={col: 'Pre Vitality'}, inplace=True)
-        elif _col == 'Yx':
-            df.rename(columns={col: 'Pre Max'}, inplace=True)
-        elif _col == 'Yn':
-            df.rename(columns={col: 'Pre Min'}, inplace=True)
-        elif _col == 'B5':
-            df.rename(columns={col: '5Days Volume Pre'}, inplace=True)
-        elif _col == 'Y5':
-            df.rename(columns={col: '5Days Volume'}, inplace=True)
-        elif _col == 'Px':
-            df.rename(columns={col: 'High Position'}, inplace=True)
-        elif _col == 'Pn':
-            df.rename(columns={col: 'Low Position'}, inplace=True)
-        elif _col == 'dis':
-            df.rename(columns={col: 'High Low Diff'}, inplace=True)
-        elif _col == 'B開':
-            df.rename(columns={col: 'Pre2 Start'}, inplace=True)
-        elif _col == 'B終':
-            df.rename(columns={col: 'Pre2 End'}, inplace=True)
-        elif _col == '8:30':
-            df.rename(columns={col: 'PreMarket 838'}, inplace=True)
-        elif _col == '9:26':
-            df.rename(columns={col: 'PreMarket 926'}, inplace=True)
-        elif _col == 'flag_event' or _col == 'flag':
-            df.rename(columns={col: 'Alert Level'}, inplace=True)
-        elif _col == '9:30':
-            df.rename(columns={col: 'Start'}, inplace=True)
-        elif _col == '活度':
-            df.rename(columns={col: 'Vitality'}, inplace=True)
-        elif _col == 'max':
-            df.rename(columns={col: 'Max'}, inplace=True)
-        elif _col == 'min':
-            df.rename(columns={col: 'Min'}, inplace=True)
-        elif _col == 'Down' or _col == 'down':
-            df.rename(columns={col: 'Avg. Decline'}, inplace=True)
-        elif _col == '終値':
-            df.rename(columns={col: 'End'}, inplace=True)
-    
-    for col in df.columns:
-        # 数値データの値タイプ変更
-        if col == 'Alert Level':
-            df[col] = df[col].apply(int)
-        else:
-            df[col] = df[col].apply(float)
+        if col == 'zm9:00':
+            df['8:30->9:00'] = df[col].str.replace(r'\.\.', '.').astype(float) - df['8:30']
+        elif col == 'QQQ3':
+            df['QQQ3/3'] = round(df[col] / 3, 2)
+        elif col == 'Nasdaq100Fut':
+            df['NQ=F'] = df[col]
+        elif col == 'sq9:00':
+            df['sq(9:00)'] = df[col]
+        elif col == '基準':
+            df['basis'] = df[col].str.replace(r'^高い$', r'2')
+            df['basis'] = df['basis'].str.replace(r'^高め$', r'1')
+            df['basis'] = df['basis'].str.replace(r'^中立$', r'0')
+            df['basis'] = df['basis'].str.replace(r'^安め$', r'-1')
+            df['basis'] = df['basis'].str.replace(r'^安い$', r'-2')
+            df['基準(5段階)'] = df['basis'].astype(int)
+        elif col == '成行':
+            df[col] = df[col].str.replace(r'^(→|↘|↗︎)(.*)', r'\2')
+            new = df[col].str.split(pat="→|↘|↗︎", expand=True)
+            df['成行QQQ3'] = new[0].str.replace(r'(.*)%$', r'\1').astype(float)
+            df['成行NQ=F'] = new[1].str.replace(r'(.*)%$', r'\1').astype(float)
+        elif col == '基準momemtum':
+            split_data = df[col].str.split(pat="@", expand=True)
+            df['Momentum'] = split_data[0].astype(int)
+            if len(split_data) >= 2:
+                df['PERTarget'] = split_data[1]
+            else:
+                df['PERTarget'] = 0.0
+        elif col == 'PER100値':
+            df['PER'] = df[col]
+        elif col == 'type':
+            df['Type'] = df[col].astype(int)
+            df['LowType'] = df[col].astype(int)
+            df['LowType'] = None
+            df['HighType'] = df[col].astype(int)
+            df['HighType'] = None
+        elif col == 'target':
+            df['Low'] = df[col].astype(float)
+        elif col == 'Memo':
+            df['High'] = df[col].str.split(pat="(", expand=True)[0].str.replace(r'(%|⇨)', '').astype(float)
+    df = df[['8:30', '8:30->9:00', 'QQQ3/3', 'NQ=F', 'sq(9:00)', '16:00', '基準(5段階)', '成行QQQ3', '成行NQ=F', 'Momentum', 'PER', 'PERTarget', 'Type', 'Low', 'LowType', 'High', 'HighType']]
+
+
+    # for col in df.columns:
+    #     # 数値データの値タイプ変更
+    #     if col == 'Alert Level':
+    #         df[col] = df[col].apply(int)
+    #     else:
+    #         df[col] = df[col].apply(float)
 
 def predicting(eval_df, target, predict_only=False):
-    # カラム数整合用CSVデータを呼び出す
-    all_alert_df = pd.read_csv('saved_data/all_alert_data.csv')
-
-    # 評価データにはalert levelが全て含まれていないので含まれているデータとconcat
-    df = pd.concat([all_alert_df, eval_df])
 
     # CSVデータのクリーニング
-    # eval_df = eval_df[['8:30', '8:30->9:00', 'QQQ3/3', 'NQ=F', 'sq(9:00)', '昨日の13:30', '昨日の終値', '昨日の基準', '昨日の成行QQQ3', '昨日の成行NQ=F', '昨日のMomentum', '一昨日の13:30', '一昨日の終値', '終値３日変化量', 'Momentum３日変化量', '終値5日変化量', '成行５日変化量', 'PER20日変化率', 'Type', 'Low', 'LowType', 'High', 'HighType']]
-    df = df[['Y開', 'Y終', 'Y活', 'Yx', 'Yn', 'B5', 'Y5', 'Px', 'Pn', 'dis', 'B開', 'B終', '8:30', '9:26', 'flag', '9:30', '活度', 'max', 'min', 'down', '終値', 'type']]
-    eval_df = df.copy()
+    eval_df = eval_df[['type', 'QQQ3', 'Nasdaq100Fut', '8:30', 'sq9:00', 'zm9:00', '16:00', '成行', 'target', '基準', '基準momemtum', 'Memo', 'PER100値']]
     eval_df = eval_df.copy()
     data_cleaning(eval_df)
 
@@ -160,87 +149,88 @@ def predicting(eval_df, target, predict_only=False):
         X_norm = X
         return X_norm
 
-    eval_df['Compare 5Days'] = eval_df['5Days Volume'] - eval_df['5Days Volume Pre']
-    eval_df.drop('5Days Volume Pre', axis=1, inplace=True)
-    def apply_pre_market_pattern(df):
-        # 堅調
-        if df['PreMarket 926'] > df['PreMarket 838'] + 0.1:
-            # 始値でもさらに上昇に転じる
-            if df['Start'] > df['PreMarket 926']:
-                return 1
-            # 始値では下がる
-            else:
-                return 2
-        # 軟調
-        elif df['PreMarket 838'] > df['PreMarket 926'] + 0.1:
-            # 始値では上昇に転じる
-            if df['Start'] > df['PreMarket 926']:
-                return 5
-            # 始値でもさらに下がる
-            else:
-                return 6
-        # 不定
-        else:
-            # 始値が上昇する
-            if df['Start'] > df['PreMarket 926']:
-                return 3
-            # 始値が下落する
-            else:
-                return 4
-    eval_df['PreMarket Pattern'] = eval_df.apply(apply_pre_market_pattern, axis=1)
-    eval_df.drop('PreMarket 926', axis=1, inplace=True)
+    # eval_df['Compare 5Days'] = eval_df['5Days Volume'] - eval_df['5Days Volume Pre']
+    # eval_df.drop('5Days Volume Pre', axis=1, inplace=True)
+    # def apply_pre_market_pattern(df):
+    #     # 堅調
+    #     if df['PreMarket 926'] > df['PreMarket 838'] + 0.1:
+    #         # 始値でもさらに上昇に転じる
+    #         if df['Start'] > df['PreMarket 926']:
+    #             return 1
+    #         # 始値では下がる
+    #         else:
+    #             return 2
+    #     # 軟調
+    #     elif df['PreMarket 838'] > df['PreMarket 926'] + 0.1:
+    #         # 始値では上昇に転じる
+    #         if df['Start'] > df['PreMarket 926']:
+    #             return 5
+    #         # 始値でもさらに下がる
+    #         else:
+    #             return 6
+    #     # 不定
+    #     else:
+    #         # 始値が上昇する
+    #         if df['Start'] > df['PreMarket 926']:
+    #             return 3
+    #         # 始値が下落する
+    #         else:
+    #             return 4
+    # eval_df['PreMarket Pattern'] = eval_df.apply(apply_pre_market_pattern, axis=1)
+    # eval_df.drop('PreMarket 926', axis=1, inplace=True)
 
-    # one hot化
-    def preprocess(df):
-        # Convert to Bins
-        categorical = None
-        if target == 'type':
-            categorical = ['Alert Level', 'PreMarket Pattern']
-        else:
-            categorical = ['Alert Level', 'PreMarket Pattern', 'type']
+    # # one hot化
+    # def preprocess(df):
+    #     # Convert to Bins
+    #     categorical = None
+    #     if target == 'type':
+    #         categorical = ['Alert Level', 'PreMarket Pattern']
+    #     else:
+    #         categorical = ['Alert Level', 'PreMarket Pattern', 'type']
         
-        for column in categorical:
-            if column == 'Alert Level':
-                one_hot = pd.get_dummies(df[column], prefix=column[:5])
-            else:
-                one_hot = pd.get_dummies(df[column], prefix=column)
-            df = df.drop(column, axis=1)
-            df = pd.concat([df, one_hot], axis=1)
-        return df
-    # 前処理
-    preprocessed_df = preprocess(eval_df)
+    #     for column in categorical:
+    #         if column == 'Alert Level':
+    #             one_hot = pd.get_dummies(df[column], prefix=column[:5])
+    #         else:
+    #             one_hot = pd.get_dummies(df[column], prefix=column)
+    #         df = df.drop(column, axis=1)
+    #         df = pd.concat([df, one_hot], axis=1)
+    #     return df
+    # # 前処理
+    # preprocessed_df = preprocess(eval_df)
 
-    # 予測に必要となるカラムのみ保持
-    X_test = preprocessed_df[['Pre End', 'Pre Vitality', '5Days Volume', 'PreMarket 838', 'Alert_0', 'Alert_1', 'Alert_2', 'Start', 'Compare 5Days', 'PreMarket Pattern_1', 'PreMarket Pattern_2', 'PreMarket Pattern_3', 'PreMarket Pattern_4', 'PreMarket Pattern_5', 'PreMarket Pattern_6']]
+    # # 予測に必要となるカラムのみ保持
+    # X_test = preprocessed_df[['Pre End', 'Pre Vitality', '5Days Volume', 'PreMarket 838', 'Alert_0', 'Alert_1', 'Alert_2', 'Start', 'Compare 5Days', 'PreMarket Pattern_1', 'PreMarket Pattern_2', 'PreMarket Pattern_3', 'PreMarket Pattern_4', 'PreMarket Pattern_5', 'PreMarket Pattern_6']]
 
-    # Y値
-    if predict_only is False:
-        y_test = preprocessed_df[[target]]
-        y_test[target] = y_test[target].apply(int)
-        real_type = pd.Series(y_test[target].values).array
-    else:
-        real_type = None
+    # # Y値
+    # if predict_only is False:
+    #     y_test = preprocessed_df[[target]]
+    #     y_test[target] = y_test[target].apply(int)
+    #     real_type = pd.Series(y_test[target].values).array
+    # else:
+    #     real_type = None
 
-    # Modelを読み込む
-    model = None
-    if target == 'type':
-        # with open('saved_data/model/stock_data_model_v2_type.pkl', 'rb') as file:
-        with open('saved_data/model/stock_data_model_v102.pkl', 'rb') as file:
-            model = pickle.load(file)
-    elif target == 'LowType':
-        with open('saved_data/model/stock_data_model_v2_low.pkl', 'rb') as file:
-            model = pickle.load(file)
-    elif target == 'HighType':
-        with open('saved_data/model/stock_data_model_v2_high.pkl', 'rb') as file:
-            model = pickle.load(file)
-    elif target == 'High Position':
-        with open('saved_data/model/stock_data_model_rf_highpos.pkl', 'rb') as file:
-            model = pickle.load(file)
+    # # Modelを読み込む
+    # model = None
+    # if target == 'type':
+    #     # with open('saved_data/model/stock_data_model_v2_type.pkl', 'rb') as file:
+    #     with open('saved_data/model/stock_data_model_v102.pkl', 'rb') as file:
+    #         model = pickle.load(file)
+    # elif target == 'LowType':
+    #     with open('saved_data/model/stock_data_model_v2_low.pkl', 'rb') as file:
+    #         model = pickle.load(file)
+    # elif target == 'HighType':
+    #     with open('saved_data/model/stock_data_model_v2_high.pkl', 'rb') as file:
+    #         model = pickle.load(file)
+    # elif target == 'High Position':
+    #     with open('saved_data/model/stock_data_model_rf_highpos.pkl', 'rb') as file:
+    #         model = pickle.load(file)
 
-    # 予測
-    pred_type = model.predict(X_test)
+    # # 予測
+    # pred_type = model.predict(X_test)
 
-    return pred_type, real_type
+    # return pred_type, real_type
+    return 1, 0
 
 def predict_today_result(form_dict, html_json, real_datas):
     today = date.today()
