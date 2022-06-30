@@ -12,6 +12,7 @@ def show_top_page(form_dict=None, from_page=None, message=None):
     html_json = {}
 
     if form_dict is not None:
+        # POSTの場合はデータを一時保存
         with open('saved_data/saved_form_data.txt', 'r+', encoding="utf-8") as data_file:
             json_str = data_file.readlines()
             html_json = json.loads(json_str[0])
@@ -26,7 +27,7 @@ def show_top_page(form_dict=None, from_page=None, message=None):
             data_file.truncate(0)
             data_file.seek(0)
             data_file.writelines(json.dumps(html_json))
-    # 保存ずみのフォーム入力情報を呼び出す
+    # 一時保存のフォーム入力情報を呼び出す
     with open('saved_data/saved_form_data.txt', 'r', encoding="utf-8") as txt_file:
         json_str = txt_file.readlines()
         html_json = json.loads(json_str[0])
@@ -36,7 +37,7 @@ def show_top_page(form_dict=None, from_page=None, message=None):
     if message is not None:
         html_json['message'] = message
 
-    # 保存ずみのフォーム入力情報が古い場合は初期化する
+    # 一時保存のフォーム入力情報が古い場合は初期化する
     if html_json['date'] != today.isoformat() and html_json['date'] != yesterday.isoformat():
         html_json['_QQQ3'] = ''
         html_json['_NQ_F'] = ''
@@ -54,21 +55,19 @@ def show_top_page(form_dict=None, from_page=None, message=None):
             real_datas.append(row)
 
     # CSV登録データの直近データ
-    html_json['pre_16_00'] = real_datas[-1]['終値']
-    html_json['pre_vitality'] = real_datas[-1]['活度']
-    html_json['pre_highest'] = real_datas[-1]['max']
-    html_json['pre_lowest'] = real_datas[-1]['min']
-    html_json['_5days_volume'] = real_datas[-1]['5日差']
-    html_json['_5days_diff'] =  '{:.1f}'.format(float(real_datas[-1]['5日差']) - float(real_datas[-2]['5日差']))
+    html_json['pre_16_00'] = real_datas[-1]['16:00']
+    html_json['pre_vitality'] = real_datas[-1]['成行']
+    html_json['target'] = real_datas[-1]['target']
+    html_json['memo'] = real_datas[-1]['Memo']
 
     ################
     #  予測を行う   #
     ################
     eval_df = pd.read_csv('saved_data/real_data.csv')
     # パターンの予測
-    # pred_type, real_type = predicting(eval_df[-1:], 'type')
-    # html_json['predicted_type'] = pred_type[-1]
-    # html_json['real_type'] = real_type[-1]
+    pred_type, real_type = predicting(eval_df[-1:], 'type')
+    html_json['predicted_type'] = pred_type[-1]
+    html_json['real_type'] = real_type[-1]
     # # 高値の位置予測
     # eval_df['type'] = pd.Series([pred_type])
     # pred_hpos, real_hpos = predicting(eval_df[-1:], 'High Position')

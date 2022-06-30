@@ -30,7 +30,7 @@ def index(html_json=None):
             message = None
             outputs = None
             try:
-                inputs_cols = ["_QQQ3", "_NQ_F", "_8_30", "_9_00", "_9_00_sq", "_9_26"]
+                inputs_cols = ["_QQQ3", "_NQ_F", "_8_30", "_9_00", "_9_00_sq", "momentum"]
                 for key, value in form_dict.items():
                     outputs = value
                     if key in inputs_cols:
@@ -40,8 +40,6 @@ def index(html_json=None):
             # 入力不備あり
             if message is not None:
                 form_dict = None
-
-            form_dict["_9_30"] = form_dict["_9_26"]
 
             return show_top_page(form_dict=form_dict, message=message)
     except Exception as e:
