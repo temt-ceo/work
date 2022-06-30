@@ -30,7 +30,7 @@ def index(html_json=None):
             message = None
             outputs = None
             try:
-                inputs_cols = ["_QQQ3", "_NQ_F", "_8_38", "_9_00", "_9_00_sq", "_9_26"]
+                inputs_cols = ["_QQQ3", "_NQ_F", "_8_30", "_9_00", "_9_00_sq", "_9_26"]
                 for key, value in form_dict.items():
                     outputs = value
                     if key in inputs_cols:
@@ -205,7 +205,7 @@ def show_graph():
                         row['_NQ_F'] = '0'
                     else:
                         row['_NQ_F'] = row['Nasdaq100Fut']
-                    row['_8_38'] = row['8:38']
+                    row['_8_30'] = row['8:30']
 
                     if row['9:00'] == '':
                         row['_9_00'] = '0'
@@ -273,7 +273,7 @@ def show_graph():
                 today_data['type'] = predicted_type
             today_QQQ3 = float(today_data['_QQQ3'])
             today_NQ_F = float(today_data['_NQ_F'])
-            today_8_38 = float(today_data['_8_38'])
+            today_8_30 = float(today_data['_8_30'])
             today_9_26 = float(today_data['_9_26'])
 
             previous = []
@@ -311,18 +311,18 @@ def show_graph():
                         elif float(obj['_NQ_F']) < today_NQ_F - (0.5 - penalize) or float(obj['_NQ_F']) > today_NQ_F + (0.5 - penalize):
                             is_append = False
 
-                        if (today_9_26 < today_8_38 and float(obj['_9_00_zm']) > float(obj['_8_38'])) or (today_9_26 > today_8_38 and float(obj['_9_00_zm']) < float(obj['_8_38'])):
+                        if (today_9_26 < today_8_30 and float(obj['_9_00_zm']) > float(obj['_8_30'])) or (today_9_26 > today_8_30 and float(obj['_9_00_zm']) < float(obj['_8_30'])):
                             is_append = False
 
                         if (today_9_26 < 0 and float(obj['_9_00_zm']) > 0) or (today_9_26 > 0 and float(obj['_9_00_zm']) < 0):
                             is_append = False
 
-                        if obj['_8_38'] != '':
-                            if today_8_38 < -1.0 and float(obj['_8_38']) > (-0.5 - penalize):
+                        if obj['_8_30'] != '':
+                            if today_8_30 < -1.0 and float(obj['_8_30']) > (-0.5 - penalize):
                                 is_append = False
-                            elif today_8_38 > 1.0 and float(obj['_8_38']) < (0.5 + penalize):
+                            elif today_8_30 > 1.0 and float(obj['_8_30']) < (0.5 + penalize):
                                 is_append = False
-                            elif float(obj['_8_38']) < today_8_38 - (0.5 - penalize) or float(obj['_8_38']) > today_8_38 + (0.5 - penalize):
+                            elif float(obj['_8_30']) < today_8_30 - (0.5 - penalize) or float(obj['_8_30']) > today_8_30 + (0.5 - penalize):
                                 is_append = False
 
                         if obj['_9_00_zm'] != '':
@@ -418,7 +418,7 @@ def show_graph():
                         row['_NQ_F'] = '0'
                     else:
                         row['_NQ_F'] = row['Nasdaq100Fut']
-                    row['_8_38'] = row['8:38']
+                    row['_8_30'] = row['8:30']
 
                     if row['9:00'] == '':
                         row['_9_00'] = '0'
@@ -485,7 +485,7 @@ def show_graph():
                 today_data['type'] = predicted_type
             today_QQQ3 = float(today_data['_QQQ3'])
             today_NQ_F = float(today_data['_NQ_F'])
-            today_8_38 = float(today_data['_8_38'])
+            today_8_30 = float(today_data['_8_30'])
             today_9_26 = float(today_data['_9_26'])
 
             previous = []
@@ -523,18 +523,18 @@ def show_graph():
                         elif float(obj['_NQ_F']) < today_NQ_F - (0.5 - penalize) or float(obj['_NQ_F']) > today_NQ_F + (0.5 - penalize):
                             is_append = False
 
-                        if (today_9_26 < today_8_38 and float(obj['_9_00_zm']) > float(obj['_8_38'])) or (today_9_26 > today_8_38 and float(obj['_9_00_zm']) < float(obj['_8_38'])):
+                        if (today_9_26 < today_8_30 and float(obj['_9_00_zm']) > float(obj['_8_30'])) or (today_9_26 > today_8_30 and float(obj['_9_00_zm']) < float(obj['_8_30'])):
                             is_append = False
 
                         if (today_9_26 < 0 and float(obj['_9_00_zm']) > 0) or (today_9_26 > 0 and float(obj['_9_00_zm']) < 0):
                             is_append = False
 
-                        if obj['_8_38'] != '':
-                            if today_8_38 < -1.0 and float(obj['_8_38']) > (-0.5 - penalize):
+                        if obj['_8_30'] != '':
+                            if today_8_30 < -1.0 and float(obj['_8_30']) > (-0.5 - penalize):
                                 is_append = False
-                            elif today_8_38 > 1.0 and float(obj['_8_38']) < (0.5 + penalize):
+                            elif today_8_30 > 1.0 and float(obj['_8_30']) < (0.5 + penalize):
                                 is_append = False
-                            elif float(obj['_8_38']) < today_8_38 - (0.5 - penalize) or float(obj['_8_38']) > today_8_38 + (0.5 - penalize):
+                            elif float(obj['_8_30']) < today_8_30 - (0.5 - penalize) or float(obj['_8_30']) > today_8_30 + (0.5 - penalize):
                                 is_append = False
 
                         if obj['_9_00_zm'] != '':

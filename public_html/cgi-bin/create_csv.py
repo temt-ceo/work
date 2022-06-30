@@ -7,8 +7,8 @@ from datetime import date, timedelta
 def do_create_csv(form_dict):
     today = date.today()
     yesterday = today - timedelta(days=1)
-    csv_columns = ["date", "Y開", "Y終", "Y活", "Yx", "Yn", "B5", "Y5", "Px", "Pn", "dis", "B開", "B終", "8:38", "9:26", "flag", "9:30", "活度", "max", "min", "down", "終値", "5日差", "type"]
-    inputs_cols = ["type", "_8_38", "_9_26", "_9_30", "_10_00", "_13_30", "_16_00"]
+    csv_columns = ["date", "Y開", "Y終", "Y活", "Yx", "Yn", "B5", "Y5", "Px", "Pn", "dis", "B開", "B終", "8:30", "9:26", "flag", "9:30", "活度", "max", "min", "down", "終値", "5日差", "type"]
+    inputs_cols = ["type", "_8_30", "_9_26", "_9_30", "_10_00", "_13_30", "_16_00"]
 
     real_datas = []
     html_json = {}
@@ -80,7 +80,7 @@ def do_create_csv(form_dict):
     real_data['dis'] = highest - lowest
     real_data['B開'] = real_datas[day2ago]['9:30']
     real_data['B終'] = real_datas[day2ago]['終値']
-    real_data['8:38'] = form_data['_8_38']
+    real_data['8:30'] = form_data['_8_30']
     real_data['9:26'] = form_data['_9_26']
     real_data['flag'] = form_dict['flag']
     real_data['9:30'] = form_data['_9_30']

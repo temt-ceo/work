@@ -59,33 +59,13 @@
                             <label style="font-size: 13px"><span>今日の早期予測結果：</span></label>
                             <div style="margin-left: 20px;">
                                 <span>株価動き: <u style="color:red">パターン{{ html_json.predicted_today_type }}</u> (高値の位置:<u style="color:red">{{ html_json.predicted_today_high_pos }}</u>)</span>
-                                {% if html_json.early_check == 'checked' %}
                                 <div><nobr>
-                                    <span>時間外の動きを早期予測した結果: </span><wbr>
+                                    <span>時間外の動きを予測した結果: </span><wbr>
                                     <span style="color:Aqua;padding-left:10px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[0] }}
-                                    <span style="color:Orange;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[1] }}
-                                    <span style="color:Gainsboro;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[2] }}
-                                    <span style="color:DarkGray;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[3] }}
-                                    <span style="color:GreenYellow;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[4] }}
-                                    <span style="color:Purple;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[5] }}
                                     </nobr>
                                 </div>
                                 <div style="font-size: 7px;">(1時間前から5分前に0.3%変化し、9:30に0.9%変化したと仮定)
                                 </div>
-                                {% else %}
-                                <div><nobr>
-                                    <span>市場開始時の上昇/下落を予測した結果: </span><wbr>
-                                    <span style="color:Aqua;padding-left:10px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[0] }}
-                                    <span style="color:Green;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[1] }}
-                                    <span style="color:Gainsboro;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[2] }}
-                                    <span style="color:Orange;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[3] }}
-                                    <span style="color:Purple;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[4] }}
-                                    <span style="color:Yellow;padding-left:3px;font-size: 12px;">■</span>{{ html_json.predicted_by_pattern[5] }}
-                                    </nobr>
-                                </div>
-                                <div style="font-size: 7px;">(左から9:30に1.6%,0.8%,0.4%,-0.4%,-0.8%,-1.6%変化したと仮定)
-                                </div>
-                                {% endif %}
                             </div>
                             {% endif %}
                        </div>
@@ -95,17 +75,17 @@
                                 <input type="text" value="{{ html_json._QQQ3 }}" name="_QQQ3" id="_QQQ3" required/>
                             </div>
                             <div class="form-group">
-                                <label for="_NQ_F">NQ=F<span style="color:red;vertical-align:super;">*</span> :</label>
+                                <label for="_NQ_F">Nasdaq100Fut<span style="color:red;vertical-align:super;">*</span> :</label>
                                 <input type="text" value="{{ html_json._NQ_F }}" name="_NQ_F" id="_NQ_F" required/>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="_8_38">時間外【市場開始１時間前】<span style="color:red;vertical-align:super;">*</span> :</label>
-                                <input type="text" value="{{ html_json._8_38 }}" name="_8_38" id="_8_38" required/>
+                                <label for="_8_30">8:30<span style="color:red;vertical-align:super;">*</span> :</label>
+                                <input type="text" value="{{ html_json._8_30 }}" name="_8_30" id="_8_30" required/>
                             </div>
                             <div class="form-group">
-                                <label for="_9_00">9:00(pypl)<span style="color:red;vertical-align:super;">*</span>:</label>
+                                <label for="_9_00">9:00<span style="color:red;vertical-align:super;">*</span>:</label>
                                 <input type="text" value="{{ html_json._9_00 }}" name="_9_00" id="_9_00" required/>
                             </div>
                         </div>
@@ -115,8 +95,8 @@
                                 <input type="text" value="{{ html_json._9_00_sq }}" name="_9_00_sq" id="_9_00_sq" required/>
                             </div>
                             <div class="form-group">
-                                <label for="_9_26">時間外【市場開始5分前】<span style="color:red;vertical-align:super;">*</span> :</label>
-                                <input type="text" value="{{ html_json._9_26 }}" name="_9_26" id="_9_26" required/>
+                                <label for="_9_00_sq">Momentum<span style="color:red;vertical-align:super;">*</span>:</label>
+                                <input type="text" value="{{ html_json.momentum }}" name="momentum" id="momentum" required/>
                             </div>
                         </div>
                         <div class="form-group">

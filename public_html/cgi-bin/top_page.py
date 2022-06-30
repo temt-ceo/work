@@ -18,16 +18,11 @@ def show_top_page(form_dict=None, from_page=None, message=None):
             html_json['date'] = today.isoformat()
             html_json['_QQQ3'] = form_dict['_QQQ3']
             html_json['_NQ_F'] = form_dict['_NQ_F']
-            html_json['_8_38'] = form_dict['_8_38']
+            html_json['_8_30'] = form_dict['_8_30']
             html_json['_9_00'] = form_dict['_9_00']
             html_json['_9_00_sq'] = form_dict['_9_00_sq']
-            html_json['_9_26'] = form_dict['_9_26']
-            html_json['_9_30'] = form_dict['_9_30']
+            html_json['momentum'] = form_dict['momentum']
             html_json['price'] = form_dict['price']
-            if 'early_check' in form_dict:
-                html_json['early_check'] = form_dict['early_check']
-            else:
-                html_json['early_check'] = ''
             data_file.truncate(0)
             data_file.seek(0)
             data_file.writelines(json.dumps(html_json))
@@ -45,13 +40,11 @@ def show_top_page(form_dict=None, from_page=None, message=None):
     if html_json['date'] != today.isoformat() and html_json['date'] != yesterday.isoformat():
         html_json['_QQQ3'] = ''
         html_json['_NQ_F'] = ''
-        html_json['_8_38'] = ''
+        html_json['_8_30'] = ''
         html_json['_9_00'] = ''
         html_json['_9_00_sq'] = ''
-        html_json['_9_26'] = ''
-        html_json['_9_30'] = ''
+        html_json['momentum'] = ''
         html_json['price'] = 0
-        html_json['early_check'] = ''
 
     # CSV登録データを呼び出す
     real_datas = []
@@ -68,18 +61,20 @@ def show_top_page(form_dict=None, from_page=None, message=None):
     html_json['_5days_volume'] = real_datas[-1]['5日差']
     html_json['_5days_diff'] =  '{:.1f}'.format(float(real_datas[-1]['5日差']) - float(real_datas[-2]['5日差']))
 
-    # 予測を行う
+    ################
+    #  予測を行う   #
+    ################
     eval_df = pd.read_csv('saved_data/real_data.csv')
     # パターンの予測
-    pred_type, real_type = predicting(eval_df[-1:], 'type')
-    html_json['predicted_type'] = pred_type[-1]
-    html_json['real_type'] = real_type[-1]
-    # 高値の位置予測
-    eval_df['type'] = pd.Series([pred_type])
-    pred_hpos, real_hpos = predicting(eval_df[-1:], 'High Position')
-    pos_to_time = list(zip([1,2,3,4],['9:30','10:00','13:30','16:00']))
-    html_json['pre_high_pos'] = pos_to_time[pred_hpos[-1] - 1][1]
-    html_json['real_high_pos'] = pos_to_time[real_hpos[-1] - 1][1]
+    # pred_type, real_type = predicting(eval_df[-1:], 'type')
+    # html_json['predicted_type'] = pred_type[-1]
+    # html_json['real_type'] = real_type[-1]
+    # # 高値の位置予測
+    # eval_df['type'] = pd.Series([pred_type])
+    # pred_hpos, real_hpos = predicting(eval_df[-1:], 'High Position')
+    # pos_to_time = list(zip([1,2,3,4],['9:30','10:00','13:30','16:00']))
+    # html_json['pre_high_pos'] = pos_to_time[pred_hpos[-1] - 1][1]
+    # html_json['real_high_pos'] = pos_to_time[real_hpos[-1] - 1][1]
 
     # Formで入力した情報から今日の動きを予測する
     if form_dict is not None:
@@ -87,7 +82,6 @@ def show_top_page(form_dict=None, from_page=None, message=None):
         html_json['message'] = '今日の予測結果が表示されました。'
         html_json['message2'] = 'グラフ表示のリンクが有効化されました。'
     return render_template('index.html', html_json=html_json)
-
 def data_cleaning(df, _type=None):
     if _type is not None:
         df['type'] = _type
@@ -121,7 +115,7 @@ def data_cleaning(df, _type=None):
             df.rename(columns={col: 'Pre2 Start'}, inplace=True)
         elif _col == 'B終':
             df.rename(columns={col: 'Pre2 End'}, inplace=True)
-        elif _col == '8:38':
+        elif _col == '8:30':
             df.rename(columns={col: 'PreMarket 838'}, inplace=True)
         elif _col == '9:26':
             df.rename(columns={col: 'PreMarket 926'}, inplace=True)
@@ -155,8 +149,10 @@ def predicting(eval_df, target, predict_only=False):
     df = pd.concat([all_alert_df, eval_df])
 
     # CSVデータのクリーニング
-    df = df[['Y開', 'Y終', 'Y活', 'Yx', 'Yn', 'B5', 'Y5', 'Px', 'Pn', 'dis', 'B開', 'B終', '8:38', '9:26', 'flag', '9:30', '活度', 'max', 'min', 'down', '終値', 'type']]
+    # eval_df = eval_df[['8:30', '8:30->9:00', 'QQQ3/3', 'NQ=F', 'sq(9:00)', '昨日の13:30', '昨日の終値', '昨日の基準', '昨日の成行QQQ3', '昨日の成行NQ=F', '昨日のMomentum', '一昨日の13:30', '一昨日の終値', '終値３日変化量', 'Momentum３日変化量', '終値5日変化量', '成行５日変化量', 'PER20日変化率', 'Type', 'Low', 'LowType', 'High', 'HighType']]
+    df = df[['Y開', 'Y終', 'Y活', 'Yx', 'Yn', 'B5', 'Y5', 'Px', 'Pn', 'dis', 'B開', 'B終', '8:30', '9:26', 'flag', '9:30', '活度', 'max', 'min', 'down', '終値', 'type']]
     eval_df = df.copy()
+    eval_df = eval_df.copy()
     data_cleaning(eval_df)
 
     # 全てのデータは-5~5の範囲にほぼあり、また、0以上と0未満は心理的に重要な意味を持つことからNormalizationは精度が下げる可能性がある為行わない。
@@ -216,11 +212,11 @@ def predicting(eval_df, target, predict_only=False):
     preprocessed_df = preprocess(eval_df)
 
     # 予測に必要となるカラムのみ保持
-    X_test = preprocessed_df[len(all_alert_df):][['Pre End', 'Pre Vitality', '5Days Volume', 'PreMarket 838', 'Alert_0', 'Alert_1', 'Alert_2', 'Start', 'Compare 5Days', 'PreMarket Pattern_1', 'PreMarket Pattern_2', 'PreMarket Pattern_3', 'PreMarket Pattern_4', 'PreMarket Pattern_5', 'PreMarket Pattern_6']]
+    X_test = preprocessed_df[['Pre End', 'Pre Vitality', '5Days Volume', 'PreMarket 838', 'Alert_0', 'Alert_1', 'Alert_2', 'Start', 'Compare 5Days', 'PreMarket Pattern_1', 'PreMarket Pattern_2', 'PreMarket Pattern_3', 'PreMarket Pattern_4', 'PreMarket Pattern_5', 'PreMarket Pattern_6']]
 
     # Y値
     if predict_only is False:
-        y_test = preprocessed_df[len(all_alert_df):][[target]]
+        y_test = preprocessed_df[[target]]
         y_test[target] = y_test[target].apply(int)
         real_type = pd.Series(y_test[target].values).array
     else:
@@ -229,7 +225,14 @@ def predicting(eval_df, target, predict_only=False):
     # Modelを読み込む
     model = None
     if target == 'type':
+        # with open('saved_data/model/stock_data_model_v2_type.pkl', 'rb') as file:
         with open('saved_data/model/stock_data_model_v102.pkl', 'rb') as file:
+            model = pickle.load(file)
+    elif target == 'LowType':
+        with open('saved_data/model/stock_data_model_v2_low.pkl', 'rb') as file:
+            model = pickle.load(file)
+    elif target == 'HighType':
+        with open('saved_data/model/stock_data_model_v2_high.pkl', 'rb') as file:
             model = pickle.load(file)
     elif target == 'High Position':
         with open('saved_data/model/stock_data_model_rf_highpos.pkl', 'rb') as file:
@@ -256,10 +259,9 @@ def predict_today_result(form_dict, html_json, real_datas):
     real_datas[-1]['dis'] = ''
     real_datas[-1]['B開'] = real_datas[-2]['Y開']
     real_datas[-1]['B終'] = real_datas[-2]['Y終']
-    real_datas[-1]['8:38'] = form_dict['_8_38']
+    real_datas[-1]['8:30'] = form_dict['_8_30']
     real_datas[-1]['9:26'] = form_dict['_9_26']
     real_datas[-1]['flag'] = 0 # form_dict['flag']
-    real_datas[-1]['9:30'] = form_dict['_9_30']
     real_datas[-1]['活度'] = ''
     real_datas[-1]['max'] = ''
     real_datas[-1]['min'] = ''
@@ -269,54 +271,10 @@ def predict_today_result(form_dict, html_json, real_datas):
     real_datas[-1]['type'] = ''
     # CSVにデータを登録する
     with open('saved_data/temp.csv', 'w', newline='', encoding="utf-8") as csvfile:
-        csv_columns = ["date", "Y開", "Y終", "Y活", "Yx", "Yn", "B5", "Y5", "Px", "Pn", "dis", "B開", "B終", "8:38", "9:26", "flag", "9:30", "活度", "max", "min", "down", "終値", "5日差", "type"]
+        csv_columns = ["date", "Y開", "Y終", "Y活", "Yx", "Yn", "B5", "Y5", "Px", "Pn", "dis", "B開", "B終", "8:30", "9:26", "flag", "9:30", "活度", "max", "min", "down", "終値", "5日差", "type"]
         writer = csv.DictWriter(csvfile, quoting=csv.QUOTE_ALL, fieldnames=csv_columns)
         writer.writeheader()
         writer.writerow(real_datas[-1])
-        if html_json['early_check'] == 'checked':
-            # 堅調・上昇
-            real_datas[-1]['9:26'] = '{:.1f}'.format(float(form_dict['_8_38']) + 0.3)
-            real_datas[-1]['9:30'] = '{:.1f}'.format(float(form_dict['_8_38']) + 0.9)
-            writer.writerow(real_datas[-1])
-            # 堅調・下落
-            real_datas[-1]['9:26'] = '{:.1f}'.format(float(form_dict['_8_38']) + 0.3)
-            real_datas[-1]['9:30'] = '{:.1f}'.format(float(form_dict['_8_38']) - 0.9)
-            writer.writerow(real_datas[-1])
-            # 不定・上昇
-            real_datas[-1]['9:26'] = '{:.1f}'.format(float(form_dict['_8_38']))
-            real_datas[-1]['9:30'] = '{:.1f}'.format(float(form_dict['_8_38']) + 0.9)
-            writer.writerow(real_datas[-1])
-            # 不定・下落
-            real_datas[-1]['9:26'] = '{:.1f}'.format(float(form_dict['_8_38']))
-            real_datas[-1]['9:30'] = '{:.1f}'.format(float(form_dict['_8_38']) - 0.9)
-            writer.writerow(real_datas[-1])
-            # 軟調・上昇
-            real_datas[-1]['9:26'] = '{:.1f}'.format(float(form_dict['_8_38']) - 0.3)
-            real_datas[-1]['9:30'] = '{:.1f}'.format(float(form_dict['_8_38']) + 0.9)
-            writer.writerow(real_datas[-1])
-            # 軟調・下落
-            real_datas[-1]['9:26'] = '{:.1f}'.format(float(form_dict['_8_38']) - 0.3)
-            real_datas[-1]['9:30'] = '{:.1f}'.format(float(form_dict['_8_38']) - 0.9)
-            writer.writerow(real_datas[-1])
-        else:
-            # 上昇大
-            real_datas[-1]['9:30'] = '{:.1f}'.format(float(form_dict['_9_26']) + 1.6)
-            writer.writerow(real_datas[-1])
-            # 上昇中
-            real_datas[-1]['9:30'] = '{:.1f}'.format(float(form_dict['_9_26']) + 0.8)
-            writer.writerow(real_datas[-1])
-            # 上昇小
-            real_datas[-1]['9:30'] = '{:.1f}'.format(float(form_dict['_9_26']) + 0.4)
-            writer.writerow(real_datas[-1])
-            # 下落小
-            real_datas[-1]['9:30'] = '{:.1f}'.format(float(form_dict['_9_26']) - 0.4)
-            writer.writerow(real_datas[-1])
-            # 下落中
-            real_datas[-1]['9:30'] = '{:.1f}'.format(float(form_dict['_9_26']) - 0.8)
-            writer.writerow(real_datas[-1])
-            # 下落大
-            real_datas[-1]['9:30'] = '{:.1f}'.format(float(form_dict['_9_26']) - 1.6)
-            writer.writerow(real_datas[-1])
     # パターンの予測
     eval_df = pd.read_csv('saved_data/temp.csv')
     pred_type, _ = predicting(eval_df, 'type', predict_only=True)

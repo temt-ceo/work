@@ -91,11 +91,11 @@ var chartData = [
         {% endif %}
     },
     {
-        "todays_data": {{ html_json._8_38 }},
+        "todays_data": {{ html_json._8_30 }},
         "timing": "8:30",
         {% if grp_num > 0 %}
           {% for i in range(0, grp_num) %}
-            "real_value_{{ i }}": {{ previous[i]._8_38 }},
+            "real_value_{{ i }}": {{ previous[i]._8_30 }},
             "date_{{ i }}": "{{ previous[i].date }}",
           {% endfor %}
         {% endif %}

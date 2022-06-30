@@ -12,10 +12,10 @@ def show_stats(form_dict=None, html_json=None):
 
     # 統計データ（過去データ表用）
     eval_df = pd.read_csv('saved_data/real_data.csv')
-    pred_type, real_type = predicting(eval_df[-105:], 'type') # 4件目まではトレーニングされている
-    html_json['predicted_type'] = pred_type
-    html_json['real_type'] = real_type
-    html_json['past_data_closed_at'] = ''
+    # pred_type, real_type = predicting(eval_df[-105:], 'type') # 4件目まではトレーニングされている
+    # html_json['predicted_type'] = pred_type
+    # html_json['real_type'] = real_type
+    # html_json['past_data_closed_at'] = ''
 
     # 5日移動平均線を求める為に2~4日のデータをcsvから取得する
     real_datas = []
@@ -37,7 +37,7 @@ def show_stats(form_dict=None, html_json=None):
         html_json['_10_00'] = form_dict['_10_00']
         temp[0]['date'] = tomorrow.isoformat()
         # 予測に使わない項目は空とする
-        temp[0]['Y8:38'] = temp[0]['8:38']
+        temp[0]['Y8:30'] = temp[0]['8:30']
         temp[0]['Y9:26'] = temp[0]['9:26']
         temp[0]['Y開'] = temp[0]['9:30']
         temp[0]['Y終'] = '' # 必須だが後で入力する
@@ -51,7 +51,7 @@ def show_stats(form_dict=None, html_json=None):
         temp[0]['dis'] = ''
         temp[0]['B開'] = ''
         temp[0]['B終'] = ''
-        temp[0]['8:38'] = '' # 必須だが後で入力する
+        temp[0]['8:30'] = '' # 必須だが後で入力する
         temp[0]['9:26'] = '' # 必須だが後で入力する
         temp[0]['flag'] = 0 # temp[0]['flag'] # 今日と明日は同じ流動性と仮定する
         temp[0]['9:30'] = '' # 必須だが後で入力する
@@ -69,47 +69,47 @@ def show_stats(form_dict=None, html_json=None):
         d5 = float(real_datas[-4]['終値'])
         # CSVにデータを登録する
         with open('saved_data/temp_future.csv', 'w', newline='', encoding="utf-8") as csvfile:
-            csv_columns = ["date", "Y8:38", "Y9:26", "Y開", "Y終", "Y活", "Yx", "Yn", "B5", "Y5", "Px", "Pn", "dis", "B開", "B終", "8:38", "9:26", "flag", "9:30", "活度", "max", "min", "down", "終値", "5日差", "type"]
+            csv_columns = ["date", "Y8:30", "Y9:26", "Y開", "Y終", "Y活", "Yx", "Yn", "B5", "Y5", "Px", "Pn", "dis", "B開", "B終", "8:30", "9:26", "flag", "9:30", "活度", "max", "min", "down", "終値", "5日差", "type"]
             writer = csv.DictWriter(csvfile, quoting=csv.QUOTE_ALL, fieldnames=csv_columns)
             writer.writeheader()
             for at_close in [2.5, 0.5, -0.5, -2.5]:
-                for _8_38 in [0.7, 0.3, -0.3, -0.7]:
+                for _8_30 in [0.7, 0.3, -0.3, -0.7]:
 
                     temp[0]['Y終'] = at_close
                     temp[0]['Y5'] = '{:.1f}'.format(at_close + d2 + d3 + d4 + d5)
-                    temp[0]['8:38'] = _8_38
+                    temp[0]['8:30'] = _8_30
 
                     # 堅調・上昇
-                    temp[0]['9:26'] = '{:.1f}'.format(_8_38 + 0.3)
-                    temp[0]['9:30'] = '{:.1f}'.format(_8_38  + 0.9)
+                    temp[0]['9:26'] = '{:.1f}'.format(_8_30 + 0.3)
+                    temp[0]['9:30'] = '{:.1f}'.format(_8_30  + 0.9)
                     writer.writerow(temp[0])
                     # 堅調・下落
-                    temp[0]['9:26'] = '{:.1f}'.format(_8_38  + 0.3)
-                    temp[0]['9:30'] = '{:.1f}'.format(_8_38  - 0.9)
+                    temp[0]['9:26'] = '{:.1f}'.format(_8_30  + 0.3)
+                    temp[0]['9:30'] = '{:.1f}'.format(_8_30  - 0.9)
                     writer.writerow(temp[0])
                     # 不定・上昇
-                    temp[0]['9:26'] = '{:.1f}'.format(_8_38)
-                    temp[0]['9:30'] = '{:.1f}'.format(_8_38 + 0.9)
+                    temp[0]['9:26'] = '{:.1f}'.format(_8_30)
+                    temp[0]['9:30'] = '{:.1f}'.format(_8_30 + 0.9)
                     writer.writerow(temp[0])
                     # 不定・下落
-                    temp[0]['9:26'] = '{:.1f}'.format(_8_38)
-                    temp[0]['9:30'] = '{:.1f}'.format(_8_38 - 0.9)
+                    temp[0]['9:26'] = '{:.1f}'.format(_8_30)
+                    temp[0]['9:30'] = '{:.1f}'.format(_8_30 - 0.9)
                     writer.writerow(temp[0])
                     # 軟調・上昇
-                    temp[0]['9:26'] = '{:.1f}'.format(_8_38 - 0.3)
-                    temp[0]['9:30'] = '{:.1f}'.format(_8_38 + 0.9)
+                    temp[0]['9:26'] = '{:.1f}'.format(_8_30 - 0.3)
+                    temp[0]['9:30'] = '{:.1f}'.format(_8_30 + 0.9)
                     writer.writerow(temp[0])
                     # 軟調・下落
-                    temp[0]['9:26'] = '{:.1f}'.format(_8_38 - 0.3)
-                    temp[0]['9:30'] = '{:.1f}'.format(_8_38 - 0.9)
+                    temp[0]['9:26'] = '{:.1f}'.format(_8_30 - 0.3)
+                    temp[0]['9:30'] = '{:.1f}'.format(_8_30 - 0.9)
                     writer.writerow(temp[0])
         eval_df = pd.read_csv('saved_data/temp_future.csv')
-        pred_type, _ = predicting(eval_df, 'type', predict_only=True)
-        html_json['predicted_by_pattern'] = pred_type
-        eval_df['type'] = pd.Series(pred_type)
-        pred_hpos, _ = predicting(eval_df, 'High Position', predict_only=True)
-        html_json['predicted_today_high_pos'] = pred_hpos
-        html_json['message'] = '明日の予測結果が表示されました。'
+        # pred_type, _ = predicting(eval_df, 'type', predict_only=True)
+        # html_json['predicted_by_pattern'] = pred_type
+        # eval_df['type'] = pd.Series(pred_type)
+        # pred_hpos, _ = predicting(eval_df, 'High Position', predict_only=True)
+        # html_json['predicted_today_high_pos'] = pred_hpos
+        # html_json['message'] = '明日の予測結果が表示されました。'
 
         # すでに今日のパターンを予測済みなら
         if html_json['today_type'] != '':
@@ -173,7 +173,7 @@ def data_cleaning(df, _type=None):
             df.rename(columns={col: 'Low Position'}, inplace=True)
         elif _col == 'dis':
             df.rename(columns={col: 'High Low Diff'}, inplace=True)
-        elif _col == '8:38':
+        elif _col == '8:30':
             df.rename(columns={col: 'PreMarket 838'}, inplace=True)
         elif _col == '9:26':
             df.rename(columns={col: 'PreMarket 926'}, inplace=True)
@@ -197,7 +197,7 @@ def predicting(eval_df, target, predict_only=False):
     df = pd.concat([all_alert_df, eval_df])
 
     # CSVデータのクリーニング
-    df = df[['Y開', 'Y終', 'Y活', 'Yx', 'Yn', 'B5', 'Y5', 'Px', 'Pn', 'dis', 'B開', 'B終', '8:38', '9:26', 'flag', '9:30', '活度', 'max', 'min', 'down', '終値', 'type']]
+    df = df[['Y開', 'Y終', 'Y活', 'Yx', 'Yn', 'B5', 'Y5', 'Px', 'Pn', 'dis', 'B開', 'B終', '8:30', '9:26', 'flag', '9:30', '活度', 'max', 'min', 'down', '終値', 'type']]
     eval_df = df.copy()
     data_cleaning(eval_df)
 
