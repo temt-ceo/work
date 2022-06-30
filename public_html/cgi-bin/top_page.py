@@ -55,10 +55,19 @@ def show_top_page(form_dict=None, from_page=None, message=None):
             real_datas.append(row)
 
     # CSV登録データの直近データ
+    html_json['pre_type'] = real_datas[-1]['type']
+    html_json['pre_qqq'] = real_datas[-1]['QQQ3']
+    html_json['pre_nqf'] = real_datas[-1]['Nasdaq100Fut']
+    html_json['pre_8_30'] = real_datas[-1]['8:30']
+    html_json['pre_9_00_zm'] = real_datas[-1]['zm9:00']
+    html_json['pre_9_00_sq'] = real_datas[-1]['sq9:00']
     html_json['pre_16_00'] = real_datas[-1]['16:00']
-    html_json['pre_vitality'] = real_datas[-1]['成行']
-    html_json['target'] = real_datas[-1]['target']
-    html_json['memo'] = real_datas[-1]['Memo']
+    html_json['pre_nari'] = real_datas[-1]['成行']
+    html_json['pre_target'] = real_datas[-1]['target']
+    html_json['pre_basis'] = real_datas[-1]['基準']
+    html_json['pre_momentum'] = real_datas[-1]['基準momemtum']
+    html_json['pre_memo'] = real_datas[-1]['Memo']
+    html_json['pre_per'] = real_datas[-1]['PER100値']
 
     ################
     #  予測を行う   #
@@ -89,7 +98,7 @@ def show_top_page(form_dict=None, from_page=None, message=None):
         html_json['message2'] = 'グラフ表示のリンクが有効化されました。'
     return render_template('index.html', html_json=html_json)
 
-def data_cleaning(df):
+def data_cleaning(df, predict_only):
     # カラム名変更
     for col in df.columns:
         if col == 'zm9:00':
@@ -114,14 +123,14 @@ def data_cleaning(df):
             df['成行NQ=F'] = new[1].str.replace(r'[^\x00-\x7F]+', '').astype(float)
         elif col == '基準momemtum':
             split_data = df[col].str.split(pat="@", expand=True)
-            df['Momentum'] = split_data[0].astype(int)
+            df['Momentum'] = split_data[0].astype(float)
             if len(split_data) >= 2:
                 df['PERTarget'] = split_data[1]
             else:
                 df['PERTarget'] = 0.0
         elif col == 'PER100値':
             df['PER'] = df[col]
-        elif col == 'type':
+        elif col == 'type' and predict_only is False:
             df['Type'] = df[col].astype(int)
             df['LowType'] = df[col].astype(int)
             df['LowType'] = None
@@ -131,7 +140,11 @@ def data_cleaning(df):
             df['Low'] = df[col].astype(float)
         elif col == 'Memo':
             df['High'] = df[col].str.split(pat="(", expand=True)[0].str.replace(r'(%|⇨)', '').astype(float)
-    df = df[['8:30', '8:30->9:00', 'QQQ3/3', 'NQ=F', 'sq(9:00)', '16:00', '基準(5段階)', '成行QQQ3', '成行NQ=F', 'Momentum', 'PER', 'PERTarget', 'Type', 'Low', 'LowType', 'High', 'HighType']]
+
+    if  predict_only is False:
+        df = df[['8:30', '8:30->9:00', 'QQQ3/3', 'NQ=F', 'sq(9:00)', '16:00', '基準(5段階)', '成行QQQ3', '成行NQ=F', 'Momentum', 'PER', 'PERTarget', 'Type', 'Low', 'LowType', 'High', 'HighType']]
+    else:
+        df = df[['8:30', '8:30->9:00', 'QQQ3/3', 'NQ=F', 'sq(9:00)', '16:00', '基準(5段階)', '成行QQQ3', '成行NQ=F', 'Momentum', 'PER', 'PERTarget']]
 
     # for col in df.columns:
     #     # 数値データの値タイプ変更
@@ -146,14 +159,13 @@ def predicting(eval_df, target, predict_only=False):
     # CSVデータのクリーニング
     eval_df = eval_df[['type', 'QQQ3', 'Nasdaq100Fut', '8:30', 'sq9:00', 'zm9:00', '16:00', '成行', 'target', '基準', '基準momemtum', 'Memo', 'PER100値']]
     eval_df = eval_df.copy()
-    data_cleaning(eval_df)
+    data_cleaning(eval_df, predict_only)
 
     # 全てのデータは-5~5の範囲にほぼあり、また、0以上と0未満は心理的に重要な意味を持つことからNormalizationは精度が下げる可能性がある為行わない。
     def normalize_x(X):
         # X_norm = (X - X.mean()) / X.std()
         X_norm = X
         return X_norm
-
 
     # # one hot化
     # def preprocess(df):
@@ -174,7 +186,7 @@ def predicting(eval_df, target, predict_only=False):
     #     return df
 
     # 前処理
-    def preprocess(df):
+    def preprocess(df, predict_only):
         #
         #
         # 必要なInputを全て用意する
@@ -235,40 +247,41 @@ def predicting(eval_df, target, predict_only=False):
                 df.at[i, '成行５日変化量'] = 0 # Input(成行5日変化量)
             df.at[i, 'PER計算'] = float(row['PERTarget']) / float(row['PER']) # Input(PER20日変化率)
 
-            # 予測結果をクラス化する
-            if df.at[i, 'Low'] <= -5.6:
-                df.at[i, 'LowType'] = 1
-            elif df.at[i, 'Low'] <= -4.2:
-                df.at[i, 'LowType'] = 2
-            elif df.at[i, 'Low'] <= -3.0:
-                df.at[i, 'LowType'] = 3
-            elif df.at[i, 'Low'] <= -2.0:
-                df.at[i, 'LowType'] = 4
-            elif df.at[i, 'Low'] <= -1.4:
-                df.at[i, 'LowType'] = 5
-            elif df.at[i, 'Low'] <= -0.6:
-                df.at[i, 'LowType'] = 6
-            elif df.at[i, 'Low'] <= 0.4:
-                df.at[i, 'LowType'] = 7
-            else:
-                df.at[i, 'LowType'] = 8
+            if predict_only is False:
+                # 予測結果をクラス化する
+                if df.at[i, 'Low'] <= -5.6:
+                    df.at[i, 'LowType'] = 1
+                elif df.at[i, 'Low'] <= -4.2:
+                    df.at[i, 'LowType'] = 2
+                elif df.at[i, 'Low'] <= -3.0:
+                    df.at[i, 'LowType'] = 3
+                elif df.at[i, 'Low'] <= -2.0:
+                    df.at[i, 'LowType'] = 4
+                elif df.at[i, 'Low'] <= -1.4:
+                    df.at[i, 'LowType'] = 5
+                elif df.at[i, 'Low'] <= -0.6:
+                    df.at[i, 'LowType'] = 6
+                elif df.at[i, 'Low'] <= 0.4:
+                    df.at[i, 'LowType'] = 7
+                else:
+                    df.at[i, 'LowType'] = 8
 
-            if df.at[i, 'High'] < -1.4:
-                df.at[i, 'HighType'] = 1
-            elif df.at[i, 'High'] < -0.7:
-                df.at[i, 'HighType'] = 2
-            elif df.at[i, 'High'] < -0.1:
-                df.at[i, 'HighType'] = 3
-            elif df.at[i, 'High'] < 1.4:
-                df.at[i, 'HighType'] = 4
-            elif df.at[i, 'High'] < 3.1:
-                df.at[i, 'HighType'] = 5
-            elif df.at[i, 'High'] < 4.3:
-                df.at[i, 'HighType'] = 6
-            elif df.at[i, 'High'] < 5.4:
-                df.at[i, 'HighType'] = 7
-            else:
-                df.at[i, 'HighType'] = 8
+                if df.at[i, 'High'] < -1.4:
+                    df.at[i, 'HighType'] = 1
+                elif df.at[i, 'High'] < -0.7:
+                    df.at[i, 'HighType'] = 2
+                elif df.at[i, 'High'] < -0.1:
+                    df.at[i, 'HighType'] = 3
+                elif df.at[i, 'High'] < 1.4:
+                    df.at[i, 'HighType'] = 4
+                elif df.at[i, 'High'] < 3.1:
+                    df.at[i, 'HighType'] = 5
+                elif df.at[i, 'High'] < 4.3:
+                    df.at[i, 'HighType'] = 6
+                elif df.at[i, 'High'] < 5.4:
+                    df.at[i, 'HighType'] = 7
+                else:
+                    df.at[i, 'HighType'] = 8
 
             T5_ago_sum_16 = sum5_16
             T5_ago_sum_N = sum5_N
@@ -283,15 +296,18 @@ def predicting(eval_df, target, predict_only=False):
 
         for i, row in df.iterrows():
             if i == -1:
-                df.at[i, 'PER20日変化率'] = df.at[i, 'PER計算'] / df.at[i - 20, 'PER計算'] # Input(PER計算)
+                df.at[i, 'PER20日変化率'] = df.at[i - 1, 'PER計算'] / df.at[i - 21, 'PER計算'] # Input(PER計算)
             else:
                 df.at[i, 'PER20日変化率'] = 0.0
 
         # 必要な項目 + 予測結果のみ
-        all_df = df[['8:30', '8:30->9:00', 'QQQ3/3', 'NQ=F', 'sq(9:00)', '昨日の終値', '基準(5段階)', '昨日の基準', '昨日の成行QQQ3', '昨日の成行NQ=F', 'Momentum', '昨日のMomentum', '一昨日の終値', '終値３日変化量', 'Momentum3日変化量', '終値5日変化量', '成行５日変化量', 'PER20日変化率', 'Type', 'Low', 'LowType', 'High', 'HighType']]
+        if predict_only is False:
+            all_df = df[['8:30', '8:30->9:00', 'QQQ3/3', 'NQ=F', 'sq(9:00)', '昨日の終値', '基準(5段階)', '昨日の基準', '昨日の成行QQQ3', '昨日の成行NQ=F', 'Momentum', '昨日のMomentum', '一昨日の終値', '終値３日変化量', 'Momentum3日変化量', '終値5日変化量', '成行５日変化量', 'PER20日変化率', 'Type', 'Low', 'LowType', 'High', 'HighType']]
+        else:
+            all_df = df[['8:30', '8:30->9:00', 'QQQ3/3', 'NQ=F', 'sq(9:00)', '昨日の終値', '基準(5段階)', '昨日の基準', '昨日の成行QQQ3', '昨日の成行NQ=F', 'Momentum', '昨日のMomentum', '一昨日の終値', '終値３日変化量', 'Momentum3日変化量', '終値5日変化量', '成行５日変化量', 'PER20日変化率']]
         return all_df
 
-    preprocessed_df = preprocess(eval_df)
+    preprocessed_df = preprocess(eval_df, predict_only)
 
     # 予測に必要となるカラムのみ保持
     X_test = []
@@ -330,44 +346,44 @@ def predicting(eval_df, target, predict_only=False):
 def predict_today_result(form_dict, html_json, real_datas):
     today = date.today()
     html_json['form_submitted'] = True
-    real_datas[-1]['date'] = today.isoformat()
-    real_datas[-1]['Y開'] = real_datas[-1]['9:30']
-    real_datas[-1]['Y終'] = real_datas[-1]['終値']
-    real_datas[-1]['Y活'] = real_datas[-1]['活度']
-    real_datas[-1]['Yx'] = real_datas[-1]['max']
-    real_datas[-1]['Yn'] = real_datas[-1]['min']
-    real_datas[-1]['B5'] = real_datas[-2]['5日差']
-    real_datas[-1]['Y5'] = real_datas[-1]['5日差']
-    real_datas[-1]['Px'] = '' # y値の１つだから使用しない
-    real_datas[-1]['Pn'] = ''
-    real_datas[-1]['dis'] = ''
-    real_datas[-1]['B開'] = real_datas[-2]['Y開']
-    real_datas[-1]['B終'] = real_datas[-2]['Y終']
-    real_datas[-1]['8:30'] = form_dict['_8_30']
-    real_datas[-1]['9:26'] = form_dict['_9_26']
-    real_datas[-1]['flag'] = 0 # form_dict['flag']
-    real_datas[-1]['活度'] = ''
-    real_datas[-1]['max'] = ''
-    real_datas[-1]['min'] = ''
-    real_datas[-1]['down'] = ''
-    real_datas[-1]['終値'] = ''
-    real_datas[-1]['5日差'] = ''
-    real_datas[-1]['type'] = ''
+    real_datas.append({
+        "date": today.isoformat(),
+        "type": "",
+        "QQQ3": form_dict['_QQQ3'],
+        "Nasdaq100Fut": form_dict['_NQ_F'],
+        "8:30": form_dict['_8_30'],
+        "sq9:00": form_dict['_9_00_sq'],
+        "zm9:00": form_dict['_9_00'],
+        "16:00": "",
+        "成行": "",
+        "target": "",
+        "基準": form_dict['price'],
+        "基準momemtum": str(form_dict['momentum']) + '@999999',
+        "Memo": "",
+        "PER100値": ""
+    })
     # CSVにデータを登録する
     with open('saved_data/temp.csv', 'w', newline='', encoding="utf-8") as csvfile:
-        csv_columns = ["date", "Y開", "Y終", "Y活", "Yx", "Yn", "B5", "Y5", "Px", "Pn", "dis", "B開", "B終", "8:30", "9:26", "flag", "9:30", "活度", "max", "min", "down", "終値", "5日差", "type"]
+        csv_columns = ["date","type","QQQ3","Nasdaq100Fut","8:30","sq9:00","zm9:00","16:00","成行","target","基準","基準momemtum","Memo","PER100値"]
         writer = csv.DictWriter(csvfile, quoting=csv.QUOTE_ALL, fieldnames=csv_columns)
         writer.writeheader()
-        writer.writerow(real_datas[-1])
+        writer.writerows(real_datas[-21:])
+
     # パターンの予測
     eval_df = pd.read_csv('saved_data/temp.csv')
-    pred_type, _ = predicting(eval_df, 'type', predict_only=True)
+    pred_type, _ = predicting(eval_df, 'Type', predict_only=True)
+    html_json['today_date'] = today.isoformat()
     html_json['predicted_today_type'] = pred_type[0]
     html_json['predicted_by_pattern'] = pred_type[1:]
-    # 高値の位置予測
-    eval_df['type'] = pd.Series(pred_type)
-    pred_hpos, _ = predicting(eval_df, 'High Position', predict_only=True)
-    pos_to_time = list(zip([1,2,3,4],['9:30','10:00','13:30','16:00']))
-    html_json['predicted_today_high_pos'] = pos_to_time[pred_hpos[-1] - 1][1]
+
+    # 底値/高値の位置予測
+    low_range = ['nodata', -5.8, -4.4, -3.2, -2.2, -1.6, -0.8, 0.2, 1.0]
+    high_range = ['nodata', '-2.5','-1.2','-0.5','0.1','1.6','3.3','4.5','5.6']
+
+    pred_low, _ = predicting(eval_df, 'LowType', predict_only=True)
+    html_json['predicted_today_low_pos'] = str(pred_low[-1]) + '【' + str(low_range[pred_low[-1]]) + '】'
+
+    pred_high, _ = predicting(eval_df, 'HighType', predict_only=True)
+    html_json['predicted_today_high_pos'] = str(pred_high[-1]) + '【' + str(high_range[pred_high[-1]]) + '】'
 
     return html_json
