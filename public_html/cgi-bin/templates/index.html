@@ -71,9 +71,39 @@
                                 <span>株価動き(Type): <u style="color:red">Type{{ html_json.predicted_today_type }}</u></span><br>
                                 <span style="margin-right: 8px;">株価動き(底値): <u style="color:red;font-size:12px;">{{ html_json.predicted_today_low_pos }}</u></span><br>
                                 <span style="margin-right: 8px;">株価動き(高値): <u style="color:red;font-size:12px;">{{ html_json.predicted_today_high_pos }}</u></span><br>
-                                <button>結果をCOPY</button><button style="margin-left: 8px;">入力値をCOPY</button>
                             </div>
-                            {% endif %}
+                            <h3>Ticket 入力値(結果) :  {{ html_json.yesterday_date }}({{ html_json.previous_stock_value }})</h3>
+                            <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
+                                type{{ html_json.predicted_today_type }}; ;from;{{ html_json.predicted_today_low_value }}%(({{ html_json.target_stock_value_low }}));to;{{ html_json.predicted_today_high_value }}%({{ html_json.target_stock_value_high }})
+                            </p>
+                            <h3>Ticket 入力値(Input) :  {{ html_json.yesterday_date }}({{ html_json.previous_stock_value }})</h3>
+                            <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
+                                {{ html_json.model_input }}
+                            </p>
+                            model_input
+                            <h3>Twitter 入力値（English）</h3>
+                            <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
+                                jdsafjdlsajf;ldsf<br><br>
+                                ldskfldsfjlagfkda;jdgkldjgdlk;sajg;dasfjlkd
+                            </p>
+                            <h3>Twitter 入力値（日本語）</h3>
+                            <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
+                                【zmの株価の動きをAIで予想しました!<br>
+                                https://chain-work.com/ti/zm<br><br>
+                                予想結果を見るには暗号通貨が必要です。<br>
+                                1.Bloctoアプリをダウンロード 2.右下の購入ボタンを押してMoonPayで購入】<br><br>
+                                ---<br>
+                                Tickets app collaborating your social media:<br>
+                                $FLOW #onflow #web3 @roham<br>
+                                @kskgroup2017 @flowverse_<br>
+                                ---
+                            </p>
+                            <h3>Twitter 入力値（中国語）</h3>
+                            <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
+                                jdsafjdlsajf;ldsf<br><br>
+                                ldskfldsfjlagfkda;jdgkldjgdlk;sajg;dasfjlkd
+                            </p>
+                        {% endif %}
                        </div>
                         <div class="form-row">
                             <div class="form-group">

@@ -74,7 +74,7 @@ def show_top_page(form_dict=None, from_page=None, message=None):
     ################
     eval_df = pd.read_csv('saved_data/real_data.csv')
     # パターンの予測
-    pred_type, real_type = predicting(eval_df[-21:], 'Type')
+    pred_type, real_type, _ = predicting(eval_df[-21:], 'Type')
     html_json['predicted_type'] = pred_type[-1]
     html_json['real_type'] = real_type[-1]
 
@@ -82,12 +82,12 @@ def show_top_page(form_dict=None, from_page=None, message=None):
     high_range = ['nodata', '-2.5','-1.2','-0.5','0.1','1.6','3.3','4.5','5.6']
 
     # 底値の予測
-    pred_low, real_low = predicting(eval_df[-21:], 'LowType')
+    pred_low, real_low, _ = predicting(eval_df[-21:], 'LowType')
     html_json['pre_low_pos'] = str(pred_low[-1]) + '【' + str(low_range[pred_low[-1]]) + '】'
     html_json['real_low_pos'] = str(real_low[-1]) + '【' + str(low_range[real_low[-1]]) + '】'
 
     # 高値の予測
-    pred_high, real_high = predicting(eval_df[-21:], 'HighType')
+    pred_high, real_high, _ = predicting(eval_df[-21:], 'HighType')
     html_json['pre_high_pos'] = str(pred_high[-1]) + '【' + str(high_range[pred_high[-1]]) + '】'
     html_json['real_high_pos'] = str(real_high[-1]) + '【' + str(high_range[real_high[-1]]) + '】'
 
@@ -102,7 +102,8 @@ def data_cleaning(df, predict_only):
     # カラム名変更
     for col in df.columns:
         if col == 'zm9:00':
-            df['8:30->9:00'] = df[col].astype(float) - df['8:30']
+            df[col] = df[col].astype(float)
+            df['8:30->9:00'] = df[col] - df['8:30']
         elif col == 'QQQ3':
             df['QQQ3/3'] = round(df[col] / 3, 2)
         elif col == 'Nasdaq100Fut':
@@ -152,6 +153,7 @@ def data_cleaning(df, predict_only):
     #         df[col] = df[col].apply(int)
     #     else:
     #         df[col] = df[col].apply(float)
+    return df
 
 
 def predicting(eval_df, target, predict_only=False):
@@ -159,7 +161,7 @@ def predicting(eval_df, target, predict_only=False):
     # CSVデータのクリーニング
     eval_df = eval_df[['type', 'QQQ3', 'Nasdaq100Fut', '8:30', 'sq9:00', 'zm9:00', '16:00', '成行', 'target', '基準', '基準momemtum', 'Memo', 'PER100値']]
     eval_df = eval_df.copy()
-    data_cleaning(eval_df, predict_only)
+    eval_df = data_cleaning(eval_df, predict_only)
 
     # 全てのデータは-5~5の範囲にほぼあり、また、0以上と0未満は心理的に重要な意味を持つことからNormalizationは精度が下げる可能性がある為行わない。
     def normalize_x(X):
@@ -324,27 +326,28 @@ def predicting(eval_df, target, predict_only=False):
     model = None
     if target == 'Type':
         # 予測に必要となるカラムのみ保持
-        X_test = preprocessed_df[-1:][['8:30', '8:30->9:00', 'QQQ3/3', 'NQ=F', 'sq(9:00)', '昨日の終値', '昨日の基準', '昨日の成行QQQ3', '昨日の成行NQ=F', '昨日のMomentum', '一昨日の終値', '終値３日変化量', 'Momentum3日変化量', '終値5日変化量', '成行５日変化量', 'PER20日変化率']]
+        X_test = preprocessed_df[-1:][['8:30', '8:30->9:00', 'QQQ3/3', 'NQ=F', 'sq(9:00)', '昨日の終値', '昨日の基準', '昨日の成行QQQ3', '昨日の成行NQ=F', 'Momentum', '一昨日の終値', '終値３日変化量', 'Momentum3日変化量', '終値5日変化量', '成行５日変化量', 'PER20日変化率']]
         with open('saved_data/model/stock_data_model_v2_type.pkl', 'rb') as file:
             model = pickle.load(file)
     elif target == 'LowType':
         # 予測に必要となるカラムのみ保持
-        X_test = preprocessed_df[-1:][['8:30', '8:30->9:00', 'QQQ3/3', 'NQ=F', 'sq(9:00)', '昨日の終値', '昨日の基準', '昨日の成行QQQ3', '昨日の成行NQ=F', '昨日のMomentum', '一昨日の終値', '終値３日変化量', 'Momentum3日変化量', '終値5日変化量', '成行５日変化量', 'PER20日変化率']]
+        X_test = preprocessed_df[-1:][['8:30', '8:30->9:00', 'QQQ3/3', 'NQ=F', 'sq(9:00)', '昨日の終値', '昨日の基準', '昨日の成行QQQ3', '昨日の成行NQ=F', 'Momentum', '一昨日の終値', '終値３日変化量', 'Momentum3日変化量', '終値5日変化量', '成行５日変化量', 'PER20日変化率']]
         with open('saved_data/model/stock_data_model_v2_low.pkl', 'rb') as file:
             model = pickle.load(file)
     elif target == 'HighType':
         # 予測に必要となるカラムのみ保持
-        X_test = preprocessed_df[-1:][['8:30', '8:30->9:00', 'QQQ3/3', 'NQ=F', 'sq(9:00)', '昨日の終値', '昨日の基準', '昨日の成行QQQ3', '昨日の成行NQ=F', '昨日のMomentum', '一昨日の終値', '終値３日変化量', 'Momentum3日変化量', '終値5日変化量', '成行５日変化量', 'PER20日変化率']]
+        X_test = preprocessed_df[-1:][['8:30', '8:30->9:00', 'QQQ3/3', 'NQ=F', 'sq(9:00)', '昨日の終値', '昨日の基準', '昨日の成行QQQ3', '昨日の成行NQ=F', 'Momentum', '一昨日の終値', '終値３日変化量', 'Momentum3日変化量', '終値5日変化量', '成行５日変化量', 'PER20日変化率']]
         with open('saved_data/model/stock_data_model_v2_high.pkl', 'rb') as file:
             model = pickle.load(file)
 
     # 予測
     pred_type = model.predict(X_test)
 
-    return pred_type, real_type
+    return pred_type, real_type, X_test
 
 def predict_today_result(form_dict, html_json, real_datas):
     today = date.today()
+    yesterday = today - timedelta(days=1)
     html_json['form_submitted'] = True
     real_datas.append({
         "date": today.isoformat(),
@@ -371,19 +374,40 @@ def predict_today_result(form_dict, html_json, real_datas):
 
     # パターンの予測
     eval_df = pd.read_csv('saved_data/temp.csv')
-    pred_type, _ = predicting(eval_df, 'Type', predict_only=True)
+    pred_type, _, X_test = predicting(eval_df, 'Type', predict_only=True)
     html_json['today_date'] = today.isoformat()
     html_json['predicted_today_type'] = pred_type[0]
     html_json['predicted_by_pattern'] = pred_type[1:]
 
     # 底値/高値の位置予測
     low_range = ['nodata', -5.8, -4.4, -3.2, -2.2, -1.6, -0.8, 0.2, 1.0]
-    high_range = ['nodata', '-2.5','-1.2','-0.5','0.1','1.6','3.3','4.5','5.6']
+    high_range = ['nodata', -2.5, -1.2, -0.5, 0.1, 1.6, 3.3, 4.5, 5.6]
 
-    pred_low, _ = predicting(eval_df, 'LowType', predict_only=True)
+    pred_low, _, _ = predicting(eval_df, 'LowType', predict_only=True)
     html_json['predicted_today_low_pos'] = str(pred_low[-1]) + '【' + str(low_range[pred_low[-1]]) + '】'
+    html_json['predicted_today_low_value'] = low_range[pred_low[-1]]
+    if html_json['predicted_today_low_value'] > 0:
+        html_json['predicted_today_low_value'] = '+' + str(html_json['predicted_today_low_value'])
 
-    pred_high, _ = predicting(eval_df, 'HighType', predict_only=True)
+    pred_high, _, _ = predicting(eval_df, 'HighType', predict_only=True)
     html_json['predicted_today_high_pos'] = str(pred_high[-1]) + '【' + str(high_range[pred_high[-1]]) + '】'
+    html_json['predicted_today_high_value'] = high_range[pred_high[-1]]
+    if html_json['predicted_today_high_value'] > 0:
+        html_json['predicted_today_high_value'] = '+' + str(html_json['predicted_today_high_value'])
+
+    split_data = html_json['pre_momentum'].split("@")
+    if len(split_data) >= 2:
+        html_json['previous_stock_value'] = split_data[1]
+        html_json['target_stock_value_low'] = "{:.2f}".format(float(split_data[1]) * (1 + float(low_range[pred_low[-1]]) / 100))
+        html_json['target_stock_value_high'] = "{:.2f}".format(float(split_data[1]) * (1 + float(high_range[pred_high[-1]]) / 100))
+    html_json['yesterday_date'] = yesterday.isoformat()
+    html_json['model_input'] = '8:30;' + "{:.1f}".format(X_test.at[20, '8:30']) + ';' + '8:30->9:00;' + "{:.1f}".format(X_test.at[20, '8:30->9:00']) + ';'
+    html_json['model_input'] = html_json['model_input'] + 'QQQ3.MI/3;' + "{:.2f}".format(X_test.at[20, 'QQQ3/3']) + ';' + 'NQ=F;' + "{:.1f}".format(X_test.at[20, 'NQ=F']) + ';'
+    html_json['model_input'] = html_json['model_input'] + 'sq(9:00);' + "{:.1f}".format(X_test.at[20, 'sq(9:00)']) + ';' + 'Yesterday_Close;' + "{:.1f}".format(X_test.at[20, '昨日の終値']) + ';'
+    html_json['model_input'] = html_json['model_input'] + 'Yesterday_Criteria;' + "{:.1f}".format(X_test.at[20, '昨日の基準']) + ';' + 'QQQ3_market_from_before_trading_hours;' + "{:.1f}".format(X_test.at[20, '昨日の成行QQQ3']) + ';'
+    html_json['model_input'] = html_json['model_input'] + 'NQ=F_market_from_before_trading_hours;' + "{:.1f}".format(X_test.at[20, '昨日の成行NQ=F']) + ';' + 'Recent_Momentum;' + "{:.1f}".format(X_test.at[20, 'Momentum']) + ';'
+    html_json['model_input'] = html_json['model_input'] + 'Close_day_before_yesterday;' + "{:.1f}".format(X_test.at[20, '一昨日の終値']) + ';' + 'Close_3_day_change;' + "{:.1f}".format(X_test.at[20, '終値３日変化量']) + ';'
+    html_json['model_input'] = html_json['model_input'] + 'Momentum_3_day_change;' + "{:.1f}".format(X_test.at[20, 'Momentum3日変化量']) + ';' + 'Close_5_day_change;' + "{:.1f}".format(X_test.at[20, '終値5日変化量']) + ';'
+    html_json['model_input'] = html_json['model_input'] + 'Market_5_day_change;' + "{:.1f}".format(X_test.at[20, '成行５日変化量']) + ';' + 'PER_20_day_change;' + "{:.1f}".format(X_test.at[20, 'PER20日変化率'])
 
     return html_json
