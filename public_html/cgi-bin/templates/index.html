@@ -46,7 +46,6 @@
                             <label style="font-size: 13px"><span>前日データ：</span></label>
                             <div style="margin-left: 20px;">
                                 <span style="margin-right: 8px;">Type: <xyz style="color:red;font-size:12px;">{{ html_json.pre_type }}</xyz></span>
-                                <span style="margin-right: 8px;">QQQ3: <xyz style="color:red;font-size:12px;">{{ html_json.pre_qqq }}</xyz></span>
                                 <span style="margin-right: 8px;">NQ=F: <xyz style="color:red;font-size:12px;">{{ html_json.pre_nqf }}</xyz></span>
                                 <span style="margin-right: 8px;">8:30: <xyz style="color:red;font-size:12px;">{{ html_json.pre_8_30 }}</xyz></span>
                                 <span style="margin-right: 8px;">9:00sq: <xyz style="color:red;font-size:12px;">{{ html_json.pre_9_00_sq }}</xyz></span>
@@ -125,12 +124,12 @@
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="_9_00">9:00<span style="color:red;vertical-align:super;">*</span>:</label>
-                                <input type="text" value="{{ html_json._9_00 }}" name="_9_00" id="_9_00" required/>
-                            </div>
-                            <div class="form-group">
                                 <label for="_9_00_sq">9:00(sq)<span style="color:red;vertical-align:super;">*</span>:</label>
                                 <input type="text" value="{{ html_json._9_00_sq }}" name="_9_00_sq" id="_9_00_sq" required/>
+                            </div>
+                            <div class="form-group">
+                                <label for="_9_00">9:00<span style="color:red;vertical-align:super;">*</span>:</label>
+                                <input type="text" value="{{ html_json._9_00 }}" name="_9_00" id="_9_00" required/>
                             </div>
                         </div>
                         <div class="form-group">
