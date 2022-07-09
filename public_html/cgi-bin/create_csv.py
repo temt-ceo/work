@@ -7,8 +7,8 @@ from datetime import date, timedelta
 def do_create_csv(form_dict):
     today = date.today()
     yesterday = today - timedelta(days=1)
-    csv_columns = ["date","type","QQQ3","Nasdaq100Fut","8:30","sq9:00","zm9:00","16:00","成行","target","基準","基準momemtum","Memo","PER100値"]
-    inputs_cols = ["date","type", "_QQQ3", "_NQ_F", "_8_30", "_9_00_zm", "_9_00_sq", "_16_00", "target_low", "target_high", "current", "basis", "per100"]
+    csv_columns = ["date","type","Nasdaq100Fut","8:30","sq9:00","zm9:00","16:00","成行","target","基準","基準momemtum","Memo","PER100値"]
+    inputs_cols = ["date","type", "_NQ_F", "_8_30", "_9_00_zm", "_9_00_sq", "_16_00", "target_low", "target_high", "current", "basis", "per100"]
 
     real_datas = []
     # CSV登録データを呼び出す
@@ -42,7 +42,6 @@ def do_create_csv(form_dict):
     # CSV登録データから前日のデータを取得、新規行の入力データに活用する
     register_data['date'] = yesterday.isoformat()
     register_data['type'] = int(form_dict['type'])
-    register_data['QQQ3'] = float(form_dict['_QQQ3'])
     register_data['Nasdaq100Fut'] = float(form_dict['_NQ_F'])
     register_data['8:30'] = float(form_dict['_8_30'])
     register_data['sq9:00'] = float(form_dict['_9_00_sq'])

@@ -71,16 +71,6 @@
 
 var chartData = [
     {
-        "todays_data": {{ html_json._QQQ3 }},
-        "timing": "QQQ3",
-        {% if grp_num > 0 %}
-          {% for i in range(0, grp_num) %}
-            "real_value_{{ i }}": {{ previous[i]._QQQ3 }},
-            "date_{{ i }}": "{{ previous[i].date }}",
-          {% endfor %}
-        {% endif %}
-    },
-    {
         "todays_data": {{ html_json._NQ_F }},
         "timing": "NQ=F",
         {% if grp_num > 0 %}

@@ -30,7 +30,7 @@ def index(html_json=None):
             message = None
             outputs = None
             try:
-                inputs_cols = ["_QQQ3", "_NQ_F", "_8_30", "_9_00", "_9_00_sq", "momentum"]
+                inputs_cols = ["_NQ_F", "_8_30", "_9_00", "_9_00_sq", "momentum"]
                 for key, value in form_dict.items():
                     outputs = value
                     if key in inputs_cols:
@@ -195,10 +195,6 @@ def show_graph():
                             sum_criteria = sum_criteria[1:]
 
                 for row in list_csv:
-                    if row['QQQ3'] == '':
-                        row['_QQQ3'] = '0'
-                    else:
-                        row['_QQQ3'] = row['QQQ3']
                     if row['Nasdaq100Fut'] == '':
                         row['_NQ_F'] = '0'
                     else:
@@ -269,7 +265,6 @@ def show_graph():
                 today_data = json.loads(json_str[0])
                 today_data['ticker'] = html_json['ticker']
                 today_data['type'] = predicted_type
-            today_QQQ3 = float(today_data['_QQQ3'])
             today_NQ_F = float(today_data['_NQ_F'])
             today_8_30 = float(today_data['_8_30'])
             today_9_26 = float(today_data['_9_26'])
@@ -280,7 +275,7 @@ def show_graph():
                     is_append = True
                     if obj['type'] == '':
                         is_append = False
-                    elif obj['QQQ3'] == '' or obj['Nasdaq100Fut'] == '':
+                    elif obj['Nasdaq100Fut'] == '':
                         if int(obj['type']) != predicted_type:
                             is_append = False
                     else:
@@ -294,13 +289,6 @@ def show_graph():
                             penalize = penalize + 0.1
                         else:
                             penalize = penalize - 0.2
-
-                        if today_QQQ3 < -2.5 and float(obj['_QQQ3']) > (-1.0 - penalize):
-                            is_append = False
-                        elif today_QQQ3 > 2.5 and float(obj['_QQQ3']) < (1.0 + penalize):
-                            is_append = False
-                        elif float(obj['_QQQ3']) < today_QQQ3 - (1.5 - penalize) or float(obj['_QQQ3']) > today_QQQ3 + (1.5 - penalize):
-                            is_append = False
 
                         if today_NQ_F < -1.0 and float(obj['_NQ_F']) > (-0.5 - penalize):
                             is_append = False
@@ -408,10 +396,6 @@ def show_graph():
                             sum_criteria = sum_criteria[1:]
 
                 for row in list_csv:
-                    if row['QQQ3'] == '':
-                        row['_QQQ3'] = '0'
-                    else:
-                        row['_QQQ3'] = row['QQQ3']
                     if row['Nasdaq100Fut'] == '':
                         row['_NQ_F'] = '0'
                     else:
@@ -481,7 +465,6 @@ def show_graph():
                 today_data = json.loads(json_str[0])
                 today_data['ticker'] = html_json['ticker']
                 today_data['type'] = predicted_type
-            today_QQQ3 = float(today_data['_QQQ3'])
             today_NQ_F = float(today_data['_NQ_F'])
             today_8_30 = float(today_data['_8_30'])
             today_9_26 = float(today_data['_9_26'])
@@ -492,7 +475,7 @@ def show_graph():
                     is_append = True
                     if obj['type'] == '':
                         is_append = False
-                    elif obj['QQQ3'] == '' or obj['Nasdaq100Fut'] == '':
+                    elif obj['Nasdaq100Fut'] == '':
                         if int(obj['type']) != predicted_type:
                             is_append = False
                     else:
@@ -506,13 +489,6 @@ def show_graph():
                             penalize = penalize + 0.1
                         else:
                             penalize = penalize - 0.2
-
-                        if today_QQQ3 < -2.5 and float(obj['_QQQ3']) > (-1.0 - penalize):
-                            is_append = False
-                        elif today_QQQ3 > 2.5 and float(obj['_QQQ3']) < (1.0 + penalize):
-                            is_append = False
-                        elif float(obj['_QQQ3']) < today_QQQ3 - (1.5 - penalize) or float(obj['_QQQ3']) > today_QQQ3 + (1.5 - penalize):
-                            is_append = False
 
                         if today_NQ_F < -1.0 and float(obj['_NQ_F']) > (-0.5 - penalize):
                             is_append = False

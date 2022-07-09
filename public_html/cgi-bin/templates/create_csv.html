@@ -52,42 +52,28 @@
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="_QQQ3">QQQ3.MI<span style="color:red;vertical-align:super;">*</span> :</label>
-                                <input type="text" value="{{ html_json._QQQ3 }}" name="_QQQ3" id="_QQQ3" required/>
-                            </div>
-                            <div class="form-group">
                                 <label for="_NQ_F">Nasdaq100Fut<span style="color:red;vertical-align:super;">*</span> :</label>
                                 <input type="text" value="{{ html_json._NQ_F }}" name="_NQ_F" id="_NQ_F" required/>
                             </div>
-                        </div>
-                        <div class="form-row">
                             <div class="form-group">
                                 <label for="_8_30">8:30<span style="color:red;vertical-align:super;">*</span> :</label>
                                 <input type="text" value="{{ html_json._8_30 }}" name="_8_30" id="_8_30" required/>
                             </div>
+                        </div>
+                        <div class="form-row">
                             <div class="form-group">
                                 <label for="_9_00_sq">9:00(sq)<span style="color:red;vertical-align:super;">*</span>:</label>
                                 <input type="text" value="{{ html_json._9_00_sq }}" name="_9_00_sq" id="_9_00_sq" required/>
                             </div>
-                        </div>
-                        <div class="form-row">
                             <div class="form-group">
                                 <label for="_9_00_zm">9:00(zm)<span style="color:red;vertical-align:super;">*</span>:</label>
                                 <input type="text" value="{{ html_json._9_00_zm }}" name="_9_00_zm" id="_9_00_zm" required/>
                             </div>
-                            <div class="form-group">
-                                <label for="_16_00">16:00<span style="color:red;vertical-align:super;">*</span>:</label>
-                                <input type="text" value="{{ html_json._16_00 }}" name="_16_00" id="_16_00" required/>
-                            </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="target_low">Target(Low)<span style="color:red;vertical-align:super;">*</span>:</label>
-                                <input type="text" value="{{ html_json.target_low }}" name="target_low" id="target_low" required/>
-                            </div>
-                            <div class="form-group">
-                                <label for="target_high">Target(High)<span style="color:red;vertical-align:super;">*</span>:</label>
-                                <input type="text" value="{{ html_json.target_high }}" name="target_high" id="target_high" required/>
+                                <label for="_16_00">16:00<span style="color:red;vertical-align:super;">*</span>:</label>
+                                <input type="text" value="{{ html_json._16_00 }}" name="_16_00" id="_16_00" required/>
                             </div>
                         </div>
                         <div class="form-row">
@@ -96,22 +82,8 @@
                                 <input type="text" value="{{ html_json.nari }}" name="nari" id="nari" required/>
                             </div>
                             <div class="form-group">
-                                <label for="basis">基準<span style="color:red;vertical-align:super;">*</span>:</label>
-                                <input type="text" value="{{ html_json.basis }}" name="basis" id="basis" required/>
-                            </div>
-                            <div class="form-group">
-                                <label for="current">Current<span style="color:red;vertical-align:super;">*</span>:</label>
-                                <input type="text" value="{{ html_json.current }}" name="current" id="current" required/>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="per100">PER100値<span style="color:red;vertical-align:super;">*</span>:</label>
-                                <input type="text" value="{{ html_json.per100 }}" name="per100" id="per100" required/>
-                            </div>
-                            <div class="form-group">
-                                <label for="bottom_time">底値時間<span style="color:red;vertical-align:super;">*</span>:</label>
-                                <input type="text" value="{{ html_json.bottom_time }}" name="bottom_time" id="bottom_time" required/>
+                                <label for="target_low">Target(Low)<span style="color:red;vertical-align:super;">*</span>:</label>
+                                <input type="text" value="{{ html_json.target_low }}" name="target_low" id="target_low" required/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -125,6 +97,30 @@
                                     <option value="安い" {% if html_json.price=='安い' %} selected="selected"{% endif %}>安い</option>
                                 </select>
                                 <span class="select-icon"><i class="zmdi zmdi-chevron-down"></i></span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="basis">Momemtum<span style="color:red;vertical-align:super;">*</span>:</label>
+                                <input type="text" value="{{ html_json.basis }}" name="basis" id="basis" required/>
+                            </div>
+                            <div class="form-group">
+                                <label for="current">16:00価格<span style="color:red;vertical-align:super;">*</span>:</label>
+                                <input type="text" value="{{ html_json.current }}" name="current" id="current" required/>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="target_high">Target(High)<span style="color:red;vertical-align:super;">*</span>:</label>
+                                <input type="text" value="{{ html_json.target_high }}" name="target_high" id="target_high" required/>
+                            </div>
+                            <div class="form-group">
+                                <label for="bottom_time">Target Time<span style="color:red;vertical-align:super;">*</span>:</label>
+                                <input type="text" value="{{ html_json.bottom_time }}" name="bottom_time" id="bottom_time" required/>
+                            </div>
+                            <div class="form-group">
+                                <label for="per100">PER100値<span style="color:red;vertical-align:super;">*</span>:</label>
+                                <input type="text" value="{{ html_json.per100 }}" name="per100" id="per100" required/>
                             </div>
                         </div>
                         <div class="form-submit">

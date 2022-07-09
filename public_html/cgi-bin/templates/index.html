@@ -65,7 +65,7 @@
                                 <span style="margin-right: 8px;">株価動き(底値): <u style="color:red;font-size:12px;">{{ html_json.pre_low_pos }}</u> (実際の値: {{ html_json.real_low_pos }})</span><br>
                                 <span style="margin-right: 8px;">株価動き(高値): <u style="color:red;font-size:12px;">{{ html_json.pre_high_pos }}</u> (実際の値: {{ html_json.real_high_pos }})</span><br>
                             </div>
-                            {% if html_json.form_submitted == True %}
+                        {% if html_json.form_submitted == True %}
                             <label style="font-size: 13px"><span>本日{{ html_json.today_date }}の予測結果：</span></label>
                             <div style="margin-left: 20px;">
                                 <span>株価動き(Type): <u style="color:red">Type{{ html_json.predicted_today_type }}</u></span><br>
@@ -80,7 +80,6 @@
                             <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
                                 {{ html_json.model_input }}
                             </p>
-                            model_input
                             <h3>Twitter 入力値（English）</h3>
                             <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
                                 jdsafjdlsajf;ldsf<br><br>
@@ -103,36 +102,35 @@
                                 jdsafjdlsajf;ldsf<br><br>
                                 ldskfldsfjlagfkda;jdgkldjgdlk;sajg;dasfjlkd
                             </p>
+                            <h3>DEBUG データ</h3>
+                            <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
+                                {{ html_json.model_input2 }}<br>
+                            </p>
+                        {% else %}
+                            <h3>DEBUG データ</h3>
+                            <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
+                                {{ html_json.model_input }}<br>
+                            </p>
                         {% endif %}
                        </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="_QQQ3">QQQ3.MI<span style="color:red;vertical-align:super;">*</span> :</label>
-                                <input type="text" value="{{ html_json._QQQ3 }}" name="_QQQ3" id="_QQQ3" required/>
-                            </div>
-                            <div class="form-group">
                                 <label for="_NQ_F">Nasdaq100Fut<span style="color:red;vertical-align:super;">*</span> :</label>
                                 <input type="text" value="{{ html_json._NQ_F }}" name="_NQ_F" id="_NQ_F" required/>
                             </div>
-                        </div>
-                        <div class="form-row">
                             <div class="form-group">
                                 <label for="_8_30">8:30<span style="color:red;vertical-align:super;">*</span> :</label>
                                 <input type="text" value="{{ html_json._8_30 }}" name="_8_30" id="_8_30" required/>
                             </div>
+                        </div>
+                        <div class="form-row">
                             <div class="form-group">
                                 <label for="_9_00">9:00<span style="color:red;vertical-align:super;">*</span>:</label>
                                 <input type="text" value="{{ html_json._9_00 }}" name="_9_00" id="_9_00" required/>
                             </div>
-                        </div>
-                        <div class="form-row">
                             <div class="form-group">
                                 <label for="_9_00_sq">9:00(sq)<span style="color:red;vertical-align:super;">*</span>:</label>
                                 <input type="text" value="{{ html_json._9_00_sq }}" name="_9_00_sq" id="_9_00_sq" required/>
-                            </div>
-                            <div class="form-group">
-                                <label for="momentum">Momentum<span style="color:red;vertical-align:super;">*</span>:</label>
-                                <input type="text" value="{{ html_json.momentum }}" name="momentum" id="momentum" required/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -146,6 +144,12 @@
                                     <option value="安い" {% if html_json.price=='安い' %} selected="selected"{% endif %}>安い</option>
                                 </select>
                                 <span class="select-icon"><i class="zmdi zmdi-chevron-down"></i></span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="momentum">Momentum<span style="color:red;vertical-align:super;">*</span>:</label>
+                                <input type="text" value="{{ html_json.momentum }}" name="momentum" id="momentum" required/>
                             </div>
                         </div>
                         <div class="form-group">
