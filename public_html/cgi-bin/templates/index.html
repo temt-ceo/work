@@ -63,6 +63,22 @@
                                 <span>株価動き(Type): <u style="color:red">Type{{ html_json.predicted_type }}</u> (実際の値:Type{{ html_json.real_type }})</span><br>
                                 <span style="margin-right: 8px;">株価動き(底値): <u style="color:red;font-size:12px;">{{ html_json.pre_low_pos }}</u> (実際の値: {{ html_json.real_low_pos }})</span><br>
                                 <span style="margin-right: 8px;">株価動き(高値): <u style="color:red;font-size:12px;">{{ html_json.pre_high_pos }}</u> (実際の値: {{ html_json.real_high_pos }})</span><br>
+                                <h4>底値(予測)</h4>
+                                <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
+                                    {{ html_json.pre_low_pos_output }}
+                                </p>
+                                <h4>底値(理想)</h4>
+                                <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
+                                    {{ html_json.real_low_pos_output }}
+                                </p>
+                                <h4>高値(予測)</h4>
+                                <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
+                                    {{ html_json.pre_high_pos_output }}
+                                </p>
+                                <h4>高値(理想)</h4>
+                                <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
+                                    {{ html_json.real_high_pos_output }}
+                                </p>
                             </div>
                         {% if html_json.form_submitted == True %}
                             <label style="font-size: 13px"><span>本日{{ html_json.today_date }}の予測結果：</span></label>
@@ -73,7 +89,7 @@
                             </div>
                             <h3>Ticket 入力値(結果) :  {{ html_json.yesterday_date }}({{ html_json.previous_stock_value }})</h3>
                             <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
-                                type{{ html_json.predicted_today_type }}; ;from;{{ html_json.predicted_today_low_value }}%(({{ html_json.target_stock_value_low }}));to;{{ html_json.predicted_today_high_value }}%({{ html_json.target_stock_value_high }})
+                                type{{ html_json.predicted_today_type }}; ;from;{{ html_json.predicted_today_low_value }}%({{ html_json.target_stock_value_low }});to;{{ html_json.predicted_today_high_value }}%({{ html_json.target_stock_value_high }})
                             </p>
                             <h3>Ticket 入力値(Input) :  {{ html_json.yesterday_date }}({{ html_json.previous_stock_value }})</h3>
                             <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
@@ -81,13 +97,7 @@
                             </p>
                             <h3>Twitter 入力値（English）</h3>
                             <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
-                                jdsafjdlsajf;ldsf<br><br>
-                                ldskfldsfjlagfkda;jdgkldjgdlk;sajg;dasfjlkd
-                            </p>
-                            <h3>Twitter 入力値（日本語）</h3>
-                            <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
-                                【zmの株価の動きをAIで予想しました!<br>
-                                https://chain-work.com/ti/zm<br><br>
+                                https://x.gd/MU464<br><br>
                                 予想結果を見るには暗号通貨が必要です。<br>
                                 1.Bloctoアプリをダウンロード 2.右下の購入ボタンを押してMoonPayで購入】<br><br>
                                 ---<br>
@@ -95,6 +105,24 @@
                                 $FLOW #onflow #web3 @roham<br>
                                 @kskgroup2017 @flowverse_<br>
                                 ---
+                            </p>
+                            <h3>Twitter 入力値（日本語夜）</h3>
+                            <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
+                                AIモデルで株価の一日の底値とそこからの高値を予想しました。特に午前に変動が激しいzm株の本日の予想結果👇
+                                https://x.gd/MU464
+                                昨日のデータと結果はこちら👇
+                                https://x.gd/MU464
+                                底値からの高値はデイトレプレイヤーには必須情報! 最新AIが全てを見通します
+                                @flowbc_jp @moukon_genius<br>
+                            </p>
+                            <h3>Twitter 入力値（日本語朝）</h3>
+                            <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
+                                AIモデルで株価の一日の底値とそこからの高値を予想しました。特に午前に変動が激しいzm株の本日の予想結果👇
+                                https://x.gd/MU464
+                                昨日のデータと結果はこちら👇
+                                https://x.gd/MU464
+                                底値からの高値はデイトレプレイヤーには必須情報! 最新AIが全てを見通します
+                                @flowbc_jp @moukon_genius<br>
                             </p>
                             <h3>Twitter 入力値（中国語）</h3>
                             <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
