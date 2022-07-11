@@ -60,22 +60,24 @@
                             </div>
                             <label style="font-size: 13px"><span>昨日の予測結果：</span></label>
                             <div style="margin-left: 20px;">
-                                <span>株価動き(Type): <u style="color:red">Type{{ html_json.predicted_type }}</u> (実際の値:Type{{ html_json.real_type }})</span><br>
+                                <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
+                                    <span>Predicted Type 予測したType <u style="color:red">　{{ html_json.predicted_type }}　</u> Actual Type 実際のType　{{ html_json.real_type }}</span><br>
+                                </p>
                                 <span style="margin-right: 8px;">株価動き(底値): <u style="color:red;font-size:12px;">{{ html_json.pre_low_pos }}</u> (実際の値: {{ html_json.real_low_pos }})</span><br>
                                 <span style="margin-right: 8px;">株価動き(高値): <u style="color:red;font-size:12px;">{{ html_json.pre_high_pos }}</u> (実際の値: {{ html_json.real_high_pos }})</span><br>
-                                <h4>底値(予測)</h4>
+                                <h6>Predicted bottom price 予測した安値</h6>
                                 <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
                                     {{ html_json.pre_low_pos_output }}
                                 </p>
-                                <h4>底値(理想)</h4>
+                                <h6>Bottom line that happened in real life 現実に発生した安値</h6>
                                 <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
                                     {{ html_json.real_low_pos_output }}
                                 </p>
-                                <h4>高値(予測)</h4>
+                                <h6>Predicted subsequent high 予測したその後の高値</h6>
                                 <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
                                     {{ html_json.pre_high_pos_output }}
                                 </p>
-                                <h4>高値(理想)</h4>
+                                <h6>Highs that should have been predicted 予測すべきだった高値</h6>
                                 <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
                                     {{ html_json.real_high_pos_output }}
                                 </p>
@@ -95,34 +97,48 @@
                             <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
                                 {{ html_json.model_input }}
                             </p>
-                            <h3>Twitter 入力値（English）</h3>
+                            <h3>Twitter 入力値（English夜）</h3>
                             <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
-                                https://x.gd/MU464<br><br>
-                                予想結果を見るには暗号通貨が必要です。<br>
-                                1.Bloctoアプリをダウンロード 2.右下の購入ボタンを押してMoonPayで購入】<br><br>
-                                ---<br>
+                                The AI model predicted the daily bottom of the stock price and the high from it. The result of today's forecast for zm stock.👇<br>
+                                https://x.gd/MU464<br>
+                                Here are the results until yesterday👇<br>
+                                https://x.gd/iZOEn<br><br>
                                 Tickets app collaborating your social media:<br>
-                                $FLOW #onflow #web3 @roham<br>
-                                @kskgroup2017 @flowverse_<br>
-                                ---
+                                $FLOW #onflow #web3
+                            </p>
+                            <h3>Twitter 入力値（English朝）</h3>
+                            <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
+                                ◆Tickets (Chain Work)<br>
+                                https://chain-work.com<br>
+                                Yesterday's U.S. stock (zm) price AI prediction results are below.<br>
+                                https://x.gd/iZOEn<br><br>
+                                —<br>
+                                Tickets app collaborating your social media: <br>
+                                $FLOW #onFlow #web3 #FlowBlockchain<br>
+                                —
                             </p>
                             <h3>Twitter 入力値（日本語夜）</h3>
                             <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
-                                AIモデルで株価の一日の底値とそこからの高値を予想しました。特に午前に変動が激しいzm株の本日の予想結果👇
-                                https://x.gd/MU464
-                                昨日のデータと結果はこちら👇
-                                https://x.gd/MU464
-                                底値からの高値はデイトレプレイヤーには必須情報! 最新AIが全てを見通します
-                                @flowbc_jp @moukon_genius<br>
+                                AIモデルで株価の一日の底値とそこからの高値を予想しました。特に午前に変動が激しいzm株の本日の予想結果👇<br>
+                                https://x.gd/MU464<br>
+                                昨日まで結果はこちら👇<br>
+                                https://x.gd/XGeOT<br>
+                                底値からの高値はデイトレプレイヤーには必須情報! 最新AIが全てを見通します<br>
+                                #onFlow $FLOW #web3
                             </p>
                             <h3>Twitter 入力値（日本語朝）</h3>
                             <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
-                                AIモデルで株価の一日の底値とそこからの高値を予想しました。特に午前に変動が激しいzm株の本日の予想結果👇
-                                https://x.gd/MU464
-                                昨日のデータと結果はこちら👇
-                                https://x.gd/MU464
-                                底値からの高値はデイトレプレイヤーには必須情報! 最新AIが全てを見通します
-                                @flowbc_jp @moukon_genius<br>
+                                ◆Tickets (Chain Work)<br>
+                                ・AIモデルの米国株底値予測<br>
+                                ・好きな時にコンテンツを作成、売却できる<br>
+                                ・イベント詳細情報作成<br>
+                                ・9ヵ国語変換<br><br>                                
+                                👇(米国株底値予測結果)<br>
+                                https://x.gd/XGeOT<br><br>
+                                —<br>
+                                Tickets app collaborating your social media:https://chain-work.com<br>
+                                $FLOW #onflow #web3<br>
+                                —
                             </p>
                             <h3>Twitter 入力値（中国語）</h3>
                             <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">

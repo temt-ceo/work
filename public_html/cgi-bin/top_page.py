@@ -98,26 +98,26 @@ def show_top_page(form_dict=None, from_page=None, message=None):
     html_json['pre_low_pos'] = str(pred_low[-1]) + '【' + str(low_range[pred_low[-1]]) + '】'
     html_json['real_low_pos'] = str(real_low[-1]) + '【' + str(low_range[real_low[-1]]) + '】'
     if (low_range[pred_low[-1]] > 0):
-        html_json['pre_low_pos_output'] = str(low_range[pred_low[-1]]) + '(' + "{:.2f}".format(last_day_price * (1 + low_range[pred_low[-1]] / 100)) + ')'
+        html_json['pre_low_pos_output'] = str(low_range[pred_low[-1]]) + '%(' + "{:.2f}".format(last_day_price * (1 + low_range[pred_low[-1]] / 100)) + ')'
     else:
-        html_json['pre_low_pos_output'] = str(low_range[pred_low[-1]]) + '(' + "{:.2f}".format(last_day_price / (1 + -1 * low_range[pred_low[-1]] / 100)) + ')'
+        html_json['pre_low_pos_output'] = str(low_range[pred_low[-1]]) + '%(' + "{:.2f}".format(last_day_price / (1 + -1 * low_range[pred_low[-1]] / 100)) + ')'
     if (low_range[real_low[-1]] > 0):
-        html_json['real_low_pos_output'] = str(low_range[real_low[-1]]) + '(' + "{:.2f}".format(last_day_price * (1 + low_range[real_low[-1]] / 100)) + ')'
+        html_json['real_low_pos_output'] = str(low_range[real_low[-1]]) + '%(' + "{:.2f}".format(last_day_price * (1 + low_range[real_low[-1]] / 100)) + ')'
     else:
-        html_json['real_low_pos_output'] = str(low_range[real_low[-1]]) + '(' + "{:.2f}".format(last_day_price / (1 + -1 * low_range[real_low[-1]] / 100)) + ')'
+        html_json['real_low_pos_output'] = str(low_range[real_low[-1]]) + '%(' + "{:.2f}".format(last_day_price / (1 + -1 * low_range[real_low[-1]] / 100)) + ')'
 
     # 高値の予測
     pred_high, real_high, X_test = predicting(eval_df, 'HighType')
     html_json['pre_high_pos'] = str(pred_high[-1]) + '【' + str(high_range[pred_high[-1]]) + '】'
     html_json['real_high_pos'] = str(real_high[-1]) + '【' + str(high_range[real_high[-1]]) + '】'
     if (high_range[pred_high[-1]] > 0):
-        html_json['pre_high_pos_output'] = str(high_range[pred_high[-1]]) + '(' + "{:.2f}".format(last_day_price * (1 + high_range[pred_high[-1]] / 100)) + ')'
+        html_json['pre_high_pos_output'] = str(high_range[pred_high[-1]]) + '%(' + "{:.2f}".format(last_day_price * (1 + high_range[pred_high[-1]] / 100)) + ')'
     else:
-        html_json['pre_high_pos_output'] = str(high_range[pred_high[-1]]) + '(' + "{:.2f}".format(last_day_price / (1 + -1 * high_range[pred_high[-1]] / 100)) + ')'
+        html_json['pre_high_pos_output'] = str(high_range[pred_high[-1]]) + '%(' + "{:.2f}".format(last_day_price / (1 + -1 * high_range[pred_high[-1]] / 100)) + ')'
     if (high_range[real_high[-1]] > 0):
-        html_json['real_high_pos_output'] = str(high_range[real_high[-1]]) + '(' + "{:.2f}".format(last_day_price * (1 + high_range[real_high[-1]] / 100)) + ')'
+        html_json['real_high_pos_output'] = str(high_range[real_high[-1]]) + '%(' + "{:.2f}".format(last_day_price * (1 + high_range[real_high[-1]] / 100)) + ')'
     else:
-        html_json['real_high_pos_output'] = str(high_range[real_high[-1]]) + '(' + "{:.2f}".format(last_day_price / (1 + -1 * high_range[real_high[-1]] / 100)) + ')'
+        html_json['real_high_pos_output'] = str(high_range[real_high[-1]]) + '%(' + "{:.2f}".format(last_day_price / (1 + -1 * high_range[real_high[-1]] / 100)) + ')'
 
     # Formで入力した情報から今日の動きを予測する
     if form_dict is not None:
