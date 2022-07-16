@@ -431,9 +431,9 @@ def predict_today_result(form_dict, html_json, real_datas):
     html_json['model_input'] = '8:30;' + "{:.1f}".format(X_test.at[24, '8:30']) + ';' + '8:30->9:00;' + "{:.1f}".format(X_test.at[24, '8:30->9:00']) + ';'
     html_json['model_input'] = html_json['model_input'] + 'NQ=F;' + "{:.1f}".format(X_test.at[24, 'NQ=F']) + ';'
     html_json['model_input'] = html_json['model_input'] + 'sq(9:00);' + "{:.1f}".format(X_test.at[24, 'sq(9:00)']) + ';' + 'Yesterday_Close;' + "{:.1f}".format(X_test.at[24, '昨日の終値']) + ';'
-    html_json['model_input'] = html_json['model_input'] + 'Yesterday_Criteria;' + "{:.1f}".format(X_test.at[24, '基準(5段階)']) + ';' + 'QQQ3_market_from_before_trading_hours;' + "{:.1f}".format(X_test.at[24, '昨日の成行QQQ3']) + ';'
-    html_json['model_input'] = html_json['model_input'] + 'NQ=F_market_from_before_trading_hours;' + "{:.1f}".format(X_test.at[24, '昨日の成行NQ=F']) + ';' + 'Recent_Momentum;' + "{:.1f}".format(X_test.at[24, 'Momentum']) + ';'
-    html_json['model_input'] = html_json['model_input'] + 'Close_day_before_yesterday;' + "{:.1f}".format(X_test.at[24, '一昨日の終値']) + ';' + 'Close_3_day_change;' + "{:.1f}".format(X_test.at[24, '終値３日変化量']) + ';'
-    html_json['model_input'] = html_json['model_input'] + 'Momentum_3_day_change;' + "{:.1f}".format(X_test.at[24, 'Momentum3日変化量']) + ';' + 'Close_5_day_change;' + "{:.1f}".format(X_test.at[24, '終値5日変化量']) + ';'
-    html_json['model_input'] = html_json['model_input'] + 'Market_5_day_change;' + "{:.1f}".format(X_test.at[24, '成行５日変化量']) + ';' + 'PER_20_day_change;' + "{:.5f}".format(X_test.at[24, 'PER20日変化率'])
+    html_json['model_input2'] = 'Yesterday_Criteria;' + "{:.1f}".format(X_test.at[24, '基準(5段階)']) + ';' + 'QQQ3_market_from_before_trading_hours;' + "{:.1f}".format(X_test.at[24, '昨日の成行QQQ3']) + ';'
+    html_json['model_input2'] = html_json['model_input2'] + 'NQ=F_market_from_before_trading_hours;' + "{:.1f}".format(X_test.at[24, '昨日の成行NQ=F']) + ';' + 'Recent_Momentum;' + "{:.1f}".format(X_test.at[24, 'Momentum']) + ';'
+    html_json['model_input3'] = 'Close_day_before_yesterday;' + "{:.1f}".format(X_test.at[24, '一昨日の終値']) + ';' + 'Close_3_day_change;' + "{:.1f}".format(X_test.at[24, '終値３日変化量']) + ';'
+    html_json['model_input3'] = html_json['model_input3'] + 'Momentum_3_day_change;' + "{:.1f}".format(X_test.at[24, 'Momentum3日変化量']) + ';' + 'Close_5_day_change;' + "{:.1f}".format(X_test.at[24, '終値5日変化量']) + ';'
+    html_json['model_input3'] = html_json['model_input3'] + 'Market_5_day_change;' + "{:.1f}".format(X_test.at[24, '成行５日変化量']) + ';' + 'PER_20_day_change;' + "{:.5f}".format(X_test.at[24, 'PER20日変化率'])
     return html_json
