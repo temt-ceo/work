@@ -365,59 +365,65 @@
                         Basically, the fastest way is to watch videos created by community members.<br>
                         基本的にコミュニティメンバーが作成したビデオを見るのが1番早いです。<br><br>
                         FlowブロックチェーンのDapp開発時につまづきやすい箇所を解説動画のURL付でチートシートにしました。<br><br>
-                        ・Struct<br>
-                        Structに値を設定出来る権利を設けられる<br>
-                        StructをStructに格納できる<br>
-                        Structにメソッドを持たせられる<br>
+                        1. Structでできることとは<br>
+                        ・Structに値を設定出来る権利を設けられる<br>
+                        ・StructをStructに格納できる<br>
+                        ・Structにメソッドを持たせられる<br>
                         Community’s video: https://www.youtube.com/watch?v=LAUN7hqlL0w<br><br>
-                        ・Resource <br>
-                        全てのリソースにはuuidがある<br>
-                        `<-!`を使うともし既にリソースが存在するとpanicが発生する<br>
-                        createキーワードはContract外では使えない<br>
+                        2. Resourceを扱うには <br>
+                        ・全てのリソースにはuuidがある<br>
+                        ・`<-!`を使うともし既にリソースが存在するとpanicが発生する<br>
+                        ・createキーワードはContract外では使えない<br>
                         Community’s video: https://www.youtube.com/watch?v=SGa2mnDFafc<br><br>
-                        ・アクセスコントロール<br>
-                        `pub`はReadはどこからでも。Writeはその内部からのみ<br>
-                        access(contract)はReadがcontract内部からのみに制限される<br>
-                        access(self)はReadが現在のスコープからのみ<br>
-                        ※Writeはpubもaccess(contract)もaccess(self)も同じ権限です。pubはaccess(all)で書き換えられます<br>
-                        ※変数にaccess(self)をStructに設定してそれを読み込むメソッドをStruct内に作ってもそのメソッドがaccess(all)なら、Structはpubなので、(コントラクト名).(Struct名).(メソッド名)でどこからでも読める。但し、Resourceの場合は(移動出来ない為)読めない。<br>
+                        3. アクセスコントロール<br>
+                        ・`pub`はReadはどこからでも。Writeはその内部からのみ<br>
+                        ・access(contract)はReadがcontract内部からのみに制限される<br>
+                        ・access(self)はReadが現在のスコープからのみ<br>
+                        ・※Writeはpubもaccess(contract)もaccess(self)も同じ権限です。pubはaccess(all)で書き換えられます<br>
                         Community’s video: https://www.youtube.com/watch?v=ly3rNs0xCRQ<br><br>
-                        ・効率的にアクセスを制限する<br>
-                        インターフェイスを使いアクセスできる機能を制限する<br>
-                        access(contract)の変数と組み合わせると可読性も上がる(メソッドからしか返せないためどれがPrivateか判断しやすい)<br>
+                        4. 効率的にアクセスを制限するには<br>
+                        ・インターフェイスを使いアクセスできる機能を制限する<br>
+                        ・access(contract)の変数と組み合わせると可読性も上がる(メソッドからしか返せないためどれがPrivateか判断しやすい)<br>
                         Community’s video: https://www.youtube.com/watch?v=5wnn9qsCXgE<br><br>
-                        ・NFTを作る<br>
-                        NonFungibleToken ContractをContractのInterfaceにセットする。<br>
-                        ダウンキャストを許可する時は`auth`を使う<br>
-                        NFTを実際にダウンキャストするには`as!`(Type Casting)を使う<br>
+                        5. NFTを作るには<br>
+                        ・NonFungibleToken ContractをContractのInterfaceにセット<br>
+                        ・ダウンキャストを許可する時には`auth`<br>
+                        ・NFTを実際にダウンキャストするには`as!`(Type Casting)<br>
                         Community’s video: https://www.youtube.com/watch?v=bQVXSpg6GE8<br><br>
-                        ・制限されたアクセスへの権限を他人のアカウントに渡す<br>
+                        6. アクセス権限を他のアカウントに渡すには<br>
                         Community’s video: https://www.youtube.com/watch?v=UP7oa9iB3RU<br><br>
-                        ・Dapp開発ノウハウ<br>
+                        7. 初心者向けDapp開発ノウハウ<br>
                         Community’s video: https://www.youtube.com/watch?v=E80BlAEVwRA&t=896s<br><br>
-                        ・独自通貨の発行<br>
-                        Fungible Tokenの作り方<br>
+                        8. 独自通貨を発行するには<br>
+                        ・Fungible Tokenの作り方<br>
                         Community’s video: https://www.youtube.com/watch?v=Yq_sUARMQ4E&t=620s<br><br>
-                        ・Anti-Pattern(アンチパターン)<br>
-                        ArrayやDictionary はPrivate であるべき<br>
-                        ※Resource内のArrayやDictionaryもPrivate であるべきだがResource を含む場合はpubでよい。移動出来ない為。<br>
+                        9. (Outdated) Anti-Pattern(アンチパターン)<br>
+                        ・ArrayやDictionary はPrivate であるべき <- Secure Cadenceで必要なくなりました!<br>
                         Community’s video: https://www.youtube.com/watch?v=pg0Pfskkky0<br>
-                         & https://www.youtube.com/watch?v=GVz0M4bavWs&t=264s<br><br>
-                        ・テストネット<br>
-                        テストネットのアカウント作成<br>
+                         & https://www.youtube.com/watch?v=GVz0M4bavWs&t=264s<br>
+                        Secure Cadence 解説: https://www.youtube.com/watch?v=58poY8ZiHoo<br><br>
+                        10. テストネット上で動かしたい場合は<br>
+                        ・テストネットのアカウント作成<br>
                         Community’s video: https://www.youtube.com/watch?v=91DZbf9cXs8<br>
                          & https://www.youtube.com/watch?v=VEbQYACodqg<br><br>
-                        ・イベント<br>
-                        イベントを定期的に取得<br>
+                        11. イベントを取得するには<br>
+                        ・定期的にイベントを取得<br>
                         Community’s video: https://www.youtube.com/watch?v=3NTaho89xd4&t=3s<br><br>
-                        ・Optional Binding <br>
-                        Optional Binding は`if let`から始まる<br>
+                        12. Optional Bindingとは<br>
+                        ・Optional Binding は`if let`から始まる<br>
                         Community’s video: https://www.youtube.com/watch?v=8XSLZA0NTBw<br><br>
-                        ・バックエンド認証<br>
-                        トランザクション費用を肩代わりする<br>
-                        2つのAuthオブジェクトを引数に渡す<br>
-                        ※2つのAuthオブジェクトを一つのTransaction の引数に渡せると様々な事が出来るようになります。<br>
-                        Community’s video: https://www.youtube.com/watch?v=vachEpMIL1M<br><br><br>
+                        13. バックエンド認証を行うには<br>
+                        ・トランザクション費用を肩代わりする<br>
+                        ・2つ以上のAuthオブジェクトを引数に持つ<br>
+                        Community’s video: https://www.youtube.com/watch?v=vachEpMIL1M<br><br>
+                        14. Dictionary内のリソースの参照を取得するには<br>
+                        Community’s video: https://www.youtube.com/watch?v=vUzA1dkb7-A<br>
+                         & https://www.youtube.com/watch?v=58poY8ZiHoo<br><br>
+                        15. VS Code Extentionのセットアップをするには<br>
+                        Community’s video: https://www.youtube.com/watch?v=X8HFAMYmmMI<br><br>
+                        16. (New!) アカウントが所有しているNFTを一覧で取得するには<br>
+                        Community’s video: https://www.youtube.com/watch?v=bwtQ0ettqLU&t=3s<br><br>
+                          <br>
                         これを全部見ればあなたも今日からブロックチェーンエンジニア!<br><br><br>
                         #blockchain<br>
                     </p>
