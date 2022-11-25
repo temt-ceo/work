@@ -1088,7 +1088,19 @@
                         　}<br>
                         　saleCollection.unlistFromSale(id: id)<br>
                         }<br><br>
-                        Community’s video(33:40頃): https://lnkd.in/gh8sC2g9<br><br>
+                        i. To purchase NFTs from the marketplace using $FLOW, do the following ($FLOWを使用してマーケットプレイスからNFTを購入するには以下のようにします)<br>
+                        prepare(acct: AuthAccount) {<br>
+                        　let saleCollection = getAccount(account).getCapability(/public/MySaleCollection).borrow<&NFTMarketplace.SaleCollection{NFTMarketplace.SaleCollectionPublic}>()<br>
+                        　.　?? panic("Could not borrow the user's SaleCollection.")<br>
+                        　let recipientCollection = acct.getCapability(/public/MyNFTCollection).borrow<&MyNFT.Collection{NonFungibleToken.CollectionPublic}>()<br>
+                        　.　?? panic("Can't get the User's Collection.")<br>
+                        　}<br>
+                        　let price = saleCollection.getPrice(id: id)<br>
+                        　let payment <- acct.borrow<&FlowToken.Vault>(from: /storage/flowTokenVault).withdraw(amount: price) as! @FlowToken.Vault<br>
+                        　saleCollection.purchase(id: id, recipientCollection: recipientCollection, payment: <- payment)<br>
+                        }<br><br>
+                        For more information on the NFT Marketplace, please watch the community video below (NFT Marketplaceの詳細は下記コミュニティビデオをご覧ください)<br>
+                        Community’s video(33:40~): https://lnkd.in/gh8sC2g9<br><br>
                         ---------<br>
                         About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
                         ブログはこちら: https://lnkd.in/g3kM3AJg<br><br>
@@ -1096,9 +1108,124 @@
                      </p>
                      <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
                         Let's build a game with Flow Blockchain! (Flow Blockchainでゲームを作ろう！) <br>
-                        16. (New!) トランザクションに有効時間を設定 or ウォレットログインをシステムのログインに利用するには<br><br>
-                        Community’s video(16分頃~): https://lnkd.in/ghi4GJTA<br><br>
-                        17. (New!) アカウントが所有しているNFTを一覧で取得するには<br><br>
+                        16. How to Verify Account Ownership (account-proof) [Improved application reliability and server-side authentication (アプリケーションの信頼性向上とサーバーサイド認証)]<br><br>
+                        Flow CLI Github Reference:<br>
+                        https://github.com/onflow/fcl-js/blob/master/docs/reference/proving-authentication.mdx<br><br>
+                        ・The range of applications is wide because it goes to the server side to obtain nonce and authenticates it on the server side. Ex: Establish validity period, etc. (サーバーサイドにnonceを取りに行き、且つ、サーバー側で認証する為、アプリケーションにさまざまな応用が出来ます。例:有効期限を設けるなど)<br>
+                        a. Retrieve account proof data from your application server when connecting to the wallet.<br>
+                        (ウォレット接続時にアプリケーションサーバーからアカウント証明データを取得してきます)<br>
+                        (Example) (一例)<br>
+                        [Frontend]<br>
+                        const resolver = async () => {<br>
+                        　const response = await fetch('/api/generate')<br>
+                        　const { nonce } = await response.json()<br>
+                        　return {<br>
+                        　.　appIdentifier: "YourAppIdentifier",<br>
+                        　.　nonce: nonce<br>
+                        　}<br>
+                        }<br>
+                        fcl.config()<br>
+                        　.put('accessNode.api', 'https://rest-testnet.onflow.org')<br>
+                        　.put('discovery.wallet', 'https://fcl-discovery.onflow.org/testnet/authn')<br>
+                        　.put('fcl.accountProof.resolver', resolver)<br>
+                        　.put('env', 'testnet')<br><br>
+                        [Backend]<br>
+                        import crypto from "crypto"<br>
+                        import { addNonce } from "../../storage"<br>
+                        export default function handler(req, res) {<br>
+                        　const nonce = crypto.randomBytes(32).toString('hex')<br>
+                        　addNonce(nonce)<br>
+                        　res.status(200).json({ nonce })<br>
+                        }<br><br>
+                        b. The data retrieved from the server should include a random nonce. The specific application identifier is displayed by wallets when users are asked to approve a signing request.<br>
+                        (サーバーから取得したデータにランダムなnonceが含まれる必要があります。特定のアプリケーション識別子は、ユーザーが署名要求を承認するよう求められたときにウォレットによって表示されます。)<br>
+                        (Example) (一例)<br>
+                        [Authentication on the Frontend side only (Frontend側でのみ認証)]<br>
+                        export async function login() {<br>
+                        　let response = await fcl.authenticate()<br>
+                        　const accountProofService = response.services.find(service => service.type === 'account-proof')<br>
+                        　if (accountProofService) {<br>
+                        　.　const verified = await fcl.AppUtils.verifyAccountProof(<br>
+                        　.　 "YourAppIdentifier",<br>
+                        　.　 accountProofService.data<br>
+                        　.　)<br>
+                        　.　if (verified) { ... do something } <br>
+                        　}<br>
+                        }<br><br>
+                        [Authentication on Backend side (Backend側で認証)]<br>
+                        export async function login() {<br>
+                        　let response = await fcl.authenticate()<br>
+                        　const accountProofService = response.services.find(service => service.type === 'account-proof')<br>
+                        　if (accountProofService) {<br>
+                        　.　const response = await fetch('/api/verify', {<br>
+                        　.　 method: 'POST',<br>
+                        　.　 headers: { 'Content-Type': 'application/json' },<br>
+                        　.　 body: JSON.stringify(accountProofService.data)<br>
+                        　.　)<br>
+                        　.　const verified = response.json()<br>
+                        　.　if (verified) { ... do something } <br>
+                        　}<br>
+                        }<br>
+                        <br>
+                        import * as fcl from "@onflow/fcl"<br>
+                        import { checkNonce, removeNonce } from "../../storage"<br>
+                        export default function handler(req, res) {<br>
+                        　const data = req.body<br>
+                        　const nonce = data.nonce<br>
+                        　if (!checkNonce(nonce)) {<br>
+                        　.　return res.status(200).json({ verified: false })<br>
+                        　}<br>
+                        　removeNonce(nonce)<br>
+                        　const verified = await fcl.AppUtils.verifyAccountProof(<br>
+                        　 "YourAppIdentifier",<br>
+                        　 data<br>
+                        　)<br>
+                        　res.status(200).json({ verified })<br>
+                        }<br><br>
+                        Community’s video(00:16~): https://lnkd.in/ghi4GJTA<br><br>
+                        ---------<br>
+                        About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
+                        ブログはこちら: https://lnkd.in/g3kM3AJg<br><br>
+                        #blockchain
+                     </p>
+                     <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
+                        Let's build a game with Flow Blockchain! (Flow Blockchainでゲームを作ろう！) <br>
+                        17. Account Storage Iteration [To get a list of NFTs owned by an account (アカウントが所有しているNFTを一覧で取得するには)]<br><br>
+                        所有NFTのID一覧を取得するには以下のようにします<br>
+                        pub fun main(user: Address): [[UInt64]] {<br>
+                        　let publicAccount: PublicAccount = getAccount(user)<br>
+                        　let authAccount: AuthAccount = getAuthAccount(user)<br>
+                        　let ids: [[UInt64]] = []<br>
+                        　let iterationFunc: ((StoragePath, Type): Bool) = fun (path: storagePath, type: Type): Bool {<br>
+                        　.　if type.isSubtype(of: Type<@NonFungibleToken.Collection>()) {<br>
+                        　.　.　let collection = authAccount.borrow<@NonFungibleToken.Collection>(from: path)<br>
+                        　.　.　let collectionIds: [UInt64] = collection.getIDs()<br>
+                        　.　.　ids.append(collectionIds)<br>
+                        　.　}<br>
+                        　.　return true<br>
+                        　}<br>
+                        　authAccount.forEachStored(iterationFunc)<br>
+                        }<br><br>
+                        所有している全てのNFTの参照一覧を取得するには以下のようにします<br>
+                        pub fun main(user: Address): {Type: [&NonFungibleToken.NFT]} {<br>
+                        　let publicAccount: PublicAccount = getAccount(user)<br>
+                        　let authAccount: AuthAccount = getAuthAccount(user)<br>
+                        　let displays: {Type: [&NonFungibleToken.NFT]} = {}<br>
+                        　let iterationFunc: ((StoragePath, Type): Bool) = fun (path: storagePath, type: Type): Bool {<br>
+                        　.　if type.isSubtype(of: Type<@NonFungibleToken.Collection>()) {<br>
+                        　.　.　let temp: [&NonFungibleToken.NFT] = []<br>
+                        　.　.　let collection = authAccount.borrow<@NonFungibleToken.Collection>(from: path)<br>
+                        　.　.　for id in collection.getIDs() {<br>
+                        　.　.　 temp.append(collection.borrowNFT(id: id))<br>
+                        　.　.　}<br>
+                        　.　.　displays[type] = temp<br>
+                        　.　}<br>
+                        　.　return true<br>
+                        　}<br>
+                        　authAccount.forEachStored(iterationFunc)<br>
+                        }<br><br>
+                        Documentation:<br>
+                        https://developers.flow.com/cadence/language/accounts#storage-iteration<br><br>
                         Community’s video: https://lnkd.in/gZFbQxJb<br><br><br>
                         https://lnkd.in/gNpYXYuR<br>
                         https://lnkd.in/g_u7gGZB<br><br><br>
