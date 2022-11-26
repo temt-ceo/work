@@ -528,19 +528,19 @@
                         　init() {<br>
                         　.　self.hellos <- {}<br>
                         　}<br>
-                        destroy() {<br>
+                        　destroy() {<br>
                         　.　destroy self.hellos<br>
                         　}<br>
-                        }<br>
-                        Resource always needs to be destined with <- or destroy, otherwise an error will occur. Resource must always use <- or destroy to indicate its destination or an error will occur.<br>
-                        (Resourceのcollectionのdestroyは上記のようにすることでcollection内のすべてのResourceをdestroyすることが出来、これがないとエラーとなります。Resourceは常に<-かdestroyで行き先を指示しないとエラーになります。)<br><br>
+                        }<br><br>
+                        Resource always needs to be with <- or destroy, otherwise an error will occur.<br>
+                        (Resourceは常に<-かdestroyで行き先を指示しないとエラーになります。)<br><br>
                         Here is an example of putting a Resource into a collection of Resource (ResourceのcollectionにResourceを入れる一例は以下です)<br>
                         pub fun depositHello(hello: @Hello) {<br>
                         　self.hellos[hello.uuid] <-! hello<br>
-                        }<br>
+                        }<br><br>
                         ・`<-! ` will cause panic if the resource already exists (`<-!`はもし既にリソースが存在する場合はpanicが発生します)<br>
-                        ・`values` cannot be used in Resource's Dictionary because it would be meaningless if the Resource itself could be moved.<br>
-                        (ResourceのDictionaryではvaluesが使用できません。Resource自体の移動ができてしまっては意味がないためです。)<br><br><br>
+                        ・`.values` cannot be used in Resource's Dictionary because it would be meaningless if the Resource itself could be moved.<br>
+                        (ResourceのDictionaryでは`.values`が使用できません。Resource自体の移動ができてしまっては意味がないためです。)<br><br><br>
                         Community’s video: https://lnkd.in/gwUNUGrx<br><br>
                         ---------<br>
                         About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
@@ -1191,7 +1191,16 @@
                      <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
                         Let's build a game with Flow Blockchain! (Flow Blockchainでゲームを作ろう！) <br>
                         17. Account Storage Iteration [To get a list of NFTs owned by an account (アカウントが所有しているNFTを一覧で取得するには)]<br><br>
-                        所有NFTのID一覧を取得するには以下のようにします<br>
+                        アカウントのPublicPathに設定されている情報を全て取得するには以下のようにします<br>
+                        pub fun main(user: Address): [PublicPath] {<br>
+                        　let publicAccount: PublicAccount = getAccount(user)<br>
+                        　return publicAccount.publicPaths<br>
+                        }<br><br>
+                        アカウントのPublicPathに設定されている情報を全て取得するには以下のようにします<br>
+                        pub fun main(user: Address): [StoragePath] {<br>
+                        　let authAccount: AuthAccount = getAuthAccount(user)<br>
+                        　return authAccount.storagePaths<br>
+                        }<br><br>
                         pub fun main(user: Address): [[UInt64]] {<br>
                         　let publicAccount: PublicAccount = getAccount(user)<br>
                         　let authAccount: AuthAccount = getAuthAccount(user)<br>
@@ -1206,7 +1215,24 @@
                         　}<br>
                         　authAccount.forEachStored(iterationFunc)<br>
                         }<br><br>
-                        所有している全てのNFTの参照一覧を取得するには以下のようにします<br>
+                        アカウントが所有する全てのNFTのID一覧を取得するには以下のようにします<br>
+                        pub fun main(user: Address): [[UInt64]] {<br>
+                        　let publicAccount: PublicAccount = getAccount(user)<br>
+                        　let authAccount: AuthAccount = getAuthAccount(user)<br>
+                        　let ids: [[UInt64]] = []<br>
+                        　let iterationFunc: ((StoragePath, Type): Bool) = fun (path: storagePath, type: Type): Bool {<br>
+                        　.　if type.isSubtype(of: Type<@NonFungibleToken.Collection>()) {<br>
+                        　.　.　let collection = authAccount.borrow<@NonFungibleToken.Collection>(from: path)<br>
+                        　.　.　let collectionIds: [UInt64] = collection.getIDs()<br>
+                        　.　.　ids.append(collectionIds)<br>
+                        　.　}<br>
+                        　.　return true<br>
+                        　}<br>
+                        　authAccount.forEachStored(iterationFunc)<br>
+                        }<br><br>
+                        ・If false is returned in fun in iterationFunc, the loop stops there; if true, the loop continues.<br>
+                        (iterationFuncの中のfunの中でfalseを返すとループの処理がそこで止まります。trueを返すとループが続きます。)<br><br>
+                        アカウントが所有する全てのNFTの参照一覧を取得するには以下のようにします<br>
                         pub fun main(user: Address): {Type: [&NonFungibleToken.NFT]} {<br>
                         　let publicAccount: PublicAccount = getAccount(user)<br>
                         　let authAccount: AuthAccount = getAuthAccount(user)<br>
