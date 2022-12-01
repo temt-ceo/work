@@ -502,7 +502,8 @@
                         [NOTE] ([注意])<br>
                         Since blockchain values are basically Public, when storing values that you do not want to make public, such as user information, it is recommended to encrypt them once in the backend, and then return the encrypted values and store them in Struct in a transaction.<br>
                         (ブロックチェーンの値は基本的にPublicであるため、ユーザー情報など公にしたくない値を格納する時は一度バックエンドで暗号化し、その暗号化された値を返してトランザクションでStructに格納することをお勧めします)<br><br><br>
-                        Community’s video: https://lnkd.in/gTp4tiVj<br><br><br>
+                        Community’s video: https://lnkd.in/gTp4tiVj<br><br>
+                        全体リファレンスはこちら: https://tokyo-em-technology.org/References.pdf<br><br>
                         ---------<br>
                         About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
                         ブログはこちら: https://lnkd.in/g3kM3AJg<br><br>
@@ -532,8 +533,8 @@
                         　.　destroy self.hellos<br>
                         　}<br>
                         }<br><br>
-                        Resource always needs to be with <- or destroy, otherwise an error will occur.<br>
-                        (Resourceは常に<-かdestroyで行き先を指示しないとエラーになります。)<br><br>
+                        Resource always needs to be with <- or destroy, otherwise an error will occur. Destroying a collection of Resource can be done as above to destroy all Resource in the collection, otherwise an error will occur.<br>
+                        (Resourceは常に<-かdestroyで行き先を指示しないとエラーになります。Resourceのcollectionのdestroyは上記のようにすることでcollection内のすべてのResourceをdestroyすることが出来、これがないとエラーとなります。)<br><br>
                         Here is an example of putting a Resource into a collection of Resource (ResourceのcollectionにResourceを入れる一例は以下です)<br>
                         pub fun depositHello(hello: @Hello) {<br>
                         　self.hellos[hello.uuid] <-! hello<br>
@@ -542,6 +543,7 @@
                         ・`.values` cannot be used in Resource's Dictionary because it would be meaningless if the Resource itself could be moved.<br>
                         (ResourceのDictionaryでは`.values`が使用できません。Resource自体の移動ができてしまっては意味がないためです。)<br><br><br>
                         Community’s video: https://lnkd.in/gwUNUGrx<br><br>
+                        全体リファレンスはこちら: https://tokyo-em-technology.org/References.pdf<br><br>
                         ---------<br>
                         About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
                         ブログはこちら: https://lnkd.in/g3kM3AJg<br><br>
@@ -550,17 +552,20 @@
                     <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
                         Let's build a game with Flow Blockchain! (Flow Blockchainでゲームを作ろう！) <br>
                         3. Access Control (アクセスコントロール)<br><br>
-                        Access Control for variables is as follows (変数のAccess Controlは以下です)<br>
+                        Access Control for variables is as follows (変数のAccess Controlは以下です)<br><br>
                         pub(set): Read Scope: All, Write Scope: All<br>
                         pub/access(all): Read Scope: All, Write Scope: Current and inner<br>
-                        access(contract): Read Scope: Current, inner, and containing contract (変数を含有するコントラクト内からアクセスできます), Write Scope: Current and inner<br>
+                        access(contract): Read Scope: Current, inner, and containing contract <br>
+                        　(変数を含有するコントラクト内からアクセスできます), Write Scope: Current and inner<br>
                         access(self): Read Scope: Current and inner, Write Scope: Current and inner<br><br>
-                        Access Control for the function is as follows (functionのAccess Controlは以下です)<br>
+                        Access Control for the function is as follows (functionのAccess Controlは以下です)<br><br>
                         pub/access(all): ALL (どこからでも呼べます)<br>
-                        access(contract): Current, inner, and containing contract (メソッドを含有するコントラクト内からアクセスできます)<br>
-                        access(self): Current and inner<br>
+                        access(contract): Current, inner, and containing contract <br>
+                        　(メソッドを含有するコントラクト内からアクセスできます)<br>
+                        access(self): Current and inner<br><br>
                         `access(contract)` will not be able to access from the transaction (`access(contract)`にするとトランザクションからアクセスすることが出来なくなります)<br><br><br>
                         Community’s video: https://lnkd.in/gbd2qRCp<br><br>
+                        全体リファレンスはこちら: https://tokyo-em-technology.org/References.pdf<br><br>
                         ---------<br>
                         About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
                         ブログはこちら: https://lnkd.in/g3kM3AJg<br><br>
@@ -569,23 +574,32 @@
                     <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
                         Let's build a game with Flow Blockchain! (Flow Blockchainでゲームを作ろう！) <br>
                         4. Resource Interface (インターフェース)<br><br>
-                        ・Interface can be used to efficiently restrict access (インターフェースを使用すると効率的にアクセス制限ができます)<br>
-                        (Example) (一例)<br>
-                        pub fun createRestrictedGreeting(): @Greeting{IGreeting} {<br>
-                        　return <- create Greeting()<br>
-                        }<br>
-                        Resource returned by this method will only be accessible to methods and variables declared in the IGreeting interface, not to variables and methods declared in the Greeting resource<br>
-                        (このメソッドで返されたリソースはIGreetingインターフェースで宣言されたメソッドや変数のみがアクセス可能となり、Greetingリソース内で宣言されインターフェースにはない変数やメソッドにはアクセスができなくなります)<br><br>
-                        ・Combined with the access(contract) variable, access can be further restricted. Readability is also improved because it is easy to determine which variables are private because they can only be returned from the method.<br>
-                        (access(contract)の変数と組み合わせるとさらにアクセスを制限できます。メソッドからしか返せない為どれがPrivateか判断し易いことから可読性も上がります)<br>
-                        (Example) (一例)<br>
+                        ・An interface describes behavior that must be implemented like a Java interface. It is implemented as follows<br>
+                        (インターフェースはJavaのインターフェースのように実装しなければならない動作を記述します。以下のように実装します。)<br><br>
                         pub resource interface IGreeting {<br>
                         　access(contract) let greeting: String<br>
                         }<br><br>
-                        Resource also allows the greeting variable to be an access control different from the interface, such as pub. In this case, @Greeting{IGreeting} with Interface will be access(contract) access, and @Greeting without Interface will be pub access.<br>
-                        (Resource内ではインターフェースと異なるアクセスコントロールを変数につけることもできます。この場合、@Greeting{IGreeting}としてInterfaceがあればaccess(contract)のアクセスとなり、@GreetingとしてInterfaceがなければpubのアクセスとなります。)<br><br>
-                        Please watch the community video below for more information on this (詳細は下記コミュニティビデオをご覧ください)<br>
+                        ・Interface can be used to efficiently restrict access <br>
+                        (インターフェースを使用すると効率的にアクセス制限ができます)<br><br>
+                        pub fun createRestrictedGreeting(): @Greeting{IGreeting} {<br>
+                        　return <- create Greeting()<br>
+                        }<br><br>
+                        ・Resource returned by this method will only be accessible to methods and variables declared in the IGreeting interface, not to variables and methods declared in the Greeting resource<br>
+                        (このメソッドで返されたリソースはIGreetingインターフェースで宣言されたメソッドや変数のみがアクセス可能となり、Greetingリソース内で宣言されIGreetingインターフェースにはない変数やメソッドにはアクセスができなくなります)<br><br>
+                        ・If the variable is set to `access(contract)`, the value of the variable can only be returned by the method, making the access control more visually obvious<br>
+                        (変数を`access(contract)`としておくと、変数の値がメソッドからしか返せない為、アクセスコントロールがより視覚的に分かりやすくなります)<br><br>
+                        pub resource Greeting: IGreeting {<br>
+                        　pub let greeting: String<br>
+                        　init() {<br>
+                        　.　self.greeting = "Hello, World!"<br>
+                        　}<br>
+                        }<br><br>
+                        ・It is also possible to attach an access control different from the interface to a variable (greeting) in the Resource. In this case, when creating a resource, if there is an Interface as @Greeting{IGreeting}, the access permission is for access (contract), and if there is no Interface as @Greeting, the access permission is for pub.<br>
+                        (インターフェースと異なるアクセスコントロールをResource内で変数(greeting)につけることもできます。この場合、リソースをcreateする時、@Greeting{IGreeting}としてInterfaceがある場合access(contract)のアクセス権限となり、@GreetingとしてInterfaceが無い場合pubのアクセス権限となります。)<br><br>
+                        Please watch the community video below for more information on this <br>
+                        (詳細は下記コミュニティビデオをご覧ください)<br>
                         Community’s video: https://lnkd.in/grDRrKHA<br><br>
+                        全体リファレンスはこちら: https://tokyo-em-technology.org/References.pdf<br><br>
                         ---------<br>
                         About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
                         ブログはこちら: https://lnkd.in/g3kM3AJg<br><br>
@@ -681,6 +695,7 @@
                         For more information on the NFT Standard, please watch the community video below (NFT Standardの詳細は下記コミュニティビデオをご覧ください)<br>
                         Community’s video: https://lnkd.in/gPCgWx2N & https://www.youtube.com/watch?v=bINELogSODk<br>
                         & https://www.youtube.com/watch?v=rgJRTozG3cw<br><br>
+                        全体リファレンスはこちら: https://tokyo-em-technology.org/References.pdf<br><br>
                         ---------<br>
                         About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
                         ブログはこちら: https://lnkd.in/g3kM3AJg<br><br>
@@ -720,6 +735,7 @@
                         By putting the Capability that another account has in a variable of a resource, you can store that resource and exercise its authority by borrowing the Capability in that variable.<br>
                         (他のアカウントが持つCapabilityをリソースの変数に入れることで、そのリソースを保存し、その変数のcapabilityをborrowすることでその権限を行使できます。)<br><br>
                         Community’s video: https://lnkd.in/gTwGEZ_g<br><br>
+                        全体リファレンスはこちら: https://tokyo-em-technology.org/References.pdf<br><br>
                         ---------<br>
                         About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
                         ブログはこちら: https://lnkd.in/g3kM3AJg<br><br>
@@ -744,8 +760,9 @@
                         　l. Open the editor and create a transitions folder under the cadence folder, create a js file under it, and paste the `k` information (エディタを開きcadenceフォルダの下にtransactionsフォルダを作成、その下にjsファイルを作成し、kの情報をペーストする)<br>
                         　m. Create a button that allows you to change the information of a contract deployed on the testnet using the fcl.send method (fcl.sendメソッドでテストネットにデプロイしたコントラクトの情報を変更できるボタンを作成する)<br>
                         　n. Execute the transaction to get the transactionHash and check it with flowscan. (トランザクションを実行するとtransactionHashが取得できるのでflowscanで確認する)<br><br>
-                        See the community video below for more details. a~n steps will take about 40 minutes! (詳細は下記コミュニティビデオをご覧ください。a~nまでの手順が40分ほどで終わります)<br>
+                        See the community video below for more details. a~n steps will take about 40 minutes! <br>(詳細は下記コミュニティビデオをご覧ください。a~nまでの手順が40分ほどで終わります)<br>
                         Community’s video: https://lnkd.in/g-Sh-rFQ<br><br>
+                        全体リファレンスはこちら: https://tokyo-em-technology.org/References.pdf<br><br>
                         Besides React, Nuxt.js can also implement Flow Dapp by using the following libraries (React以外にNuxt.jsも以下のライブラリを使用することでFlow Dappを実装できます)<br>
                         https://github.com/brunogonzales/fcl-nuxt-starter<br><br>
                         ---------<br>
@@ -756,12 +773,15 @@
                     <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
                         Let's build a game with Flow Blockchain! (Flow Blockchainでゲームを作ろう！) <br>
                         8. How to Create a Fungible Token (独自通貨を発行するには)<br><br>
-                        ・Fungible Tokenの作り方(一例)<br>
-                        1. Fungible Token Standardのinterfaceは以下にあります。<br>
-                        https://github.com/onflow/flow-ft/blob/master/contracts/FungibleToken.cdc<br>
-                        2. このInterfaceをimportしたContractを作ります<br>
-                        3. totalSupply, deposit, withdraw, Minterを実装します<br>
-                        depositは以下のようにします<br>
+                        ・How to create a Fungible Token (Fungible Tokenの作り方)<br><br>
+                        1). The Fungible Token Standard interface can be found below. <br>
+                        (Fungible Token Standardのinterfaceは以下にあります。)<br><br>
+                        https://github.com/onflow/flow-ft/blob/master/contracts/FungibleToken.cdc<br><br>
+                        2). Create a Contract that imports this Interface <br>
+                        (このInterfaceをimportしたContractを作ります)<br><br>
+                        3). Implement totalSupply, deposit, withdraw, Minter<br>
+                        (totalSupply, deposit, withdraw, Minterを実装します)<br><br>
+                        ・The deposit function should be as follows (depositは以下のようにします)<br>
                         pub fun deposit(from: @FungibleToken.vault) {<br>
                         　let vault <- from as! @MyToken.vault<br>
                         　emit TokensDeposited(amount: vault.balance, to: self.owner?.address)<br>
@@ -769,13 +789,13 @@
                         　vault.balance = 0.0<br>
                         　destroy vault<br>
                         }<br><br>
-                        withdrawは以下のようにします<br>
+                        ・The withdraw function should be as follows (withdrawは以下のようにします)<br>
                         pub fun withdraw(amount: UFix64): @FungibleToken.vault {<br>
                         　self.balance = self.balance - amount<br>
                         　emit TokensWithdrawn(amount: amount, from: self.owner?.address)<br>
                         　return <- create Vault(balance: amount)<br>
                         }<br><br>
-                        Minterは以下のようにします<br>
+                        ・The Minter resource should be as follows (Minterは以下のようにします)<br>
                         pub resource Minter {<br>
                         　pub fun mintToken(amount: UFix64): @FungibleToken.vault {<br>
                         　.　MyToken.totalSupply = MyToken.totalSupply + amount<br>
@@ -789,12 +809,14 @@
                         　self.account.save(<- create Minter(), to: /storage/Minter)<br>
                         　}<br>
                         }<br><br>
-                        4. アカウントにこのContractのvalutを保存します。以下のようにします<br>
+                        4). Save the valut of this Contract to the account. Do the following <br>
+                        (アカウントにこのContractのvalutを保存します。以下のようにします)<br><br>
                         prepare(acct: AuthAccount) {<br>
                         　acct.save(<- MyToken.createEmptyVault(), to: /storage/Vault)<br>
                         　acct.link<@MyToken.vault{FungibleToken.Balance, FungibleToken.Receiver}>(/public/Vault, target: /storage/Vault)<br>
                         }<br><br>
-                        5. 独自通貨を発行して特定のアカウントに預け入れるには以下のようにします<br>
+                        5). To issue fungible currencies and deposit it into a specific account, do the following<br>
+                        (独自通貨を発行して特定のアカウントに預け入れるには以下のようにします)<br><br>
                         prepare(acct: AuthAccount) {<br>
                         　let minter = acct.borrow<&MyToken.Minter>(from: /storage/Minter)<br>
                         　let newVault <- minter.mintToken(amount: 20.0)<br>
@@ -803,7 +825,7 @@
                         　.　.　?? panic("Couldn't get the public vault.")<br>
                         　receiverVault.deposit(from: <- newVault)<br>
                         }<br><br>
-                        6. アカウント間の独自通貨の転送は以下のようにします
+                        6. Transferring fungible currencies between accounts should be done as follows (アカウント間の独自通貨の転送は以下のようにします)<br>
                         prepare(acct: AuthAccount) {<br>
                         　let signerVault = acct.borrow<&MyToken.Vault>(from: /storage/Vault)<br>
                         　.　.　?? panic("Couldn't get the signer's vault.")<br>
@@ -813,6 +835,7 @@
                         　receiverVault.deposit(from: <- signerVault.withdraw(amount: amount))<br>
                         }<br><br>
                         Community’s video: https://lnkd.in/gb2GCDT5<br><br>
+                        全体リファレンスはこちら: https://tokyo-em-technology.org/References.pdf<br><br>
                         ---------<br>
                         About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
                         ブログはこちら: https://lnkd.in/g3kM3AJg<br><br>
@@ -821,9 +844,11 @@
                     <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
                         Let's build a game with Flow Blockchain! (Flow Blockchainでゲームを作ろう！) <br>
                         9. Send a Transaction with a Non-Custodial Wallet (ノンカストディアルウォレットでトランザクションを送信する)<br><br>
-                        private key, public keyの生成の一例は以下です<br>
+                        An example of private key and public key generation is as follows <br>
+                        (private key, public keyの生成の一例は以下です)<br><br>
                         flow keys generate --network=testnet --sig-algo=ECMA_secp256k1<br><br>
-                        生成したkeyによる認証関数は以下のようにします<br>
+                        The authentication function with the generated key is as follows <br>
+                        (生成したkeyによる認証関数は以下のようにします)<br><br>
                         const EC = require('elliptic').ec<br>
                         const ec = new EC('secp256k1')<br>
                         const ADDRESS = '0x0c60359d10739baa'<br>
@@ -860,7 +885,8 @@
                         module.exports = {<br>
                         　authorizationFunction<br>
                         }<br><br>
-                        ノンカストディアルウォレットでトランザクションを送信するには以下のようにします<br>
+                        To send a transaction with a Non-Custodial wallet, do the following<br>
+                        (ノンカストディアルウォレットでトランザクションを送信するには以下のようにします)<br><br>
                         const sendTx = asnyc () => {<br>
                         　console.log('Sending Tx')<br>
                         　const transactionId = await fcl.send([<br>
@@ -884,15 +910,17 @@
                         }<br>
                         sendTx()<br><br>
                         Community’s video: https://lnkd.in/g5tqYRcU<br><br>
-                         ---------<br>
-                         About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
-                         ブログはこちら: https://lnkd.in/g3kM3AJg<br><br>
-                         #blockchain
+                        全体リファレンスはこちら: https://tokyo-em-technology.org/References.pdf<br><br>
+                        ---------<br>
+                        About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
+                        ブログはこちら: https://lnkd.in/g3kM3AJg<br><br>
+                        #blockchain
                      </p>
                      <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
-                         Let's build a game with Flow Blockchain! (Flow Blockchainでゲームを作ろう！) <br>
-                         10. Query for Events (イベントを取得するには)<br><br>
-                        定期的にイベントを取得には以下のようにします<br>
+                        Let's build a game with Flow Blockchain! (Flow Blockchainでゲームを作ろう！) <br>
+                        10. Query for Events (イベントを取得するには)<br><br>
+                        To retrieve events periodically, do the following<br>
+                        (定期的にイベントを取得には以下のようにします)<br><br>
                         const contractAddress = '1654653399040a61' // Take 0x from 0x1654653399040a61<br>
                         const contractName = 'FlowToken'<br>
                         const eventName = 'TokensDeposited'<br>
@@ -915,6 +943,7 @@
                         }<br>
                         fetchEvents()<br><br>
                         Community’s video: https://lnkd.in/gJpqi3aw<br><br>
+                        全体リファレンスはこちら: https://tokyo-em-technology.org/References.pdf<br><br>
                         ---------<br>
                         About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
                         ブログはこちら: https://lnkd.in/g3kM3AJg<br><br>
@@ -923,15 +952,17 @@
                     <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
                         Let's build a game with Flow Blockchain! (Flow Blockchainでゲームを作ろう！) <br>
                         11. Optional Binding<br><br>
-                        Dictionaryにキーがある時とない時で処理を分けたい時、キーがある場合の状態を変数に移動して処理を描くことが出来ます<br>
+                        If you want to handle separately when a dictionary has a data and when it has not, you can write the code to get the state when the dictionary has a data by a variable.<br>
+                        (Dictionaryに値がある時とない時で処理を分けたい時、値がある状態を変数に移動して処理を書くことが出来ます)<br><br>
                         let tests: {Int: Test} = { 10: Test(10), 20: Test(20) }<br>
                         if let test = tests[10] {<br>
                         　return test.fruites[0]<br>
                         } else {<br>
                         　return nil<br>
-                        }<br>
-                        ・Optional Binding は`if let`から始まります<br><br>
+                        }<br><br>
+                        ・Optional Binding starts with `if let`. (Optional Binding は`if let`から始まります)<br><br>
                         Community’s video: https://lnkd.in/gWZtX-M5<br><br>
+                        全体リファレンスはこちら: https://tokyo-em-technology.org/References.pdf<br><br>
                         ---------<br>
                         About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
                         ブログはこちら: https://lnkd.in/g3kM3AJg<br><br>
@@ -939,9 +970,10 @@
                     </p>
                     <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
                         Let's build a game with Flow Blockchain! (Flow Blockchainでゲームを作ろう！) <br>
-                        12. How to Multi-Sign (マルチサインのやり方)<br><br>
-                        a: (Frontend:) Post request to the backend<br>
-                        private keyはsignatureのところだけで必要なので、それ以外の認証機能をFrontEndに置いておきます。以下のようにします。<br>
+                        12. How to Multi-Sign (マルチサインを行うには)<br><br>
+                        a: (Frontend:) Post request to the backend (バックエンドにリクエストを送信します)<br>
+                        Private key is only needed at the signature position, so the rest of the signature is placed at FrontEnd. Do the following<br>
+                        (Private keyはsignatureの場所でのみ必要なので、それ以外はFrontEndに置いておきます。以下のようにします。)<br><br>
                         export const serverAuthorization = asnyc (account) => {<br>
                         　const addr = '0x0c60359d10739baa'<br>
                         　const keyId = 0<br>
@@ -960,12 +992,13 @@
                         　.　}<br>
                         　}<br>
                         }<br>
-                        ・getSignature(signable)の部分がバックエンドにPOST requestするところです<br>
+                        ・The getSignature(signable) part is the POST request to the backend<br>
+                        (getSignature(signable)の部分がバックエンドにPOST requestするところです)<br><br>
                         b: (Backend:) Take in the signable message from the frontend, and sign it with the Admin's private key that is stored on the backend.<br>
-                        以下のようにします。signメソッドは9.に記載があります。<br>
-                        const signature = sign(signable.message)<br>
+                        (フロントエンドから署名するメッセージを受け取り、バックエンドに保存されているAdminのprivate keyを使用して署名します)<br><br>
+                        const signature = sign(signable.message)<br><br>
                         c: (Backend:) Return the signature back to the frontend.<br>
-                        a-cの一連の処理を呼び出すには以下のようにします。<br>
+                        The front-end code at this time is as follows (この時のフロントエンドの処理は以下です)<br><br>
                         const transactionId = await fcl.send([<br>
                         　fcl.transaction`<br>
                         　transaction() {<br>
@@ -977,9 +1010,11 @@
                         　fcl.proposer(fcl.authz),<br>
                         　fcl.authorizationz([fcl.authz, serverAuthorization]),<br>
                         　fcl.limit(9999)<br>
-                        ]).then(fcl.decode)<br>
-                        ・これによってトランザクション費用を肩代わりすることなどができるようになります。<br><br>
+                        ]).then(fcl.decode)<br><br>
+                        ・This allows the Admin to pay transaction costs on behalf of the client, for example.<br>
+                        (これによってトランザクション費用を肩代わりすることなどができるようになります。)<br><br>
                         Community’s video: https://lnkd.in/gjFmFNTR<br><br>
+                        全体リファレンスはこちら: https://tokyo-em-technology.org/References.pdf<br><br>
                         ---------<br>
                         About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
                         ブログはこちら: https://lnkd.in/g3kM3AJg<br><br>
@@ -988,14 +1023,18 @@
                     <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
                         Let's build a game with Flow Blockchain! (Flow Blockchainでゲームを作ろう！) <br>
                         13. Optional References<br><br>
-                        Secure Cadenceによって変更された部分です。<br>
-                        pub var tests = @{UInt64: Test}<br>
-                        このDictionary内のリソースの参照を取得するには以下のようにします<br>
+                        ・This is the area modified by Secure Cadence<br>
+                        (Secure Cadenceによって変更された部分です)<br><br>
+                        pub var tests = @{UInt64: Test}<br><br>
+                        To get a reference to a resource in this dictionary, do the following<br>
+                        (このDictionaryの中にある、リソースの参照を取得するには以下のようにします)<br><br>
                         pub fun getRef(): &Test? {<br>
                         　return &self.tests[0] as &Test?<br>
-                        }<br>
-                        Dictionary内のリソースはOptionalであるため、nilのケースを開発者が適切に処理できるように?を付けるように変更されました。以前は?が無かったのでnilの参照が生じる可能性がありました。<br><br>
+                        }<br><br>
+                        This is a change by Secure Cadence where the resource in the Dictionary is Optional, to allow developers to handle nil cases properly. Previously, there was no ? was not added, which could result in nil references.<br>
+                        (ここはSecure Cadenceによる変更で、開発者がnilケースを適切に扱えるように、DictionaryのリソースにOptional?を付けるように変更されました。以前は?がつかなかったのでnilの参照が生じる可能性がありました。)<br><br>
                         Community’s video: https://lnkd.in/gYvGX8dU & https://lnkd.in/gk4gKcFB<br><br>
+                        全体リファレンスはこちら: https://tokyo-em-technology.org/References.pdf<br><br>
                         ---------<br>
                         About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
                         ブログはこちら: https://lnkd.in/g3kM3AJg<br><br>
@@ -1004,14 +1043,16 @@
                      <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
                         Let's build a game with Flow Blockchain! (Flow Blockchainでゲームを作ろう！) <br>
                         14. Configure Cadence VSCode Extension (VSCode Extentionのセットアップ方法)<br><br>
-                        1. Install Flow CLI. (flow-cliをインストール)<br>
-                        　Flow CLI: https://developers.flow.com/tools/flow-cli/install<br>
-                        2. Install Cadence VSCode Extension. (Cadence VSCode Extensionをインストール)<br>
+                        1. Install Flow CLI. (flow-cliをインストール)<br><br>
+                        　Flow CLI: https://developers.flow.com/tools/flow-cli/install<br><br>
+                        2. Install Cadence VSCode Extension. (Cadence VSCode Extensionをインストール)<br><br>
                         　Marketplace: https://marketplace.visualstudio.com/items?itemName=onflow.cadence<br>
-                        　Github: https://github.com/onflow/vscode-cadence<br>
-                        3. Run `flow init` in your terminal to create flow.json file. This will highlight the Cadence code.(flow initのコマンドを叩き、flow.jsonファイルを作成します。こうすることでCadenceコードがハイライトされます。)<br>
-                        4. Restart VSCode. (VSCodeを再起動する)<br>
+                        　Github: https://github.com/onflow/vscode-cadence<br><br>
+                        3. Run `flow init` in your terminal to create flow.json file. This will highlight the Cadence code.<br>
+                        (flow initのコマンドを叩き、flow.jsonファイルを作成します。こうすることでCadenceコードがハイライトされます。)<br><br>
+                        4. Restart VSCode. (VSCodeを再起動する)<br><br>
                         Community’s video: https://lnkd.in/gkDWMzaw<br><br>
+                        全体リファレンスはこちら: https://tokyo-em-technology.org/References.pdf<br><br>
                         ---------<br>
                         About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
                         ブログはこちら: https://lnkd.in/g3kM3AJg<br><br>
@@ -1021,13 +1062,14 @@
                         Let's build a game with Flow Blockchain! (Flow Blockchainでゲームを作ろう！) <br>
                         15. How to Build an NFT Marketplace (NFTのマーケットプレイスを作るには)<br><br>
                         a. Create a forSale object to manage the listing, a Capability to withdraw the NFT and a Capability to deposit the Flow. <br>
-                        (出品を管理するforSaleオブジェクトとNFTを引き出すCapabilityとFlowを振り込むCapabilityを作成します)<br>
+                        (出品を管理するforSaleオブジェクトとNFTを引き出すCapabilityとFlowを振り込むCapabilityを作成します)<br><br>
                         pub resource SaleCollection {<br>
                         　pub var forSale: {UInt64: UFix64} // id of the nft --> the price of that NFT<br>
                         　pub let NFTCollectionCaps: Capability<&MyNFT.Collection><br>
                         　pub let FlowTokenVault: Capability<&FlowToken.Vault{FungibleToken.Receiver}><br>
                         }<br><br>
-                        b. To allow only NFT holders to list, do the following (NFTを保持する人のみが出品できるようにするには以下のようにします)<br>
+                        b. To allow only NFT holders to list, do the following <br>
+                        (NFTを保持する人のみが出品できるようにするには以下のようにします)<br><br>
                         pub fun listForSale(id: UInt64, price: UFix64) {<br>
                         　pre{<br>
                         　.　self.NFTCollectionCaps.borrow()!getIDs().contains(id): "This SaleCollection owner does not have this NFT"<br>
@@ -1035,7 +1077,8 @@
                         　}<br>
                         　self.forSale[id] = price<br>
                         }<br><br>
-                        c. To create a purchase function, do the following (purchaseメソッドを作成するには以下のようにします)<br>
+                        c. To create a purchase function, do the following <br>
+                        (purchaseメソッドを作成するには以下のようにします)<br>
                         pub fun purchase(id: UInt64, recipientCollection: &MyNFT.Collection{NonFungibleToken.CollectionPublic}, payment: @FlowToken.Vault) {<br>
                         　pre{<br>
                         　.　payment.balance == self.forSale[id]: "This payment is not equal to the price of the NFT"<br>
@@ -1044,13 +1087,14 @@
                         　self.FlowTokenVault.borrow()!.deposit(from: <- payment)<br>
                         }<br><br>
                         d. Create SaleCollectionPublic Interface <br>
-                        (SaleCollectionPublicインターフェースを作成します)<br>
+                        (SaleCollectionPublicインターフェースを作成します)<br><br>
                         pub resource interface SaleCollectionPublic {<br>
                         　pub fun getIDs(): [UInt64]<br>
                         　pub fun getPrice(id: UInt64): UFix64<br>
                         　pub fun purchase(id: UInt64, recipientCollection: &MyNFT.Collection{NonFungibleToken.CollectionPublic}, payment: @FlowToken.Vault)<br>
                         }<br><br>
-                        e. To store the marketplace resource in an account, do the following (アカウントにマーケットプレイスのリソースを保存するには以下のようにします)<br>
+                        e. To store the marketplace resource in an account, do the following <br>
+                        (アカウントにマーケットプレイスのリソースを保存するには以下のようにします)<br><br>
                         prepare(acct: AuthAccount) {<br>
                         　let MyNFTCollection = acct.getCapability<&MyNFT.Collection>(/public/MyNFTCollection)<br>
                         　let FlowTokenVault = acct.getCapability<&FlowToken.Vault{FungibleToken.Receiver}>(/public/flowTokenReceiver)<br>
@@ -1058,14 +1102,16 @@
                         　acct.save(<- NFTMarketplace.createSaleCollection(MyNFTCollection: MyNFTCollection, FlowTokenVault: FlowTokenVault), to: /storage/MySaleCollection)<br>
                         　acct.link<&NFTMarketplace.saleCollection{NFTMarketplace.SaleCollectionPublic}>(/public/MySaleCollection, target: /storage/MySaleCollection)<br>
                         }<br><br>
-                        f. To list a NFT on the marketplace, do the following (マーケットプレイスに出品するには以下のようにします)<br>
+                        f. To list a NFT on the marketplace, do the following <br>
+                        (マーケットプレイスに出品するには以下のようにします)<br><br>
                         prepare(acct: AuthAccount) {<br>
                         　let saleCollection = acct.getCapability<&NFTMarketplace.saleCollection{NFTMarketplace.SaleCollectionPublic}>(from: /public/MySaleCollection)<br>
                         　.　?? panic("This SaleCollectiondoes not exist.")<br>
                         　}<br>
                         　saleCollection.listForSale(id: id, price: price)<br>
                         }<br><br>
-                        g. To retrieve a marketplace listing, do the following (マーケットプレイスの出品リストを取得するには以下のようにします)<br>
+                        g. To retrieve a marketplace listing, do the following <br>
+                        (マーケットプレイスの出品リストを取得するには以下のようにします)<br><br>
                         pub fun main(account: Account): {UInt64: NFTMarketplace.SaleItem} {<br>
                         　let saleCollection = acct.getCapability(/public/MySaleCollection).borrow<&NFTMarketplace.SaleCollection{NFTMarketplace.SaleCollectionPublic}>()<br>
                         　.　?? panic("Could not borrow the user's SaleCollection.")<br>
@@ -1081,14 +1127,16 @@
                         　}<br>
                         　return returnVals<br>
                         }<br><br>
-                        h. To cancel a marketplace listing, do the following (マーケットプレイスの出品を取り消すには以下のようにします)<br>
+                        h. To cancel a marketplace listing, do the following <br>
+                        (マーケットプレイスの出品を取り消すには以下のようにします)<br><br>
                         prepare(acct: AuthAccount) {<br>
                         　let saleCollection = acct.borrow<&NFTMarketplace.saleCollection>(from: /storage/MySaleCollection)<br>
                         　.　?? panic("This SaleCollectiondoes not exist.")<br>
                         　}<br>
                         　saleCollection.unlistFromSale(id: id)<br>
                         }<br><br>
-                        i. To purchase NFTs from the marketplace using $FLOW, do the following ($FLOWを使用してマーケットプレイスからNFTを購入するには以下のようにします)<br>
+                        i. To purchase NFTs from the marketplace using $FLOW, do the following <br>
+                        ($FLOWを使用してマーケットプレイスからNFTを購入するには以下のようにします)<br><br>
                         prepare(acct: AuthAccount) {<br>
                         　let saleCollection = getAccount(account).getCapability(/public/MySaleCollection).borrow<&NFTMarketplace.SaleCollection{NFTMarketplace.SaleCollectionPublic}>()<br>
                         　.　?? panic("Could not borrow the user's SaleCollection.")<br>
@@ -1099,8 +1147,10 @@
                         　let payment <- acct.borrow<&FlowToken.Vault>(from: /storage/flowTokenVault).withdraw(amount: price) as! @FlowToken.Vault<br>
                         　saleCollection.purchase(id: id, recipientCollection: recipientCollection, payment: <- payment)<br>
                         }<br><br>
-                        For more information on the NFT Marketplace, please watch the community video below (NFT Marketplaceの詳細は下記コミュニティビデオをご覧ください)<br>
+                        For more information on the NFT Marketplace, please watch the community video below <br>
+                        (NFT Marketplaceの詳細は下記コミュニティビデオをご覧ください)<br>
                         Community’s video(33:40~): https://lnkd.in/gh8sC2g9<br><br>
+                        全体リファレンスはこちら: https://tokyo-em-technology.org/References.pdf<br><br>
                         ---------<br>
                         About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
                         ブログはこちら: https://lnkd.in/g3kM3AJg<br><br>
@@ -1108,13 +1158,15 @@
                      </p>
                      <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
                         Let's build a game with Flow Blockchain! (Flow Blockchainでゲームを作ろう！) <br>
-                        16. How to Verify Account Ownership (account-proof) [Improved application reliability and server-side authentication (アプリケーションの信頼性向上とサーバーサイド認証)]<br><br>
-                        Flow CLI Github Reference:<br>
+                        16. How to Verify Account Ownership (account-proof) <br><br>
+                        [Improved application reliability and server-side authentication (アプリケーションの信頼性向上とサーバーサイド認証)]<br><br>
+                        Flow CLI Github Reference (Flow CLI Githubリファレンス):<br>
                         https://github.com/onflow/fcl-js/blob/master/docs/reference/proving-authentication.mdx<br><br>
-                        ・The range of applications is wide because it goes to the server side to obtain nonce and authenticates it on the server side. Ex: Establish validity period, etc. (サーバーサイドにnonceを取りに行き、且つ、サーバー側で認証する為、アプリケーションにさまざまな応用が出来ます。例:有効期限を設けるなど)<br>
+                        ・The range of applications is wide because it goes to the server side to obtain nonce and authenticates it on the server side. Ex: Establish validity period, etc. <br>
+                        (サーバーサイドにnonceを取りに行き、且つ、サーバー側で認証する為、アプリケーションにさまざまな応用が出来ます。例:有効期限を設けるなど)<br><br>
                         a. Retrieve account proof data from your application server when connecting to the wallet.<br>
                         (ウォレット接続時にアプリケーションサーバーからアカウント証明データを取得してきます)<br>
-                        (Example) (一例)<br>
+                        (Example) (一例)<br><br>
                         [Frontend]<br>
                         const resolver = async () => {<br>
                         　const response = await fetch('/api/generate')<br>
@@ -1139,7 +1191,7 @@
                         }<br><br>
                         b. The data retrieved from the server should include a random nonce. The specific application identifier is displayed by wallets when users are asked to approve a signing request.<br>
                         (サーバーから取得したデータにランダムなnonceが含まれる必要があります。特定のアプリケーション識別子は、ユーザーが署名要求を承認するよう求められたときにウォレットによって表示されます。)<br>
-                        (Example) (一例)<br>
+                        (Example) (一例)<br><br>
                         [Authentication on the Frontend side only (Frontend側でのみ認証)]<br>
                         export async function login() {<br>
                         　let response = await fcl.authenticate()<br>
@@ -1183,6 +1235,7 @@
                         　res.status(200).json({ verified })<br>
                         }<br><br>
                         Community’s video(00:16~): https://lnkd.in/ghi4GJTA<br><br>
+                        全体リファレンスはこちら: https://tokyo-em-technology.org/References.pdf<br><br>
                         ---------<br>
                         About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
                         ブログはこちら: https://lnkd.in/g3kM3AJg<br><br>
@@ -1190,32 +1243,16 @@
                      </p>
                      <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
                         Let's build a game with Flow Blockchain! (Flow Blockchainでゲームを作ろう！) <br>
-                        17. Account Storage Iteration [To get a list of NFTs owned by an account (アカウントが所有しているNFTを一覧で取得するには)]<br><br>
-                        アカウントのPublicPathに設定されている情報を全て取得するには以下のようにします<br>
+                        17. Account Storage Iteration <br><br>
+                        [To get a list of NFTs owned by an account (アカウントが所有しているNFTを一覧で取得するには)]<br><br>
+                        To retrieve all the information set in the PublicPath of an account, do the following<br>
+                        (アカウントのPublicPathに設定されている情報を全て取得するには以下のようにします)<br><br>
                         pub fun main(user: Address): [PublicPath] {<br>
                         　let publicAccount: PublicAccount = getAccount(user)<br>
                         　return publicAccount.publicPaths<br>
                         }<br><br>
-                        アカウントのPublicPathに設定されている情報を全て取得するには以下のようにします<br>
-                        pub fun main(user: Address): [StoragePath] {<br>
-                        　let authAccount: AuthAccount = getAuthAccount(user)<br>
-                        　return authAccount.storagePaths<br>
-                        }<br><br>
-                        pub fun main(user: Address): [[UInt64]] {<br>
-                        　let publicAccount: PublicAccount = getAccount(user)<br>
-                        　let authAccount: AuthAccount = getAuthAccount(user)<br>
-                        　let ids: [[UInt64]] = []<br>
-                        　let iterationFunc: ((StoragePath, Type): Bool) = fun (path: storagePath, type: Type): Bool {<br>
-                        　.　if type.isSubtype(of: Type<@NonFungibleToken.Collection>()) {<br>
-                        　.　.　let collection = authAccount.borrow<@NonFungibleToken.Collection>(from: path)<br>
-                        　.　.　let collectionIds: [UInt64] = collection.getIDs()<br>
-                        　.　.　ids.append(collectionIds)<br>
-                        　.　}<br>
-                        　.　return true<br>
-                        　}<br>
-                        　authAccount.forEachStored(iterationFunc)<br>
-                        }<br><br>
-                        アカウントが所有する全てのNFTのID一覧を取得するには以下のようにします<br>
+                        To get a list of all NFT IDs owned by an account, do the following<br>
+                        (アカウントが所有する全てのNFTのID一覧を取得するには以下のようにします)<br><br>
                         pub fun main(user: Address): [[UInt64]] {<br>
                         　let publicAccount: PublicAccount = getAccount(user)<br>
                         　let authAccount: AuthAccount = getAuthAccount(user)<br>
@@ -1232,7 +1269,8 @@
                         }<br><br>
                         ・If false is returned in fun in iterationFunc, the loop stops there; if true, the loop continues.<br>
                         (iterationFuncの中のfunの中でfalseを返すとループの処理がそこで止まります。trueを返すとループが続きます。)<br><br>
-                        アカウントが所有する全てのNFTの参照一覧を取得するには以下のようにします<br>
+                        To get a list of all NFT references owned by an account, do the following<br>
+                        (アカウントが所有する全てのNFTの参照一覧を取得するには以下のようにします)<br><br>
                         pub fun main(user: Address): {Type: [&NonFungibleToken.NFT]} {<br>
                         　let publicAccount: PublicAccount = getAccount(user)<br>
                         　let authAccount: AuthAccount = getAuthAccount(user)<br>
@@ -1252,11 +1290,11 @@
                         }<br><br>
                         Documentation:<br>
                         https://developers.flow.com/cadence/language/accounts#storage-iteration<br><br>
-                        Community’s video: https://lnkd.in/gZFbQxJb<br><br><br>
-                        https://lnkd.in/gNpYXYuR<br>
-                        https://lnkd.in/g_u7gGZB<br><br><br>
-                        これを全部見ればあなたも今日からブロックチェーンエンジニア!<br><br>
-                        ブログはこちら: https://lnkd.in/ga7fJT4d<br><br>
+                        Community’s video: https://lnkd.in/gZFbQxJb<br><br>
+                        全体リファレンスはこちら: https://tokyo-em-technology.org/References.pdf<br><br>
+                        ---------<br>
+                        About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
+                        ブログはこちら: https://lnkd.in/g3kM3AJg<br><br>
                         #blockchain
                     </p>
                     <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
@@ -1282,16 +1320,24 @@
                         #blockchain
                     </p>
                     <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
-                        Flow Blockchain をゲームに利用する利点は？ (&ゲーム情報)<br>
-                        (What is the benefit of using Flow Blockchain for games? & Game Info)<br><br>
-                        デジタルゲームのカードなどをNFTにすることでコミュニティを形作ることができます。<br>
-                        (For online games, cards and other items can be NFT to shape the community within the game.)<br><br>
-                        この時Flow BlockchainはこのNFTを所持することに対して普通のユーザーが感じるハードルを低くすることができます。<br>
-                        そして、このNFTはプログラムで安全にTransferすることが出来ます。<br>
-                        (Flow Blockchain can lower the hurdle that ordinary users feel about possessing NFTs. <br>
-                        And this NFT can be programmatically transferred safely.)<br><br>
-                        Flow には他のブロックチェーンには無い以下の特徴があります。<br>
-                        (Flow has the following features not found in other blockchains.)<br><br>
+                        Flow Blockchain とは？ゲームとの相性は？<br>
+                        (What is Flow Blockchain? How does it work with games?)<br><br>
+                        2011年にiPhone4sが出てきました。<br><br>
+                        2012年、コンビニはスマホの本で溢れ、電車の中では皆得意げにスマホを操作していました。<br><br>
+                        ウォーレン・バフェットは2016年にApple株を買いました。<br><br>
+                        2016年当時iPhoneは進化が遅いと批判されていましたが、その後も世界では販売が伸び、株価も上がっていきました。<br><br>
+                        対して、ブロックチェーンは？ FTXの失敗とは何だったのか?<br><br>
+                        FTXの失敗はFTTに代表されるトークンをお金として扱っただけに終始します。<br><br>
+                        NFTを作れるトークンも中にはあると思いますが、スマートコントラクトを安全に低コストで作成することができるトークンはほとんどありません。（コントラクトの監査は法外な料金が請求されます）<br><br>
+                        FTXに代表される失敗の数々ではトークンの中にスマートコントラクトが重要なファクターとして出てきていません。<br><br>
+                        スマートコントラクトはプログラミング言語で作成します。お金ではありません。しかし、お金も扱います。<br><br>
+                        Flow Blockchainはメタマスクを使用しません。安全性を懸念して、Web3のデファクトスタンダードであるウォレットを採用していません。<br><br>
+                        それは安全性に懸念がある為です。<br><br>
+                        スマートコントラクトの言語であるCadenceもEthereumのスマートコントラクト言語であるSolidityの数々の機能を安全性の懸念の為採用していません。<br><br>
+                        その結果どうでしょうか？法外な監査がFlow Blockchainでは存在しません。誰の目にもはっきりとわかる分かりやすい仕様のためです。<br><br>
+                        もちろんプログラマーによるバグは資産の紛失に繋がります。ですが、高いガス代など現代において理不尽な問題からは悩まされることは無くなります。<br><br><br><br>
+                        ゲームとの相性は以下です。基本的に自分達が行いたいプログラムを低コスト(ほぼノーコスト)で行うことが出来ます。ただし、暗号化だけはバックエンド等で行ってくださいね？ブロックチェーンに値を保存するときなどに平文はそのまま晒されます。ですが、暗号化を除けば万能なスマートコントラクト言語です、Flow Blockchainの言語Cadenceって。<br><br>
+                        ＜ゲームとの相性＞<br>
                         1.一般の人にハードルが低いです(操作が簡単)<br>
                           (Low hurdles to the public.(Simple to use.))<br><br>
                         2.早い<br>
@@ -1311,16 +1357,14 @@
                         3.Flow Blockchain を利用したゲームは、世界中で同じ価値のトークン($FLOW)を収益にしますので、円高円安にかかわらずソフトウェアの安定収益源となります。<br>
                           (Games powered by Flow Blockchain generate the same value of tokens ($FLOW) worldwide, making it a stable revenue stream for the software.)<br><br>
                         --<br>
-                        私が応援しているElf Mastersがこのたび、PvP機能を12月初旬にリリースするそうです！ (下の画像) 遊戯王みたいな感じですね。勝つとゲーム内トークンがもらえるようです。PLTに変換して取引所で売れるのかな? Elf Mastersの制作元の吉田世博社長はNFT Dayで登壇されていた方です。<br><br>
+                        私が応援しているElf Mastersがこのたび、PvP機能を12月初旬にリリースするそうです！遊戯王みたいに対人でカードバトルができますね。勝つとゲーム内トークンがもらえるようです。PLTに変換して取引所で売れるのかな? Elf Mastersの制作元の吉田世博社長はNFT Dayで登壇されていた方です。<br><br>
                         Elf Masters自体はすでに稼働中です。私のTwitterにはよくファンのTweetが流れてきます。<br>
                         https://lnkd.in/gJcvVjjt<br>
                         ↑信じられない、これでWebブラウザゲームだなんて。吉田社長、Flow Blockchain上でも見たいよ💗👀<br><br>
-                        Elf Masters, which I support, will release a PvP feature! (Bottom image.) It's like Yu-Gi-Oh! It seems you get in-game tokens when you win; I wonder if they can be converted to PLT and sold on an exchange? The president of Elf Masters' creator, Seihaku Yoshida, was a speaker at NFT Day.<br><br>
+                        Elf Masters, which I support, will release a PvP feature! It's like Yu-Gi-Oh! It seems you get in-game tokens when you win; I wonder if they can be converted to PLT and sold on an exchange? The president of Elf Masters' creator, Seihaku Yoshida, was a speaker at NFT Day.<br><br>
                         Elf Masters itself is already up and running. I often get fan Tweets on my Twitter feed.<br>
                         https://lnkd.in/gJcvVjjt<br>
                         ↑I can't believe this is a web browser game. President Yoshida, I'd love to see it on Flow Blockchain too.💗👀<br><br>
-                        日本にはほぼ日本人だけが住んでますよね？そうすると誰がエルマスのトークンエコノミーのためにScalar(奨学金)に資金を提供するか、ということが問題になってきます。これがNBA TopShotで世界的に有名なFlowブロックチェーンを使えば、世界でゲームが有名になることで解決できると思っています。<br><br>
-                        Almost exclusively Japanese people live in Japan, right? Then the question becomes who will fund Scalar for the Elf Masters token economy? I believe this can be solved by using Flow blockchain which is globally famous with NBA TopShot, and making the game famous in the world.<br><br>
                         ブログはこちら: https://lnkd.in/g3kM3AJg<br><br>
                         What is Flow Blockchain?<br>
                         https://www.whitepapercapital.com/portfolio/flow<br><br>
