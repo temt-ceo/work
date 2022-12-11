@@ -451,10 +451,10 @@
                         ~~<br>
                         Flow は誰にでも使いやすいブロックチェーンです。<br>
                         ちょっとしたリワードを配りたいという事業者にピッタリなNFTウォレットをセットにした基盤です。<br><br>
-                        安全さが追求され、NFTウォレットはブランドオリジナルで、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
+                        安全さが追求され、NFTウォレットは事業者のブランドを表現でき、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
                         Flow is an easy-to-use blockchain for everyone.<br>
                         It is a foundation with a set of NFT wallets that is perfect for businesses that want to give away a little reward.<br><br>
-                        It is designed to be secure, and the NFT wallet is brand new and can be owned by everyone by downloading the app. <br>
+                        It is designed to be secure, and the NFT wallet can represent the brand of the business and can be owned by everyone by downloading the app. <br>
                         ~~<br><br>
                         1. Array, Dictionary, Struct<br><br>
                         How to declare an Array (Arrayの宣言の仕方)<br>
@@ -524,10 +524,10 @@
                         ~~<br>
                         Flow は誰にでも使いやすいブロックチェーンです。<br>
                         ちょっとしたリワードを配りたいという事業者にピッタリなNFTウォレットをセットにした基盤です。<br><br>
-                        安全さが追求され、NFTウォレットはブランドオリジナルで、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
+                        安全さが追求され、NFTウォレットは事業者のブランドを表現でき、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
                         Flow is an easy-to-use blockchain for everyone.<br>
                         It is a foundation with a set of NFT wallets that is perfect for businesses that want to give away a little reward.<br><br>
-                        It is designed to be secure, and the NFT wallet is brand new and can be owned by everyone by downloading the app. <br>
+                        It is designed to be secure, and the NFT wallet can represent the brand of the business and can be owned by everyone by downloading the app. <br>
                         ~~<br><br>
                         2. Resource <br><br>
                         How to declare a Resource (Resourceを宣言の仕方)<br>
@@ -573,10 +573,10 @@
                         ~~<br>
                         Flow は誰にでも使いやすいブロックチェーンです。<br>
                         ちょっとしたリワードを配りたいという事業者にピッタリなNFTウォレットをセットにした基盤です。<br><br>
-                        安全さが追求され、NFTウォレットはブランドオリジナルで、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
+                        安全さが追求され、NFTウォレットは事業者のブランドを表現でき、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
                         Flow is an easy-to-use blockchain for everyone.<br>
                         It is a foundation with a set of NFT wallets that is perfect for businesses that want to give away a little reward.<br><br>
-                        It is designed to be secure, and the NFT wallet is brand new and can be owned by everyone by downloading the app. <br>
+                        It is designed to be secure, and the NFT wallet can represent the brand of the business and can be owned by everyone by downloading the app. <br>
                         ~~<br><br>
                         3. Access Control (アクセスコントロール)<br><br>
                         Access Control for variables is as follows (変数のAccess Controlは以下です)<br><br>
@@ -604,10 +604,10 @@
                         ~~<br>
                         Flow は誰にでも使いやすいブロックチェーンです。<br>
                         ちょっとしたリワードを配りたいという事業者にピッタリなNFTウォレットをセットにした基盤です。<br><br>
-                        安全さが追求され、NFTウォレットはブランドオリジナルで、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
+                        安全さが追求され、NFTウォレットは事業者のブランドを表現でき、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
                         Flow is an easy-to-use blockchain for everyone.<br>
                         It is a foundation with a set of NFT wallets that is perfect for businesses that want to give away a little reward.<br><br>
-                        It is designed to be secure, and the NFT wallet is brand new and can be owned by everyone by downloading the app. <br>
+                        It is designed to be secure, and the NFT wallet can represent the brand of the business and can be owned by everyone by downloading the app. <br>
                         ~~<br><br>
                         4. Resource Interface (インターフェース)<br><br>
                         ・An interface describes behavior that must be implemented like a Java interface. It is implemented as follows<br>
@@ -684,7 +684,7 @@
                         pub fun getViews(): [Type] {<br>
                         　return [<br>
                         　.　Type＜MetadataViews.Display＞(),<br>
-                        　.　Type＜MetadataViews.Royalties()<br>
+                        　.　Type＜MetadataViews.Royalties＞()<br>
                         　]<br>
                         }<br>
                         ・getViewsはジェネリックであり、世界中のNFTをコントラクトのインポートなしに取得することができます<br><br>
@@ -697,7 +697,7 @@
                         　.　.　description: self.description,<br>
                         　.　.　thumbnail: MetadataViews.HTTPFile(url: self.thumbnail)<br>
                         　.　 }<br>
-                        　.　case Type＜MetadataViews.Royalties():<br>
+                        　.　case Type＜MetadataViews.Royalties＞():<br>
                         　.　 return MetadataViews.Royalties(<br>
                         　.　.　self.royalties<br>
                         　.　 }<br>
@@ -724,18 +724,17 @@
                     </p>
                     <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
                         Let's build a game with Flow Blockchain! (Flow Blockchainでゲームを作ろう！) <br>
-                        本日のテーマは「Private Capabilities」。制作者権限の移譲が出来るようになる実装について、解説していきます。<br><br>
+                        本日のテーマは「Private Capabilities」。製作者権限の移譲が出来るようになる実装について、解説していきます。<br><br>
                         ~~<br>
                         Flow は誰にでも使いやすいブロックチェーンです。<br>
                         ちょっとしたリワードを配りたいという事業者にピッタリなNFTウォレットをセットにした基盤です。<br><br>
-                        安全さが追求され、NFTウォレットはブランドオリジナルで、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
+                        安全さが追求され、NFTウォレットは事業者のブランドを表現でき、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
                         Flow is an easy-to-use blockchain for everyone.<br>
                         It is a foundation with a set of NFT wallets that is perfect for businesses that want to give away a little reward.<br><br>
-                        It is designed to be secure, and the NFT wallet is brand new and can be owned by everyone by downloading the app. <br>
+                        It is designed to be secure, and the NFT wallet can represent the brand of the business and can be owned by everyone by downloading the app. <br>
                         ~~<br><br>
                         6. Private Capabilities<br><br>
-                        To create a Contract that allows the privileges held by the Contract holder to pass to another account, do the following<br>
-                        (Contractの保持者が持つ特権を他のアカウントに渡すことができるContractを作成するには以下のようにします)<br>
+                        ・Contractの保持者が持つ権限(init内で持つ事が可能)を他のアカウントに渡すには以下のようにします<br><br>
                         pub resource Admin {<br>
                         　pub let profile: Capabilities＜&Profile＞<br>
                         　init(_profile: Capability＜&Profile＞),<br>
@@ -744,26 +743,23 @@
                         }<br>
                         pub fun createAdmin(profile: Capabilities＜&Profile＞): @Admin {<br>
                         　return <- create Admin(_profile: profile)<br>
-                        }<br>
-                        Here we are passing the Private access rights to the Profile resource to another account (ここではProfileリソースのPrivateなアクセス権限を他のアカウントに渡しています)<br><br>
-                        To create Private Capabilities that allow the privileges held by the Contract holder to be passed on to other accounts, do the following<br>
-                        (Contractの保持者が持つ特権を他のアカウントに渡すことができるPrivate Capabilitiesを作成するには以下のようにします)<br>
-                        prepare(acct: AuthAccount) {<br>
-                        　acct.save(<- Example.createProfile(name: "Taro", email: "abc@example.com"), to: /storage/Profile)<br>
-                        　acct.link＜&Example.Profile{Example.ProfilePublic}＞(/public/ProfilePublic, target: /storage/Profile)<br>
-                        　acct.link＜&Example.Profile＞(/private/ProfilePrivate, target: /storage/Profile)<br>
-                        　let privateCapability = acct.getCapability＜&Example.Profile＞(/private/ProfilePrivate)<br>
-                        　acct.save(<- Example.createAdmin(profile: privateCapability), to: /storage/Admin)<br>
-                        }<br>
-                        At the very end, we are storing Capability. Here it is stored in the same account, but it can be saved in other accounts.<br>
-                        (一番最後のところでCapabilityを保存しています。ここでは同一アカウント内に保存していますが、他のアカウントに保存することが出来ます)<br><br>
-                        To use the privilege with the passed Capability, do the following (渡されたCapabilityを使用して特権を利用するには以下のようにします)<br>
+                        }<br><br>
+                        ・ここではProfileリソースへのCapabilityを他のアカウントに渡しています<br><br>
+                        ・Contractの保持者が持つ権限を他のアカウントに渡すことができるPrivate Capabilityを作成するには以下のようにします<br><br>
+                        prepare(acct: AuthAccount) {<br><br>
+                        　acct.save(<- Example.createProfile(name: "Taro", email: "abc@example.com"), to: /storage/Profile)<br><br>
+                        　acct.link＜&Example.Profile{Example.ProfilePublic}＞(/public/ProfilePublic, target: /storage/Profile)<br><br>
+                        　acct.link＜&Example.Profile＞(/private/ProfilePrivate, target: /storage/Profile)<br><br>
+                        　let privateCapability = acct.getCapability＜&Example.Profile＞(/private/ProfilePrivate)<br><br>
+                        　acct.save(<- Example.createAdmin(profile: privateCapability), to: /storage/Admin)<br><br>
+                        }<br><br>
+                        ・一番最後のところでCapabilityを保存しています。ここでは同一アカウント内に保存していますが、他のアカウントに保存することが出来ます<br><br>
+                        ・受け取ったCapabilityを使用して権限を行使するには以下のようにします<br><br>
                         prepare(acct: AuthAccount) {<br>
                         　let admin = acct.borrow＜&Example.Admin＞(from: /storage/Admin) ?? panic("Could not borrow the Admin.")<br>
                         　log(admin.profile.borrow()!.name)<br>
                         }<br><br>
-                        By putting the Capability that another account has in a variable of a resource, you can store that resource and exercise its authority by borrowing the Capability in that variable.<br>
-                        (他のアカウントが持つCapabilityをリソースの変数に入れることで、そのリソースを保存し、その変数のcapabilityをborrowすることでその権限を行使できます。)<br><br>
+                        ・CapabilityはAuthAccount.linkメソッドでストレージの/private/や/public/のパスに保存することで作成します。このCapabilityは削除も可能であり、削除するとそのCapabilityをborrowしていたアカウントも権限を消失します。Capability自体はストレージの/storage/に保存されたリソースの一部行使権限ですので、リソースの保持者はいつでも他人に与えた権限を取り消すことが出来るわけです。<br><br>
                         Community’s video: https://lnkd.in/gTwGEZ_g<br><br>
                         全体リファレンスはこちら: https://lnkd.in/ggwZ5bX3<br><br>
                         ---------<br>
@@ -777,33 +773,33 @@
                         ~~<br>
                         Flow は誰にでも使いやすいブロックチェーンです。<br>
                         ちょっとしたリワードを配りたいという事業者にピッタリなNFTウォレットをセットにした基盤です。<br><br>
-                        安全さが追求され、NFTウォレットはブランドオリジナルで、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
+                        安全さが追求され、NFTウォレットは事業者のブランドを表現でき、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
                         Flow is an easy-to-use blockchain for everyone.<br>
                         It is a foundation with a set of NFT wallets that is perfect for businesses that want to give away a little reward.<br><br>
-                        It is designed to be secure, and the NFT wallet is brand new and can be owned by everyone by downloading the app. <br>
+                        It is designed to be secure, and the NFT wallet can represent the brand of the business and can be owned by everyone by downloading the app. <br>
                         ~~<br><br>
                         7. How to build a Flow Dapp on Testnet<br><br>
-                        An example of a Flow Dapp development is below (Flow Dapp開発の一例は以下です)<br>
-                        　a. Install Node.js.<br>
-                        　b. Install Flow CLI.<br>
-                        　c. Create Contract template on Play Ground (Play Ground上でContractの雛形を作成)<br>
-                        　d. Deploy Contract to testnet at flow-view-source.com (flow-view-source.comでContractをテストネットにデプロイ)<br>
-                        　e. Create a script to get Contract information on Play Ground. (Play Ground上でContractの情報を取得するscriptを作成)<br>
-                        　f. Open the editor, create a new cadence folder, create a scripts folder under it, create a js file under it, and paste the `e` information (エディタを開きcadenceフォルダを新規で作成し、その下にscriptsフォルダを作成、その下にjsファイルを作成し、eの情報をペーストする)<br>
-                        　g. Install @onflow/fcl and @onflow/types with npm (npmで@onflow/fclと@onflow/typesをインストールする)<br>
-                        　h. Import fcl and set it to connect to the test net. At this time, set the Address that is displayed in the lower left corner when logging in with view-source.<br>
-                        　(fclをimportし、テストネットに接続するように設定する。この時、view-sourceでログインしたときに左下に表示されるAddressをセットする)<br>
-                        　i. Execute the fcl.send method to the point where you can retrieve information about the contract deployed on the testnet. (fcl.sendメソッドでテストネットにデプロイしたコントラクトの情報を取得できるところまで確認する)<br>
-                        　j. Create a method to log in to the Flow wallet with the fcl.authenticate method (fcl.authenticateメソッドでFlowのウォレットにログインできるメソッドを作成する)<br>
-                        　k. Create a transaction script to change Contract information on Play Ground (Play Ground上でContractの情報を変更するtransactionスクリプトを作成)<br>
-                        　l. Open the editor and create a transitions folder under the cadence folder, create a js file under it, and paste the `k` information (エディタを開きcadenceフォルダの下にtransactionsフォルダを作成、その下にjsファイルを作成し、kの情報をペーストする)<br>
-                        　m. Create a button that allows you to change the information of a contract deployed on the testnet using the fcl.send method (fcl.sendメソッドでテストネットにデプロイしたコントラクトの情報を変更できるボタンを作成する)<br>
-                        　n. Execute the transaction to get the transactionHash and check it with flowscan. (トランザクションを実行するとtransactionHashが取得できるのでflowscanで確認する)<br><br>
-                        See the community video below for more details. a~n steps will take about 40 minutes! <br>(詳細は下記コミュニティビデオをご覧ください。a~nまでの手順が40分ほどで終わります)<br>
+                        Flow Dapp開発の流れのあくまで一例は以下です<br><br>
+                        　1) Install Node.js<br><br>
+                        　2) Install Flow CLI<br><br>
+                        　3) Play Ground上でContractの雛形を作成する<br><br>
+                        　4) flow-view-source.comでContractをテストネットにデプロイする<br><br>
+                        　5) Play Ground上でScriptを作成(Contractの情報を取得する)<br><br>
+                        　6) エディタを開きcadenceフォルダを新規で作成し、その下にscriptsフォルダを作成、その下にjsファイルを作成し、5)の情報をペーストする<br><br>
+                        　7) npmで@onflow/fclと@onflow/typesをインストールする<br><br>
+                        　8) fclをimportし、テストネットに接続するように設定する<br><br>
+                        　9) fcl.sendメソッドで6)のファイルを実行しテストネットにデプロイしたコントラクトの情報を取得できるか確認する<br><br>
+                        　10) Flowのウォレットにログインできるメソッドを作成する<br><br>
+                        　11) Play Ground上でTransactionを作成(Contractの情報を変更する)<br><br>
+                        　12) エディタを開きcadenceフォルダの下にtransactionsフォルダを作成、その下にjsファイルを作成し、11)の情報をペーストする<br><br>
+                        　13) fcl.sendメソッドで12)のファイルを実行しテストネットにデプロイしたコントラクトの情報を変更できるか確認する<br><br>
+                        　14) TransactionHashを取得し、Flowscanで確認する<br><br><br>
+                        詳細は下記コミュニティビデオをご覧ください。1)~14)までの流れが40分ほどで終わります<br>
                         Community’s video: https://lnkd.in/g-Sh-rFQ<br><br>
+                        React以外にNuxt.jsでも以下のライブラリを使用することでFlow Dappを開発することができます<br>
+                        https://github.com/brunogonzales/fcl-nuxt-starter<br>
+                        TicketsもNuxtで開発しています: https://lnkd.in/gyEdjB4Y<br><br>
                         全体リファレンスはこちら: https://lnkd.in/ggwZ5bX3<br><br>
-                        Besides React, Nuxt.js can also implement Flow Dapp by using the following libraries (React以外にNuxt.jsも以下のライブラリを使用することでFlow Dappを実装できます)<br>
-                        https://github.com/brunogonzales/fcl-nuxt-starter<br><br>
                         ---------<br>
                         About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
                         ブログはこちら: https://lnkd.in/g3kM3AJg<br><br>
@@ -811,19 +807,146 @@
                     </p>
                     <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
                         Let's build a game with Flow Blockchain! (Flow Blockchainでゲームを作ろう！) <br>
+                        本日のテーマは「Events」。ブロックチェーン上に変更があった時に通知を受け取ることが出来るようになる実装について、解説していきます。<br><br>
+                        ~~<br>
+                        Flow は誰にでも使いやすいブロックチェーンです。<br>
+                        ちょっとしたリワードを配りたいという事業者にピッタリなNFTウォレットをセットにした基盤です。<br><br>
+                        安全さが追求され、NFTウォレットは事業者のブランドを表現でき、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
+                        Flow is an easy-to-use blockchain for everyone.<br>
+                        It is a foundation with a set of NFT wallets that is perfect for businesses that want to give away a little reward.<br><br>
+                        It is designed to be secure, and the NFT wallet can represent the brand of the business and can be owned by everyone by downloading the app. <br>
+                        ~~<br><br>
+                        8. Query for Events (イベント通知を取得するには)<br><br>
+                        ・ブロックチェーン上の通知を取得するには以下のようにします<br><br>
+                        const contractAddress = '1654653399040a61' // Take 0x from 0x1654653399040a61<br>
+                        const contractName = 'FlowToken'<br>
+                        const eventName = 'TokensDeposited'<br>
+                        const fetchEvents = async() {<br>
+                        　const latestBlock = await fcl.send([<br>
+                        　.　fcl.getBlock(true)<br>
+                        　]).then(fcl.decode)<br>
+                        　<br>
+                        　let end = latestBlock.height - 10<br>
+                        　let start = end - 100<br>
+                        　const response = await fcl.send([<br>
+                        　.　fcl.getEvents(`A.${contractAddress}.${contractName}.${eventName}`, start, end)<br>
+                        　]).then(fcl.decode)<br>
+                        　<br>
+                        　const {events} = response<br>
+                        　console.log(events)<br>
+                        　events.forEach((event) => {<br>
+                        　.　console.log(event.payload.value.fields, event.payload.value.fields[1].value.value)<br>
+                        　})<br>
+                        }<br>
+                        fetchEvents()<br><br>
+                        ・ここではFlowトークンが振り込まれた時をトリガーとして発せられたイベントを取得しています。ご覧の通り、受け取る値はGraphQLの形と似ており、DynamoDBやAppSyncといった通知を扱うサービスと相性がとても良いです。<br><br>
+                        Community’s video: https://lnkd.in/gJpqi3aw<br><br>
+                        全体リファレンスはこちら: https://lnkd.in/ggwZ5bX3<br><br>
+                        ---------<br>
+                        About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
+                        ブログはこちら: https://lnkd.in/g3kM3AJg<br><br>
+                        #blockchain
+                    </p>
+                    <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
+                        Let's build a game with Flow Blockchain! (Flow Blockchainでゲームを作ろう！) <br>
+                        本日のテーマは「Non-Custodial Wallet」。プライベートキーを自分で管理してトランザクションを発行する方法について、解説していきます。<br><br>
+                        ~~<br>
+                        Flow は誰にでも使いやすいブロックチェーンです。<br>
+                        ちょっとしたリワードを配りたいという事業者にピッタリなNFTウォレットをセットにした基盤です。<br><br>
+                        安全さが追求され、NFTウォレットは事業者のブランドを表現でき、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
+                        Flow is an easy-to-use blockchain for everyone.<br>
+                        It is a foundation with a set of NFT wallets that is perfect for businesses that want to give away a little reward.<br><br>
+                        It is designed to be secure, and the NFT wallet can represent the brand of the business and can be owned by everyone by downloading the app. <br>
+                        ~~<br><br>
+                        9. Send a Transaction with a Non-Custodial Wallet (ノンカストディアルウォレットでトランザクションを送信する)<br><br>
+                        An example of private key and public key generation is as follows <br>
+                        (Private key, Public keyの生成の一例は以下です)<br><br>
+                        flow keys generate --network=testnet --sig-algo=ECMA_secp256k1<br><br>
+                        The authentication function with the generated key is as follows <br>
+                        (生成したkeyによる認証関数を以下のようにして作成します)<br><br>
+                        const EC = require('elliptic').ec<br>
+                        const ec = new EC('secp256k1')<br>
+                        const ADDRESS = '0x0c60359d10739baa'<br>
+                        const PRIVATE_KEY = '64c6e9541f45676b75fb4c1c50b78d2103e1cd85004ba2074c7721f7769bc36a3'<br>
+                        const KEY_ID = 0<br>
+                        const sign = (message) => {<br>
+                        　const key = ec.keyFromPrivate(Buffer.from(PRIVATE_KEY, 'hex'))<br>
+                        　const sig = key.sign(hash(message))<br>
+                        　const n = 32<br>
+                        　const r = sig.r.toArrayLike(Buffer, 'be', n)<br>
+                        　const s = sig.s.toArrayLike(Buffer, 'be', n)<br>
+                        　return Buffer.concat([r, s]).toString('hex')<br>
+                        }<br>
+                        const hash = (message) => {<br>
+                        　const sha = new SHA3(256)<br>
+                        　sha.update(Buffer.from(message, 'hex'))<br>
+                        　return sha.digest()<br>
+                        }<br>
+                        const authorizationFunction = async (account) => {<br>
+                        　return {<br>
+                        　.　...account,<br>
+                        　.　tempId: `${ADDRESS}-${KEY_ID}`,<br>
+                        　.　addr: fcl.sansPrefix(ADDRESS),<br>
+                        　.　keyId: Number(KEY_ID),<br>
+                        　.　signingFunction: async signable => {<br>
+                        　.　 return {<br>
+                        　.　.　addr: fcl.withPrefix(ADDRESS),<br>
+                        　.　.　keyId: Number(KEY_ID),<br>
+                        　.　.　signature: sign(signable.message)<br>
+                        　.　 }<br>
+                        　.　}<br>
+                        　}<br>
+                        }<br>
+                        module.exports = {<br>
+                        　authorizationFunction<br>
+                        }<br><br>
+                        To send a transaction with a Non-Custodial wallet, do the following<br>
+                        (ノンカストディアルウォレットでトランザクションを送信するには以下のようにします)<br><br>
+                        const sendTx = async () => {<br>
+                        　console.log('Sending Tx')<br>
+                        　const transactionId = await fcl.send([<br>
+                        　.　fcl.transaction`<br>
+                        　.　 transaction(number: Int, greeting: String) {<br>
+                        　.　.　prepare(signer: AuthAccount) {<br>
+                        　.　.　}<br>
+                        　.　.　execute(){}<br>
+                        　.　 }<br>
+                        　.　`,<br>
+                        　.　fcl.args([<br>
+                        　.　.　fcl.arg(1, t.Int),<br>
+                        　.　.　fcl.arg('Hello', t.String)<br>
+                        　.　]),<br>
+                        　.　fcl.proposer(authorizationFunction),<br>
+                        　.　fcl.payer(authorizationFunction),<br>
+                        　.　fcl.authorizations([authorizationFunction]),<br>
+                        　.　fcl.limit(9999)<br>
+                        　]).then(fcl.decode)<br>
+                        　console.log(transactionId)<br>
+                        }<br>
+                        sendTx()<br><br>
+                        ・これが出来ることの利点は、Private Capabilityを作成できることです。コントラクトの持つ権限を部分的に他のアカウントに渡すことで、運営がしやすくなります。AuthAccountを複数引数に持たせられ、認証関係の複雑な処理がこれによって可能となります。<br><br>
+                        Community’s video: https://lnkd.in/g5tqYRcU<br><br>
+                        全体リファレンスはこちら: https://lnkd.in/ggwZ5bX3<br><br>
+                        ---------<br>
+                        About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
+                        ブログはこちら: https://lnkd.in/g3kM3AJg<br><br>
+                        #blockchain
+                     </p>
+                    <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
+                        Let's build a game with Flow Blockchain! (Flow Blockchainでゲームを作ろう！) <br>
                         本日のテーマは「Fungible Token」。通貨の発行が出来るようになる実装について、解説していきます。<br><br>
                         ~~<br>
                         Flow は誰にでも使いやすいブロックチェーンです。<br>
                         ちょっとしたリワードを配りたいという事業者にピッタリなNFTウォレットをセットにした基盤です。<br><br>
-                        安全さが追求され、NFTウォレットはブランドオリジナルで、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
+                        安全さが追求され、NFTウォレットは事業者のブランドを表現でき、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
                         Flow is an easy-to-use blockchain for everyone.<br>
                         It is a foundation with a set of NFT wallets that is perfect for businesses that want to give away a little reward.<br><br>
-                        It is designed to be secure, and the NFT wallet is brand new and can be owned by everyone by downloading the app. <br>
+                        It is designed to be secure, and the NFT wallet can represent the brand of the business and can be owned by everyone by downloading the app. <br>
                         ~~<br><br>
-                        8. How to Create a Fungible Token (独自通貨を発行するには)<br><br>
+                        10. How to Create a Fungible Token (独自通貨を発行するには)<br><br>
                         ・How to create a Fungible Token (Fungible Tokenの作り方)<br><br>
                         1). The Fungible Token Standard interface can be found below. <br>
-                        (Fungible Token Standardのinterfaceは以下にあります。)<br><br>
+                        (Fungible Token StandardのInterfaceは以下にあります。)<br><br>
                         https://github.com/onflow/flow-ft/blob/master/contracts/FungibleToken.cdc<br><br>
                         2). Create a Contract that imports this Interface <br>
                         (このInterfaceをimportしたContractを作ります)<br><br>
@@ -891,152 +1014,63 @@
                     </p>
                     <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
                         Let's build a game with Flow Blockchain! (Flow Blockchainでゲームを作ろう！) <br>
-                        本日のテーマは「Non-Custodial Wallet」。プライベートキーを自分で管理してトランザクションを発行する方法について、解説していきます。<br><br>
+                        本日のテーマは「Storage Iteration」。どんなNFTを持っているかが分かるようになる実装について、解説していきます。<br><br>
                         ~~<br>
                         Flow は誰にでも使いやすいブロックチェーンです。<br>
                         ちょっとしたリワードを配りたいという事業者にピッタリなNFTウォレットをセットにした基盤です。<br><br>
-                        安全さが追求され、NFTウォレットはブランドオリジナルで、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
+                        安全さが追求され、NFTウォレットは事業者のブランドを表現でき、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
                         Flow is an easy-to-use blockchain for everyone.<br>
                         It is a foundation with a set of NFT wallets that is perfect for businesses that want to give away a little reward.<br><br>
-                        It is designed to be secure, and the NFT wallet is brand new and can be owned by everyone by downloading the app. <br>
+                        It is designed to be secure, and the NFT wallet can represent the brand of the business and can be owned by everyone by downloading the app. <br>
                         ~~<br><br>
-                        9. Send a Transaction with a Non-Custodial Wallet (ノンカストディアルウォレットでトランザクションを送信する)<br><br>
-                        An example of private key and public key generation is as follows <br>
-                        (private key, public keyの生成の一例は以下です)<br><br>
-                        flow keys generate --network=testnet --sig-algo=ECMA_secp256k1<br><br>
-                        The authentication function with the generated key is as follows <br>
-                        (生成したkeyによる認証関数は以下のようにします)<br><br>
-                        const EC = require('elliptic').ec<br>
-                        const ec = new EC('secp256k1')<br>
-                        const ADDRESS = '0x0c60359d10739baa'<br>
-                        const PRIVATE_KEY = '64c6e9541f45676b75fb4c1c50b78d2103e1cd85004ba2074c7721f7769bc36a3'<br>
-                        const KEY_ID = 0<br>
-                        const sign = (message) => {<br>
-                        　const key = ec.keyFromPrivate(Buffer.from(PRIVATE_KEY, 'hex'))<br>
-                        　const sig = key.sign(hash(message))<br>
-                        　const n = 32<br>
-                        　const r = sig.r.toArrayLike(Buffer, 'be', n)<br>
-                        　const s = sig.s.toArrayLike(Buffer, 'be', n)<br>
-                        　return Buffer.concat([r, s]).toString('hex')<br>
-                        }<br>
-                        const hash = (message) => {<br>
-                        　const sha = new SHA3(256)<br>
-                        　sha.update(Buffer.from(message, 'hex'))<br>
-                        　return sha.digest()<br>
-                        }<br>
-                        const authorizationFunction = async (account) => {<br>
-                        　return {<br>
-                        　.　...account,<br>
-                        　.　tempId: `${ADDRESS}-${KEY_ID}`,<br>
-                        　.　addr: fcl.sansPrefix(ADDRESS),<br>
-                        　.　keyId: number(KEY_ID),<br>
-                        　.　signingFunction: async signable => {<br>
-                        　.　 return {<br>
-                        　.　.　addr: fcl.withPrefix(ADDRESS),<br>
-                        　.　.　keyId: number(KEY_ID),<br>
-                        　.　.　signature: sign(signable.message)<br>
-                        　.　 }<br>
+                        11. Account Storage Iteration <br><br>
+                        [To get a list of NFTs owned by an account (アカウントが所有しているNFTを一覧で取得するには)]<br><br>
+                        To retrieve all the information set in the PublicPath of an account, do the following<br>
+                        (アカウントのPublicPathに設定されている情報を全て取得するには以下のようにします)<br><br>
+                        pub fun main(user: Address): [PublicPath] {<br>
+                        　let publicAccount: PublicAccount = getAccount(user)<br>
+                        　return publicAccount.publicPaths<br>
+                        }<br><br>
+                        To get a list of all NFT IDs owned by an account, do the following<br>
+                        (アカウントが所有する全てのNFTのID一覧を取得するには以下のようにします)<br><br>
+                        pub fun main(user: Address): [[UInt64]] {<br>
+                        　let publicAccount: PublicAccount = getAccount(user)<br>
+                        　let authAccount: AuthAccount = getAuthAccount(user)<br>
+                        　let ids: [[UInt64]] = []<br>
+                        　let iterationFunc: ((StoragePath, Type): Bool) = fun (path: storagePath, type: Type): Bool {<br>
+                        　.　if type.isSubtype(of: Type<@NonFungibleToken.Collection>()) {<br>
+                        　.　.　let collection = authAccount.borrow<@NonFungibleToken.Collection>(from: path)<br>
+                        　.　.　let collectionIds: [UInt64] = collection.getIDs()<br>
+                        　.　.　ids.append(collectionIds)<br>
                         　.　}<br>
+                        　.　return true<br>
                         　}<br>
-                        }<br>
-                        module.exports = {<br>
-                        　authorizationFunction<br>
+                        　authAccount.forEachStored(iterationFunc)<br>
                         }<br><br>
-                        To send a transaction with a Non-Custodial wallet, do the following<br>
-                        (ノンカストディアルウォレットでトランザクションを送信するには以下のようにします)<br><br>
-                        const sendTx = asnyc () => {<br>
-                        　console.log('Sending Tx')<br>
-                        　const transactionId = await fcl.send([<br>
-                        　.　fcl.transaction`<br>
-                        　.　 transaction(number: Int, greeting: String) {<br>
-                        　.　.　prepare(signer: AuthAccount) {<br>
+                        ・If false is returned in fun in iterationFunc, the loop stops there; if true, the loop continues.<br>
+                        (iterationFuncの中のfunの中でfalseを返すとループの処理がそこで止まります。trueを返すとループが続きます。)<br><br>
+                        To get a list of all NFT references owned by an account, do the following<br>
+                        (アカウントが所有する全てのNFTの参照一覧を取得するには以下のようにします)<br><br>
+                        pub fun main(user: Address): {Type: [&NonFungibleToken.NFT]} {<br>
+                        　let publicAccount: PublicAccount = getAccount(user)<br>
+                        　let authAccount: AuthAccount = getAuthAccount(user)<br>
+                        　let displays: {Type: [&NonFungibleToken.NFT]} = {}<br>
+                        　let iterationFunc: ((StoragePath, Type): Bool) = fun (path: storagePath, type: Type): Bool {<br>
+                        　.　if type.isSubtype(of: Type<@NonFungibleToken.Collection>()) {<br>
+                        　.　.　let temp: [&NonFungibleToken.NFT] = []<br>
+                        　.　.　let collection = authAccount.borrow<@NonFungibleToken.Collection>(from: path)<br>
+                        　.　.　for id in collection.getIDs() {<br>
+                        　.　.　 temp.append(collection.borrowNFT(id: id))<br>
                         　.　.　}<br>
-                        　.　.　execute(){}<br>
-                        　.　 }<br>
-                        　.　`,<br>
-                        　.　fcl.args([<br>
-                        　.　.　fcl.arg(1, t.Int),<br>
-                        　.　.　fcl.arg('Hello', t.String)<br>
-                        　.　]),<br>
-                        　.　fcl.proposer(authorizationFunction),<br>
-                        　.　fcl.payer(authorizationFunction),<br>
-                        　.　fcl.authorizations([authorizationFunction]),<br>
-                        　.　fcl.limit(9999)<br>
-                        　]).then(fcl.decode)<br>
-                        　console.log(transactionId)<br>
-                        }<br>
-                        sendTx()<br><br>
-                        Community’s video: https://lnkd.in/g5tqYRcU<br><br>
-                        全体リファレンスはこちら: https://lnkd.in/ggwZ5bX3<br><br>
-                        ---------<br>
-                        About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
-                        ブログはこちら: https://lnkd.in/g3kM3AJg<br><br>
-                        #blockchain
-                     </p>
-                     <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
-                        Let's build a game with Flow Blockchain! (Flow Blockchainでゲームを作ろう！) <br>
-                        本日のテーマは「Events」。イベント通知を受け取ることが出来るようになる実装について、解説していきます。<br><br>
-                        ~~<br>
-                        Flow は誰にでも使いやすいブロックチェーンです。<br>
-                        ちょっとしたリワードを配りたいという事業者にピッタリなNFTウォレットをセットにした基盤です。<br><br>
-                        安全さが追求され、NFTウォレットはブランドオリジナルで、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
-                        Flow is an easy-to-use blockchain for everyone.<br>
-                        It is a foundation with a set of NFT wallets that is perfect for businesses that want to give away a little reward.<br><br>
-                        It is designed to be secure, and the NFT wallet is brand new and can be owned by everyone by downloading the app. <br>
-                        ~~<br><br>
-                        10. Query for Events (イベントを取得するには)<br><br>
-                        To retrieve events periodically, do the following<br>
-                        (定期的にイベントを取得には以下のようにします)<br><br>
-                        const contractAddress = '1654653399040a61' // Take 0x from 0x1654653399040a61<br>
-                        const contractName = 'FlowToken'<br>
-                        const eventName = 'TokensDeposited'<br>
-                        const fetchEvents = async() {<br>
-                        　const latestBlock = await fcl.send([<br>
-                        　.　fcl.getBlock(true)<br>
-                        　]).then(fcl.decode)<br>
-                        　<br>
-                        　let end = latestBlock.height - 10<br>
-                        　let start = end - 100<br>
-                        　const response = await fcl.send([<br>
-                        　.　fcl.getEvents(`A.${contractAddress}.${contractName}.${eventName}`, start, end)<br>
-                        　]).then(fcl.decode)<br>
-                        　<br>
-                        　const {events} = response<br>
-                        　console.log(events)<br>
-                        　events.forEach((event) => {<br>
-                        　.　console.log(event.payload.value.fields, event.payload.value.fields[1].value.value)<br>
-                        　})<br>
-                        }<br>
-                        fetchEvents()<br><br>
-                        Community’s video: https://lnkd.in/gJpqi3aw<br><br>
-                        全体リファレンスはこちら: https://lnkd.in/ggwZ5bX3<br><br>
-                        ---------<br>
-                        About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
-                        ブログはこちら: https://lnkd.in/g3kM3AJg<br><br>
-                        #blockchain
-                    </p>
-                    <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
-                        Let's build a game with Flow Blockchain! (Flow Blockchainでゲームを作ろう！) <br>
-                        本日のテーマは「Optional Binding」。Optionalによる警告を受けることがなくなる実装について、解説していきます。<br><br>
-                        ~~<br>
-                        Flow は誰にでも使いやすいブロックチェーンです。<br>
-                        ちょっとしたリワードを配りたいという事業者にピッタリなNFTウォレットをセットにした基盤です。<br><br>
-                        安全さが追求され、NFTウォレットはブランドオリジナルで、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
-                        Flow is an easy-to-use blockchain for everyone.<br>
-                        It is a foundation with a set of NFT wallets that is perfect for businesses that want to give away a little reward.<br><br>
-                        It is designed to be secure, and the NFT wallet is brand new and can be owned by everyone by downloading the app. <br>
-                        ~~<br><br>
-                        11. Optional Binding<br><br>
-                        If you want to handle separately when a dictionary has a data and when it has not, you can write the code to get the state when the dictionary has a data by a variable.<br>
-                        (Dictionaryに値がある時とない時で処理を分けたい時、値がある状態を変数に移動して処理を書くことが出来ます)<br><br>
-                        let tests: {Int: Test} = { 10: Test(10), 20: Test(20) }<br>
-                        if let test = tests[10] {<br>
-                        　return test.fruites[0]<br>
-                        } else {<br>
-                        　return nil<br>
+                        　.　.　displays[type] = temp<br>
+                        　.　}<br>
+                        　.　return true<br>
+                        　}<br>
+                        　authAccount.forEachStored(iterationFunc)<br>
                         }<br><br>
-                        ・Optional Binding starts with `if let`. (Optional Binding は`if let`から始まります)<br><br>
-                        Community’s video: https://lnkd.in/gWZtX-M5<br><br>
+                        Documentation:<br>
+                        https://developers.flow.com/cadence/language/accounts#storage-iteration<br><br>
+                        Community’s video: https://lnkd.in/gZFbQxJb<br><br>
                         全体リファレンスはこちら: https://lnkd.in/ggwZ5bX3<br><br>
                         ---------<br>
                         About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
@@ -1049,16 +1083,16 @@
                         ~~<br>
                         Flow は誰にでも使いやすいブロックチェーンです。<br>
                         ちょっとしたリワードを配りたいという事業者にピッタリなNFTウォレットをセットにした基盤です。<br><br>
-                        安全さが追求され、NFTウォレットはブランドオリジナルで、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
+                        安全さが追求され、NFTウォレットは事業者のブランドを表現でき、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
                         Flow is an easy-to-use blockchain for everyone.<br>
                         It is a foundation with a set of NFT wallets that is perfect for businesses that want to give away a little reward.<br><br>
-                        It is designed to be secure, and the NFT wallet is brand new and can be owned by everyone by downloading the app. <br>
+                        It is designed to be secure, and the NFT wallet can represent the brand of the business and can be owned by everyone by downloading the app. <br>
                         ~~<br><br>
                         12. How to Multi-Sign (マルチサインを行うには)<br><br>
-                        a: (Frontend:) Post request to the backend (バックエンドにリクエストを送信します)<br>
+                        1). (Frontend:) Post request to the backend (バックエンドにリクエストを送信します)<br>
                         Private key is only needed at the signature position, so the rest of the signature is placed at FrontEnd. Do the following<br>
                         (Private keyはsignatureの場所でのみ必要なので、それ以外はFrontEndに置いておきます。以下のようにします。)<br><br>
-                        export const serverAuthorization = asnyc (account) => {<br>
+                        export const serverAuthorization = async (account) => {<br>
                         　const addr = '0x0c60359d10739baa'<br>
                         　const keyId = 0<br>
                         　return {<br>
@@ -1078,10 +1112,10 @@
                         }<br>
                         ・The getSignature(signable) part is the POST request to the backend<br>
                         (getSignature(signable)の部分がバックエンドにPOST requestするところです)<br><br>
-                        b: (Backend:) Take in the signable message from the frontend, and sign it with the Admin's private key that is stored on the backend.<br>
+                        2). (Backend:) Take in the signable message from the frontend, and sign it with the Admin's private key that is stored on the backend.<br>
                         (フロントエンドから署名するメッセージを受け取り、バックエンドに保存されているAdminのprivate keyを使用して署名します)<br><br>
                         const signature = sign(signable.message)<br><br>
-                        c: (Backend:) Return the signature back to the frontend.<br>
+                        3). (Backend:) Return the signature back to the frontend.<br>
                         The front-end code at this time is as follows (この時のフロントエンドの処理は以下です)<br><br>
                         const transactionId = await fcl.send([<br>
                         　fcl.transaction`<br>
@@ -1106,27 +1140,92 @@
                     </p>
                     <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
                         Let's build a game with Flow Blockchain! (Flow Blockchainでゲームを作ろう！) <br>
-                        本日のテーマは「Optional References」。コレクションの参照がヌルでも直感的に実装できるようになった変更について、解説していきます。<br><br>
+                        本日のテーマは「Verify Ownership」。サーバーサイド認証が出来るようになる実装について、解説していきます。<br><br>
                         ~~<br>
                         Flow は誰にでも使いやすいブロックチェーンです。<br>
                         ちょっとしたリワードを配りたいという事業者にピッタリなNFTウォレットをセットにした基盤です。<br><br>
-                        安全さが追求され、NFTウォレットはブランドオリジナルで、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
+                        安全さが追求され、NFTウォレットは事業者のブランドを表現でき、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
                         Flow is an easy-to-use blockchain for everyone.<br>
                         It is a foundation with a set of NFT wallets that is perfect for businesses that want to give away a little reward.<br><br>
-                        It is designed to be secure, and the NFT wallet is brand new and can be owned by everyone by downloading the app. <br>
+                        It is designed to be secure, and the NFT wallet can represent the brand of the business and can be owned by everyone by downloading the app. <br>
                         ~~<br><br>
-                        13. Optional References<br><br>
-                        ・This is the area modified by Secure Cadence<br>
-                        (Secure Cadenceによって変更された部分です)<br><br>
-                        pub var tests = @{UInt64: Test}<br><br>
-                        To get a reference to a resource in this dictionary, do the following<br>
-                        (このDictionaryの中にある、リソースの参照を取得するには以下のようにします)<br><br>
-                        pub fun getRef(): &Test? {<br>
-                        　return &self.tests[0] as &Test?<br>
+                        13. How to Verify Account Ownership (account-proof) <br><br>
+                        [Improved application reliability and server-side authentication (アプリケーションの信頼性向上とサーバーサイド認証)]<br><br>
+                        Flow CLI Github Reference (Flow CLI Githubリファレンス):<br>
+                        https://github.com/onflow/fcl-js/blob/master/docs/reference/proving-authentication.mdx<br><br>
+                        ・The range of applications is wide because it goes to the server side to obtain nonce and authenticates it on the server side. Ex: Establish validity period, etc. <br>
+                        (サーバーサイドにnonceを取りに行き、且つ、サーバー側で認証する為、アプリケーションにさまざまな応用が出来ます。例:有効期限を設けるなど)<br><br>
+                        a. Retrieve account proof data from your application server when connecting to the wallet.<br>
+                        (ウォレット接続時にアプリケーションサーバーからアカウント証明データを取得してきます)<br>
+                        (Example) (一例)<br><br>
+                        [Frontend]<br>
+                        const resolver = async () => {<br>
+                        　const response = await fetch('/api/generate')<br>
+                        　const { nonce } = await response.json()<br>
+                        　return {<br>
+                        　.　appIdentifier: "YourAppIdentifier",<br>
+                        　.　nonce: nonce<br>
+                        　}<br>
+                        }<br>
+                        fcl.config()<br>
+                        　.put('accessNode.api', 'https://rest-testnet.onflow.org')<br>
+                        　.put('discovery.wallet', 'https://fcl-discovery.onflow.org/testnet/authn')<br>
+                        　.put('fcl.accountProof.resolver', resolver)<br>
+                        　.put('env', 'testnet')<br><br>
+                        [Backend]<br>
+                        import crypto from "crypto"<br>
+                        import { addNonce } from "../../storage"<br>
+                        export default function handler(req, res) {<br>
+                        　const nonce = crypto.randomBytes(32).toString('hex')<br>
+                        　addNonce(nonce)<br>
+                        　res.status(200).json({ nonce })<br>
                         }<br><br>
-                        This is a change by Secure Cadence where the resource in the Dictionary is Optional, to allow developers to handle nil cases properly. Previously, there was no ? was not added, which could result in nil references.<br>
-                        (ここはSecure Cadenceによる変更で、開発者がnilケースを適切に扱えるように、DictionaryのリソースにOptional?を付けるように変更されました。以前は?がつかなかったのでnilの参照が生じる可能性がありました。)<br><br>
-                        Community’s video: https://lnkd.in/gYvGX8dU & https://lnkd.in/gk4gKcFB<br><br>
+                        b. The data retrieved from the server should include a random nonce. The specific application identifier is displayed by wallets when users are asked to approve a signing request.<br>
+                        (サーバーから取得したデータにランダムなnonceが含まれる必要があります。特定のアプリケーション識別子は、ユーザーが署名要求を承認するよう求められたときにウォレットによって表示されます。)<br>
+                        (Example) (一例)<br><br>
+                        [Authentication on the Frontend side only (Frontend側でのみ認証)]<br>
+                        export async function login() {<br>
+                        　let response = await fcl.authenticate()<br>
+                        　const accountProofService = response.services.find(service => service.type === 'account-proof')<br>
+                        　if (accountProofService) {<br>
+                        　.　const verified = await fcl.AppUtils.verifyAccountProof(<br>
+                        　.　 "YourAppIdentifier",<br>
+                        　.　 accountProofService.data<br>
+                        　.　)<br>
+                        　.　if (verified) { ... do something } <br>
+                        　}<br>
+                        }<br><br>
+                        [Authentication on Backend side (Backend側で認証)]<br>
+                        export async function login() {<br>
+                        　let response = await fcl.authenticate()<br>
+                        　const accountProofService = response.services.find(service => service.type === 'account-proof')<br>
+                        　if (accountProofService) {<br>
+                        　.　const response = await fetch('/api/verify', {<br>
+                        　.　 method: 'POST',<br>
+                        　.　 headers: { 'Content-Type': 'application/json' },<br>
+                        　.　 body: JSON.stringify(accountProofService.data)<br>
+                        　.　)<br>
+                        　.　const verified = response.json()<br>
+                        　.　if (verified) { ... do something } <br>
+                        　}<br>
+                        }<br>
+                        <br>
+                        import * as fcl from "@onflow/fcl"<br>
+                        import { checkNonce, removeNonce } from "../../storage"<br>
+                        export default function handler(req, res) {<br>
+                        　const data = req.body<br>
+                        　const nonce = data.nonce<br>
+                        　if (!checkNonce(nonce)) {<br>
+                        　.　return res.status(200).json({ verified: false })<br>
+                        　}<br>
+                        　removeNonce(nonce)<br>
+                        　const verified = await fcl.AppUtils.verifyAccountProof(<br>
+                        　 "YourAppIdentifier",<br>
+                        　 data<br>
+                        　)<br>
+                        　res.status(200).json({ verified })<br>
+                        }<br><br>
+                        Community’s video(00:16~): https://lnkd.in/ghi4GJTA<br><br>
                         全体リファレンスはこちら: https://lnkd.in/ggwZ5bX3<br><br>
                         ---------<br>
                         About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
@@ -1139,10 +1238,10 @@
                         ~~<br>
                         Flow は誰にでも使いやすいブロックチェーンです。<br>
                         ちょっとしたリワードを配りたいという事業者にピッタリなNFTウォレットをセットにした基盤です。<br><br>
-                        安全さが追求され、NFTウォレットはブランドオリジナルで、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
+                        安全さが追求され、NFTウォレットは事業者のブランドを表現でき、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
                         Flow is an easy-to-use blockchain for everyone.<br>
                         It is a foundation with a set of NFT wallets that is perfect for businesses that want to give away a little reward.<br><br>
-                        It is designed to be secure, and the NFT wallet is brand new and can be owned by everyone by downloading the app. <br>
+                        It is designed to be secure, and the NFT wallet can represent the brand of the business and can be owned by everyone by downloading the app. <br>
                         ~~<br><br>
                         14. Configure Cadence VSCode Extension (VSCode Extentionのセットアップ方法)<br><br>
                         1. Install Flow CLI. (flow-cliをインストール)<br><br>
@@ -1166,10 +1265,10 @@
                         ~~<br>
                         Flow は誰にでも使いやすいブロックチェーンです。<br>
                         ちょっとしたリワードを配りたいという事業者にピッタリなNFTウォレットをセットにした基盤です。<br><br>
-                        安全さが追求され、NFTウォレットはブランドオリジナルで、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
+                        安全さが追求され、NFTウォレットは事業者のブランドを表現でき、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
                         Flow is an easy-to-use blockchain for everyone.<br>
                         It is a foundation with a set of NFT wallets that is perfect for businesses that want to give away a little reward.<br><br>
-                        It is designed to be secure, and the NFT wallet is brand new and can be owned by everyone by downloading the app. <br>
+                        It is designed to be secure, and the NFT wallet can represent the brand of the business and can be owned by everyone by downloading the app. <br>
                         ~~<br><br>
                         15. How to Build an NFT Marketplace (NFTのマーケットプレイスを作るには)<br><br>
                         a. Create a forSale object to manage the listing, a Capability to withdraw the NFT and a Capability to deposit the Flow. <br>
@@ -1269,133 +1368,114 @@
                      </p>
                      <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
                         Let's build a game with Flow Blockchain! (Flow Blockchainでゲームを作ろう！) <br>
-                        本日のテーマは「Verify Ownership」。サーバーサイド認証が出来るようになる実装について、解説していきます。<br><br>
+                        本日のテーマは「Optional Binding」。Optionalによる警告を受けることがなくなる実装について、解説していきます。<br><br>
                         ~~<br>
                         Flow は誰にでも使いやすいブロックチェーンです。<br>
                         ちょっとしたリワードを配りたいという事業者にピッタリなNFTウォレットをセットにした基盤です。<br><br>
-                        安全さが追求され、NFTウォレットはブランドオリジナルで、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
+                        安全さが追求され、NFTウォレットは事業者のブランドを表現でき、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
                         Flow is an easy-to-use blockchain for everyone.<br>
                         It is a foundation with a set of NFT wallets that is perfect for businesses that want to give away a little reward.<br><br>
-                        It is designed to be secure, and the NFT wallet is brand new and can be owned by everyone by downloading the app. <br>
+                        It is designed to be secure, and the NFT wallet can represent the brand of the business and can be owned by everyone by downloading the app. <br>
                         ~~<br><br>
-                        16. How to Verify Account Ownership (account-proof) <br><br>
-                        [Improved application reliability and server-side authentication (アプリケーションの信頼性向上とサーバーサイド認証)]<br><br>
-                        Flow CLI Github Reference (Flow CLI Githubリファレンス):<br>
-                        https://github.com/onflow/fcl-js/blob/master/docs/reference/proving-authentication.mdx<br><br>
-                        ・The range of applications is wide because it goes to the server side to obtain nonce and authenticates it on the server side. Ex: Establish validity period, etc. <br>
-                        (サーバーサイドにnonceを取りに行き、且つ、サーバー側で認証する為、アプリケーションにさまざまな応用が出来ます。例:有効期限を設けるなど)<br><br>
-                        a. Retrieve account proof data from your application server when connecting to the wallet.<br>
-                        (ウォレット接続時にアプリケーションサーバーからアカウント証明データを取得してきます)<br>
-                        (Example) (一例)<br><br>
-                        [Frontend]<br>
-                        const resolver = async () => {<br>
-                        　const response = await fetch('/api/generate')<br>
-                        　const { nonce } = await response.json()<br>
-                        　return {<br>
-                        　.　appIdentifier: "YourAppIdentifier",<br>
-                        　.　nonce: nonce<br>
-                        　}<br>
-                        }<br>
-                        fcl.config()<br>
-                        　.put('accessNode.api', 'https://rest-testnet.onflow.org')<br>
-                        　.put('discovery.wallet', 'https://fcl-discovery.onflow.org/testnet/authn')<br>
-                        　.put('fcl.accountProof.resolver', resolver)<br>
-                        　.put('env', 'testnet')<br><br>
-                        [Backend]<br>
-                        import crypto from "crypto"<br>
-                        import { addNonce } from "../../storage"<br>
-                        export default function handler(req, res) {<br>
-                        　const nonce = crypto.randomBytes(32).toString('hex')<br>
-                        　addNonce(nonce)<br>
-                        　res.status(200).json({ nonce })<br>
+                        16. Optional Binding<br><br>
+                        If you want to handle separately when a dictionary has a data and when it has not, you can write the code to get the state when the dictionary has a data by a variable.<br>
+                        (Dictionaryに値がある時とない時で処理を分けたい時、値がある状態を変数に移動して処理を書くことが出来ます)<br><br>
+                        let tests: {Int: Test} = { 10: Test(10), 20: Test(20) }<br>
+                        if let test = tests[10] {<br>
+                        　return test.fruites[0]<br>
+                        } else {<br>
+                        　return nil<br>
                         }<br><br>
-                        b. The data retrieved from the server should include a random nonce. The specific application identifier is displayed by wallets when users are asked to approve a signing request.<br>
-                        (サーバーから取得したデータにランダムなnonceが含まれる必要があります。特定のアプリケーション識別子は、ユーザーが署名要求を承認するよう求められたときにウォレットによって表示されます。)<br>
-                        (Example) (一例)<br><br>
-                        [Authentication on the Frontend side only (Frontend側でのみ認証)]<br>
-                        export async function login() {<br>
-                        　let response = await fcl.authenticate()<br>
-                        　const accountProofService = response.services.find(service => service.type === 'account-proof')<br>
-                        　if (accountProofService) {<br>
-                        　.　const verified = await fcl.AppUtils.verifyAccountProof(<br>
-                        　.　 "YourAppIdentifier",<br>
-                        　.　 accountProofService.data<br>
-                        　.　)<br>
-                        　.　if (verified) { ... do something } <br>
-                        　}<br>
+                        ・Optional Binding starts with `if let`. (Optional Binding は`if let`から始まります)<br><br>
+                        Community’s video: https://lnkd.in/gWZtX-M5<br><br>
+                        全体リファレンスはこちら: https://lnkd.in/ggwZ5bX3<br><br>
+                        ---------<br>
+                        About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
+                        ブログはこちら: https://lnkd.in/g3kM3AJg<br><br>
+                        #blockchain
+                    </p>
+                    <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
+                        Let's build a game with Flow Blockchain! (Flow Blockchainでゲームを作ろう！) <br>
+                        本日のテーマは「Optional References」。コレクションの参照がヌルでも直感的に実装できるようになった変更について、解説していきます。<br><br>
+                        ~~<br>
+                        Flow は誰にでも使いやすいブロックチェーンです。<br>
+                        ちょっとしたリワードを配りたいという事業者にピッタリなNFTウォレットをセットにした基盤です。<br><br>
+                        安全さが追求され、NFTウォレットは事業者のブランドを表現でき、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
+                        Flow is an easy-to-use blockchain for everyone.<br>
+                        It is a foundation with a set of NFT wallets that is perfect for businesses that want to give away a little reward.<br><br>
+                        It is designed to be secure, and the NFT wallet can represent the brand of the business and can be owned by everyone by downloading the app. <br>
+                        ~~<br><br>
+                        17. Optional References<br><br>
+                        ・This is the area modified by Secure Cadence<br>
+                        (Secure Cadenceによって変更された部分です)<br><br>
+                        pub var tests = @{UInt64: Test}<br><br>
+                        To get a reference to a resource in this dictionary, do the following<br>
+                        (このDictionaryの中にある、リソースの参照を取得するには以下のようにします)<br><br>
+                        pub fun getRef(): &Test? {<br>
+                        　return &self.tests[0] as &Test?<br>
                         }<br><br>
-                        [Authentication on Backend side (Backend側で認証)]<br>
-                        export async function login() {<br>
-                        　let response = await fcl.authenticate()<br>
-                        　const accountProofService = response.services.find(service => service.type === 'account-proof')<br>
-                        　if (accountProofService) {<br>
-                        　.　const response = await fetch('/api/verify', {<br>
-                        　.　 method: 'POST',<br>
-                        　.　 headers: { 'Content-Type': 'application/json' },<br>
-                        　.　 body: JSON.stringify(accountProofService.data)<br>
-                        　.　)<br>
-                        　.　const verified = response.json()<br>
-                        　.　if (verified) { ... do something } <br>
-                        　}<br>
-                        }<br>
-                        <br>
-                        import * as fcl from "@onflow/fcl"<br>
-                        import { checkNonce, removeNonce } from "../../storage"<br>
-                        export default function handler(req, res) {<br>
-                        　const data = req.body<br>
-                        　const nonce = data.nonce<br>
-                        　if (!checkNonce(nonce)) {<br>
-                        　.　return res.status(200).json({ verified: false })<br>
-                        　}<br>
-                        　removeNonce(nonce)<br>
-                        　const verified = await fcl.AppUtils.verifyAccountProof(<br>
-                        　 "YourAppIdentifier",<br>
-                        　 data<br>
-                        　)<br>
-                        　res.status(200).json({ verified })<br>
-                        }<br><br>
-                        Community’s video(00:16~): https://lnkd.in/ghi4GJTA<br><br>
+                        This is a change by Secure Cadence where the resource in the Dictionary is Optional, to allow developers to handle nil cases properly. Previously, there was no ? was not added, which could result in nil references.<br>
+                        (ここはSecure Cadenceによる変更で、開発者がnilケースを適切に扱えるように、DictionaryのリソースにOptional?を付けるように変更されました。以前は?がつかなかったのでnilの参照が生じる可能性がありました。)<br><br>
+                        Community’s video: https://lnkd.in/gYvGX8dU & https://lnkd.in/gk4gKcFB<br><br>
                         全体リファレンスはこちら: https://lnkd.in/ggwZ5bX3<br><br>
                         ---------<br>
                         About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
                         ブログはこちら: https://lnkd.in/g3kM3AJg<br><br>
                         #blockchain
                      </p>
-                     <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
-                        Let's build a game with Flow Blockchain! (Flow Blockchainでゲームを作ろう！) <br>
-                        本日のテーマは「Storage Iteration」。どんなNFTを持っているかが分かるようになる実装について、解説していきます。<br><br>
-                        ~~<br>
-                        Flow は誰にでも使いやすいブロックチェーンです。<br>
-                        ちょっとしたリワードを配りたいという事業者にピッタリなNFTウォレットをセットにした基盤です。<br><br>
-                        安全さが追求され、NFTウォレットはブランドオリジナルで、アプリをダウンロードすることでみんなが持つ事が出来ます。<br><br>
-                        Flow is an easy-to-use blockchain for everyone.<br>
-                        It is a foundation with a set of NFT wallets that is perfect for businesses that want to give away a little reward.<br><br>
-                        It is designed to be secure, and the NFT wallet is brand new and can be owned by everyone by downloading the app. <br>
-                        ~~<br><br>
-                        17. Account Storage Iteration <br><br>
-                        [To get a list of NFTs owned by an account (アカウントが所有しているNFTを一覧で取得するには)]<br><br>
-                        To retrieve all the information set in the PublicPath of an account, do the following<br>
-                        (アカウントのPublicPathに設定されている情報を全て取得するには以下のようにします)<br><br>
-                        pub fun main(user: Address): [PublicPath] {<br>
-                        　let publicAccount: PublicAccount = getAccount(user)<br>
-                        　return publicAccount.publicPaths<br>
-                        }<br><br>
-                        To get a list of all NFT IDs owned by an account, do the following<br>
-                        (アカウントが所有する全てのNFTのID一覧を取得するには以下のようにします)<br><br>
-                        pub fun main(user: Address): [[UInt64]] {<br>
-                        　let publicAccount: PublicAccount = getAccount(user)<br>
-                        　let authAccount: AuthAccount = getAuthAccount(user)<br>
-                        　let ids: [[UInt64]] = []<br>
-                        　let iterationFunc: ((StoragePath, Type): Bool) = fun (path: storagePath, type: Type): Bool {<br>
-                        　.　if type.isSubtype(of: Type<@NonFungibleToken.Collection>()) {<br>
-                        　.　.　let collection = authAccount.borrow<@NonFungibleToken.Collection>(from: path)<br>
-                        　.　.　let collectionIds: [UInt64] = collection.getIDs()<br>
-                        　.　.　ids.append(collectionIds)<br>
-                        　.　}<br>
-                        　.　return true<br>
-                        　}<br>
-                        　authAccount.forEachStored(iterationFunc)<br>
-                        }<br><br>
+                    <p type="textarea" style="border-color: brown; border-style: dashed groove groove dotted;">
+                        node -v<br>
+                        v18.4.0<br><br>
+                        Amplify CLIがインストール済みの前提で進めます。<br>
+                        amplify -v<br>
+                        10.5.1<br>
+                        amplify configure<br>
+                        Web Blowserが立ち上がりますのでログインします。<br>
+                        Enterを入力します<br>
+                        AWS Regionを選択します<br>
+                        新しく作成するIAM ユーザーの名前を入力します。<br><br>
+                        Web Blowserが立ち上がりますのでユーザーの作成処理の続きを行います。<br>
+                        Enterを入力します<br>
+                        Access key IDとSecret access keyにいま作成したばかりユーザーの情報を入力します。<br>
+                        以降はdefaultのまま入力して、設定画面を閉じます。<br>
+                        Nuxtアプリを作成しますので以下のコマンドを叩きます。<br>
+                        npx nuxi init game-built-on-flow<br>
+                        作成されたフォルダに入り以下のコマンドを実行してください。<br>
+                        npm install<br>
+                        npm run dev<br>
+                        localhost:3000にWebページが表示されます。<br>
+                        以下のコマンドを実行してください。<br>
+                        amplify init<br>
+                        設定内容はお好みで大丈夫です。<br>
+                        以下のコマンドを実行してください。<br>
+                        amplify add api<br>
+                        GraphQLを選択し、Authorization ModeにはAmazon Cognito User Poolを選択します。<br>
+                        それ以降はデフォルトの選択値を選択します。<br>
+                        ./amplify/backend/apiフォルダが作成されます。<br>
+                        以下のコマンドを実行してください。<br>
+                        amplify push<br>
+                        Would you like to create an API Key? ではNoを選択します。<br>
+                        それ以降はデフォルトの選択肢で以下のように選択します。<br>
+                        これを行うことでaws-exports.jsが作成されますので、次からはそれを読み込むファイルを作成していきます。<br>
+                        必要なライブラリをインストールします。以下のコマンドを叩きます。<br>
+                        npm install aws-amplify @aws-amplify/ui-vue<br>
+                        プロジェクトのルートフォルダでpluginsフォルダを作成します。<br>
+                        mkdir plugins<br>
+                        pluginsフォルダの中にamplify.jsというファイルを作成し、以下の内容を入力します。<br>
+                        import Vue from 'vue'<br>
+                        import Amplify from 'aws-amplify'<br>
+                        import '@aws-amplify/ui-vue'<br>
+                        import awsExports from '../src/aws-exports'<br><br>
+                        Amplify.configure(awsExports)<br>
+                        Vue.use(Amplify)<br><br>
+                        nuxt.config.jsのplugins[]の場所を以下のようにします<br>
+                        plugins: [<br>
+                        　.　.　{ src: '~/plugins/amplify.js', ssr: false }<br>
+                        ],<br><br>
+                        aws-exportsの場所が環境によっては変わることがあり、Nuxtがエラーを出す可能性がありますので、その時は適宜パスを修正してください。<br>
+                        以下を実行しますと、GraphQL endpointなどが表示されます。<br>
+                        amplify status<br><br>
+                        ./pages/index.vueを以下のように変更します。<br>
                         ・If false is returned in fun in iterationFunc, the loop stops there; if true, the loop continues.<br>
                         (iterationFuncの中のfunの中でfalseを返すとループの処理がそこで止まります。trueを返すとループが続きます。)<br><br>
                         To get a list of all NFT references owned by an account, do the following<br>
