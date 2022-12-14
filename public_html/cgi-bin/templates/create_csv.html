@@ -943,16 +943,12 @@
                         It is a foundation with a set of NFT wallets that is perfect for businesses that want to give away a little reward.<br><br>
                         It is designed to be secure, and the NFT wallet can represent the brand of the business and can be owned by everyone by downloading the app. <br>
                         ~~<br><br>
-                        10. How to Create a Fungible Token (独自通貨を発行するには)<br><br>
-                        ・How to create a Fungible Token (Fungible Tokenの作り方)<br><br>
-                        1). The Fungible Token Standard interface can be found below. <br>
-                        (Fungible Token StandardのInterfaceは以下にあります。)<br><br>
+                        10. How to Create a Fungible Token (Fungible Tokenの作り方)<br><br>
+                        1). Fungible Token StandardのInterfaceは以下にあります。<br><br>
                         https://github.com/onflow/flow-ft/blob/master/contracts/FungibleToken.cdc<br><br>
-                        2). Create a Contract that imports this Interface <br>
-                        (このInterfaceをimportしたContractを作ります)<br><br>
-                        3). Implement totalSupply, deposit, withdraw, Minter<br>
-                        (totalSupply, deposit, withdraw, Minterを実装します)<br><br>
-                        ・The deposit function should be as follows (depositは以下のようにします)<br>
+                        2). このInterfaceをimportしたContractを作ります<br><br>
+                        3). totalSupply, deposit, withdraw, Minterを実装します<br><br>
+                        ・depositは以下のようにします<br>
                         pub fun deposit(from: @FungibleToken.vault) {<br>
                         　let vault <- from as! @MyToken.vault<br>
                         　emit TokensDeposited(amount: vault.balance, to: self.owner?.address)<br>
@@ -960,13 +956,13 @@
                         　vault.balance = 0.0<br>
                         　destroy vault<br>
                         }<br><br>
-                        ・The withdraw function should be as follows (withdrawは以下のようにします)<br>
+                        ・withdrawは以下のようにします<br>
                         pub fun withdraw(amount: UFix64): @FungibleToken.vault {<br>
                         　self.balance = self.balance - amount<br>
                         　emit TokensWithdrawn(amount: amount, from: self.owner?.address)<br>
                         　return <- create Vault(balance: amount)<br>
                         }<br><br>
-                        ・The Minter resource should be as follows (Minterは以下のようにします)<br>
+                        ・Minterは以下のようにします<br>
                         pub resource Minter {<br>
                         　pub fun mintToken(amount: UFix64): @FungibleToken.vault {<br>
                         　.　MyToken.totalSupply = MyToken.totalSupply + amount<br>
@@ -980,14 +976,12 @@
                         　self.account.save(<- create Minter(), to: /storage/Minter)<br>
                         　}<br>
                         }<br><br>
-                        4). Save the valut of this Contract to the account. Do the following <br>
-                        (アカウントにこのContractのvalutを保存します。以下のようにします)<br><br>
+                        4). アカウントにこのContractのvalutを保存します。以下のようにします<br><br>
                         prepare(acct: AuthAccount) {<br>
                         　acct.save(<- MyToken.createEmptyVault(), to: /storage/Vault)<br>
                         　acct.link<@MyToken.vault{FungibleToken.Balance, FungibleToken.Receiver}>(/public/Vault, target: /storage/Vault)<br>
                         }<br><br>
-                        5). To issue fungible currencies and deposit it into a specific account, do the following<br>
-                        (独自通貨を発行して特定のアカウントに預け入れるには以下のようにします)<br><br>
+                        5). 独自通貨を発行して特定のアカウントに預け入れるには以下のようにします<br><br>
                         prepare(acct: AuthAccount) {<br>
                         　let minter = acct.borrow<&MyToken.Minter>(from: /storage/Minter)<br>
                         　let newVault <- minter.mintToken(amount: 20.0)<br>
@@ -996,7 +990,7 @@
                         　.　.　?? panic("Couldn't get the public vault.")<br>
                         　receiverVault.deposit(from: <- newVault)<br>
                         }<br><br>
-                        6. Transferring fungible currencies between accounts should be done as follows (アカウント間の独自通貨の転送は以下のようにします)<br>
+                        6). アカウント間の独自通貨の転送は以下のようにします<br><br>
                         prepare(acct: AuthAccount) {<br>
                         　let signerVault = acct.borrow<&MyToken.Vault>(from: /storage/Vault)<br>
                         　.　.　?? panic("Couldn't get the signer's vault.")<br>
@@ -1024,15 +1018,13 @@
                         It is designed to be secure, and the NFT wallet can represent the brand of the business and can be owned by everyone by downloading the app. <br>
                         ~~<br><br>
                         11. Account Storage Iteration <br><br>
-                        [To get a list of NFTs owned by an account (アカウントが所有しているNFTを一覧で取得するには)]<br><br>
-                        To retrieve all the information set in the PublicPath of an account, do the following<br>
-                        (アカウントのPublicPathに設定されている情報を全て取得するには以下のようにします)<br><br>
+                        アカウントが所有しているNFTを一覧で取得するには<br><br>
+                        ・アカウントのPublicPathに設定されているパスを全て取得するには以下のようにします<br><br>
                         pub fun main(user: Address): [PublicPath] {<br>
                         　let publicAccount: PublicAccount = getAccount(user)<br>
                         　return publicAccount.publicPaths<br>
                         }<br><br>
-                        To get a list of all NFT IDs owned by an account, do the following<br>
-                        (アカウントが所有する全てのNFTのID一覧を取得するには以下のようにします)<br><br>
+                        ・アカウントが所有する全てのNFTのID一覧を取得するには以下のようにします<br><br>
                         pub fun main(user: Address): [[UInt64]] {<br>
                         　let publicAccount: PublicAccount = getAccount(user)<br>
                         　let authAccount: AuthAccount = getAuthAccount(user)<br>
@@ -1046,11 +1038,11 @@
                         　.　return true<br>
                         　}<br>
                         　authAccount.forEachStored(iterationFunc)<br>
-                        }<br><br>
-                        ・If false is returned in fun in iterationFunc, the loop stops there; if true, the loop continues.<br>
-                        (iterationFuncの中のfunの中でfalseを返すとループの処理がそこで止まります。trueを返すとループが続きます。)<br><br>
-                        To get a list of all NFT references owned by an account, do the following<br>
-                        (アカウントが所有する全てのNFTの参照一覧を取得するには以下のようにします)<br><br>
+                        }<br>
+                        —-<br>
+                        iterationFuncの中のfunの中でfalseを返すとループの処理がそこで止まります。trueを返すとループが続きます。<br>
+                        —-<br><br>
+                        ・アカウントが所有する全てのNFTの参照一覧を取得するには以下のようにします<br><br>
                         pub fun main(user: Address): {Type: [&NonFungibleToken.NFT]} {<br>
                         　let publicAccount: PublicAccount = getAccount(user)<br>
                         　let authAccount: AuthAccount = getAuthAccount(user)<br>
@@ -1068,9 +1060,9 @@
                         　}<br>
                         　authAccount.forEachStored(iterationFunc)<br>
                         }<br><br>
+                        Community’s video: https://lnkd.in/gZFbQxJb<br><br>
                         Documentation:<br>
                         https://developers.flow.com/cadence/language/accounts#storage-iteration<br><br>
-                        Community’s video: https://lnkd.in/gZFbQxJb<br><br>
                         全体リファレンスはこちら: https://lnkd.in/ggwZ5bX3<br><br>
                         ---------<br>
                         About Us(Tickets Onchain): https://tickets-onchain.com/about/<br><br>
@@ -1437,45 +1429,221 @@
                         Web Blowserが立ち上がりますのでユーザーの作成処理の続きを行います。<br>
                         Enterを入力します<br>
                         Access key IDとSecret access keyにいま作成したばかりユーザーの情報を入力します。<br>
-                        以降はdefaultのまま入力して、設定画面を閉じます。<br>
+                        以降はdefaultのまま入力して、設定を終了します。<br>
                         Nuxtアプリを作成しますので以下のコマンドを叩きます。<br>
                         npx nuxi init game-built-on-flow<br>
                         作成されたフォルダに入り以下のコマンドを実行してください。<br>
                         npm install<br>
                         npm run dev<br>
-                        localhost:3000にWebページが表示されます。<br>
+                        Web BrowserでURLバーにlocalhost:3000を入力してEnterを押してみてください。Webページが表示されているはずです。<br>
                         以下のコマンドを実行してください。<br>
                         amplify init<br>
-                        設定内容はお好みで大丈夫です。<br>
-                        以下のコマンドを実行してください。<br>
+                        設定内容はお好みで大丈夫ですが以下の画像を参考にしていただいて構いません。<br>
+                        しばらくするとAmplifyを利用する準備が整います。<br>
+                        AmplifyのAPIを作成しますので、以下のコマンドを実行してください。<br>
                         amplify add api<br>
-                        GraphQLを選択し、Authorization ModeにはAmazon Cognito User Poolを選択します。<br>
+                        最初にGraphQLを選択してください<br>
+                        設定を選ぶ段階では上下ボタンで">"の位置が動きます。それをAuthorization Modeの位置まで">"が来るように押して、Authorization Modeにカーソルを合わせます。<br>
+                        Enterを押して、Authorization ModeにはAmazon Cognito User Poolを選択します。<br>
                         それ以降はデフォルトの選択値を選択します。<br>
-                        ./amplify/backend/apiフォルダが作成されます。<br>
-                        以下のコマンドを実行してください。<br>
+                        "Configure additional auth types?"と表示されたら"N"を入力します。<br>
+                        その他の選択肢も設定が閉じるまでデフォルトのままとします<br>
+                        画面に"GraphQL schema compiled successfully."と表示されると、./amplify/backend/apiフォルダが作成されているはずです。<br>
+                        次にaws-exports.jsというファイルを作成しますので以下のコマンドを実行してください。<br>
                         amplify push<br>
-                        Would you like to create an API Key? ではNoを選択します。<br>
-                        それ以降はデフォルトの選択肢で以下のように選択します。<br>
-                        これを行うことでaws-exports.jsが作成されますので、次からはそれを読み込むファイルを作成していきます。<br>
-                        必要なライブラリをインストールします。以下のコマンドを叩きます。<br>
+                        "Are you sure you want to continue?"と表示されたら"Y"と入力します。<br>
+                        "Would you like to create an API Key?"と表示されたら"N"と入力します。<br>
+                        "Do you want to generate code for your newly created GraphQL API"と表示されたら"Y"と入力します。<br>
+                        そのほかはお好みで大丈夫ですが、特に理由がなければデフォルトの選択値を選択しましょう。<br>
+                        以下の画像を参考にして最後の選択肢まで設定を入力してみましょう。<br>
+                        入力が終わるとAmplifyのAPIがAWSにデプロイされます。<br>
+                        また、これを行うことでaws-exports.jsが作成されています。デプロイ中でも存在しますので/srcフォルダに存在するか確認してみましょう。<br>
+                        次はこれを読み込むファイルを作成していきます。デプロイ中でも大丈夫です。以下のコマンドを叩きます。<br>
                         npm install aws-amplify @aws-amplify/ui-vue<br>
+                        アプリに必要なライブラリのインストールがされますので終わるまで待ちます。<br>
                         プロジェクトのルートフォルダでpluginsフォルダを作成します。<br>
                         mkdir plugins<br>
                         pluginsフォルダの中にamplify.jsというファイルを作成し、以下の内容を入力します。<br>
-                        import Vue from 'vue'<br>
-                        import Amplify from 'aws-amplify'<br>
-                        import '@aws-amplify/ui-vue'<br>
-                        import awsExports from '../src/aws-exports'<br><br>
-                        Amplify.configure(awsExports)<br>
-                        Vue.use(Amplify)<br><br>
-                        nuxt.config.jsのplugins[]の場所を以下のようにします<br>
-                        plugins: [<br>
-                        　.　.　{ src: '~/plugins/amplify.js', ssr: false }<br>
-                        ],<br><br>
-                        aws-exportsの場所が環境によっては変わることがあり、Nuxtがエラーを出す可能性がありますので、その時は適宜パスを修正してください。<br>
+                        import { defineNuxtPlugin } from '#app'<br>
+                        import amplifyConfig from '../src/aws-exports'<br>
+                        import { Amplify, Auth } from 'aws-amplify'<br>
+                        export default defineNuxtPlugin(() => {<br>
+                        　Amplify.configure(amplifyConfig)<br>
+                        　return {
+                        　.　provide: {
+                        　.　.　auth: Auth
+                        　.　}
+                        　}
+                        })<br><br>
+                        aws-exportsの場所はaws initコマンドで指定した場所ですので、もしlocalhost:3000内でNuxt.jsがエラーを出ていましたら、違うパスにaws-exports.jsが作成されている可能性がありますので、その時は適宜パスを修正してください。<br>
+                        プロジェクトのルートフォルダにあるnuxt.config.tsというファイルの2行目以下に以下の行を追加します<br>
+                        ssr: false,<br>
+                        alias: {<br>
+                        　'./runtimeConfig': './runtimeConfig.browser'<br>
+                        },<br>
+                        このssr: falseという記述をするのはamplify.jsをサーバーサイドレンダリングモードで読み込んでしまうとエラーになるためです。<br>
+                        プロジェクトのルートフォルダでpagesフォルダを作成します。<br>
+                        mkdir pages<br>
+                        pagesフォルダの中にindex.vueというファイルを作成し、以下の内容を入力します。<br>
+                        ＜template><br>
+                        　＜div><br>
+                        　.　＜h1>GraphQL App/h1><br>
+                        　.　.　＜p>＜label for="name">Name :＜/label>＜input v-model="name" id="Name" />＜/p><br>
+                        　.　.　＜p>＜label for="Description">Description :＜/label>＜input v-model="description" id="Description" />＜/p><br>
+                        　.　.　＜p>＜button style="border: solid; padding: 10px;" @click="createTodo">Create＜/button>＜/p><br>
+                        　.　.　＜ul><br>
+                        　.　.　.　＜li v-for="todo in todos" :key="todo.id"><br>
+                        　.　.　.　.　｛{ todo.name }} : ｛{ todo.description }}<br>
+                        　.　.　.　＜/li><br>
+                        　.　.　＜/ul><br>
+                        　.　＜/div><br>
+                        ＜/template><br><br>                          
+                        ＜script><br>
+                        import { Auth, API } from 'aws-amplify'<br>
+                        import { createTodo } from '~/src/graphql/mutations'<br>
+                        import { listTodos } from '~/src/graphql/queries'<br>
+                        import { onCreateTodo } from '~/src/graphql/subscriptions'<br><br>                          
+                        export default {<br>
+                        　data() {<br>
+                        　.　return {<br>
+                        　.　.　name: '',<br>
+                        　.　.　description: '',<br>
+                        　.　.　todos: [],<br>
+                        　.　}<br>
+                        　},<br>
+                        }<br>
+                        ＜/script><br><br>
+                        この3行目にあるToDoSampleとはAmplifyがデフォルトで用意してくれるToDoスキーマを利用するため、このような名称にしています。<br>
+                        Amplifyを生成時にデフォルトで用意してくれた実装を利用します。<br>
+                        今回新しく作るAPIはこのToDoのサンプルをもとに生成すると楽に作れます。<br><br>
+                        次にプロジェクトのルートフォルダにあるapp.vueを以下の画像のように変更します。<br>
+                        先頭に以下の4行を追加します。<br>
+                        ＜script setup lang="ts"><br>
+                        　import {Authenticator} from "@aws-amplify/ui-vue"<br>
+                        　import "@aws-amplify/ui-vue/styles.css"<br>
+                        ＜/script><br>
+                        templateの中のdivの中身を以下ように3行変更します。<br>
+                        ＜template><br>
+                        　＜div><br>
+                        　.　＜Authenticator><br>
+                        　.　.　＜NuxtPage /><br>
+                        　.　＜/Authenticator><br>
+                        　＜/div><br>
+                        ＜/template><br><br>
+                        この記述をすることによって、もしユーザーがログインをしていればNuxtのpages/index.vueの内容が、ログインが終わっていなければAmplifyが用意したログイン画面が出るようになります。<br>
+                        また、＜NuxtWelcome />の部分を＜NuxtPage />に変更することでpagesの中にあるファイルが認識されるようになります。<br>
+                        ※2022年12月時点ではこの状態ではエラーが発生します。<br>
+                        https://github.com/aws-amplify/amplify-js/issues/678 に記載の内容の対応策が必要となっています。<br>
+                        プロジェクトのルートフォルダにあるnuxt.config.tsというファイルに、以下の画像のように下の3行を追加お願いします<br>
+                        vite: {<br>
+                        　define: {<br>
+                        　.　'window.global': {}<br>
+                        　}<br>
+                        }<br><br>
+                        localhost:3000にアクセスしてみましょう。以下のようが画面が出ると思います。<br>
+                        Sign Up機能が自動で用意されていますが、これら認証に使用したデータはAWS Cognito User Poolによって管理されます。<br>
+                        Webブラウザーからhttps://console.aws.amazon.com　に遷移してAWSコンソールにログインし、Cognitoのサービスのページを表示します。ユーザープールを選択してflowgamebuiltonflowe...というユーザープールを選択します。左のメニューからユーザーとグループを選択すると、Nuxtのサインアップ画面から登録したユーザー情報を確認することが出来ます。<br>
+                        他の方法を試したい場合は以下のコラムで示した方法を試してみてください。<br>
+                        ここでログインするとAmplifyで設定した時に用意されたToDoの情報を表示したいと思います。<br>
+                        このAmplifyで用意された情報は、DynamoDBといいAWSがクラウドに用意した情報をGraphQLという仕組みを使って取得したものです。<br>
+                        では取得するコードを書いていきます。以下のコードをindex.vueの下から３行目に挿入してみてください。<br>
+                        async created() {<br><br>
+                        　const currentAuthUser = await Auth.currentAuthenticatedUser();<br><br>                        
+                        　const session = await Auth.userSession(currentAuthUser);<br><br>                        
+                        　if (!session?.isValid()) {<br>
+                        　.　console.error('セッションが無効です!')<br>
+                        　};<br>
+                        　this.getTodos()<br>
+                        　this.subscribe()<br>
+                        },<br>
+                        methods: {<br>
+                        　async createTodo() {<br>
+                        　.　const { name, description } = this<br>
+                        　.　if (!name || !description) return false<br>
+                        　.　const todo = { name, description }<br>
+                        　.　await API.graphql({<br>
+                        　.　.　query: createTodo,<br>
+                        　.　.　variables: { input: todo },<br>
+                        　.　})<br>
+                        　.　this.name = ''<br>
+                        　.　this.description = ''<br>
+                        　},<br>
+                        　async getTodos() {<br>
+                        　.　await API.graphql({<br>
+                        　.　.　query: listTodos,<br>
+                        　.　}).then((todos) => {
+                        　.　.　this.todos = todos.data.listTodos.items
+                        　.　}).catch((err) => {
+                        　.　.　console.log('Error:', err)
+                        　.　})<br>
+                        　},<br>
+                        　subscribe() {<br>
+                        　.　API.graphql({ query: onCreateTodo }).subscribe({<br>
+                        　.　.　next: (eventData) => {<br>
+                        　.　.　.　const todo = eventData.value.data.onCreateTodo<br>
+                        　.　.　.　if (this.todos.some((item) => item.name === todo.name)) return // remove duplications<br>
+                        　.　.　.　this.todos = [...this.todos, todo]<br>
+                        　.　.　},<br>
+                        　.　})<br>
+                        　},<br>
+                        },<br><br>
+                        先ほどの書いたようにAmplifyから取得したデータはDynamoDBから取得していますので、AppSyncに権限の設定を行います。<br>
+                        Amplifyによって作成されたプロジェクトルート直下の/amplify/backend/api/(プロジェクト名)/schema.graphqlファイルを開いてtype Todoの欄を以下のように変更してください。<br>
+                        type Todo @model @auth(rules: [{ allow: private }]) {<br>
+                        これはDynamoDBにアクセスするAPIにログインしたユーザーだけが読み取れるようにする設定になります。<br>
+                        先ほどのlocalhost:3000を開きます。
+                        ログイン画面の設定は以下の手順で行います。<br>
+                        ログイン画面はAmplifyが用意してくれます。Apple IDやGoogle、Facebookなどでログインが可能になります。<br>
+                        さらにパスワードの強度設定なども行えます。<br>
+                        これらログインに関する設定を行うには、まずAWSコンソールでログインを行います。<br>
+                        次に以下のURLにアクセスします。<br>
+                        console.aws.amazon.com/amplify/home<br>
+                        Amplifyの画面に遷移しますので、先ほど作成したAmplifyのカードを選びます<br>
+                        まずAmplify Studioの設定をONにする必要があります。<br>
+                        画面中部にある"Backend environments"を選択し、画面上部に表示されるAmplify StudioをONにしますか？の表示のあるチェックボックスをONにします。<br>
+                        ONにするとしばらくして以下のような画面が表示されます。<br>
+                        以下のような画面が表示されますので画面中央右寄りの「View Authentication Settings」をクリックします。<br>
+                        以下のような画面が表示されますので、ここでログインの仕様を変更することが出来ます。今回はデフォルトの設定でログイン画面の実装を行います。<br>
                         以下を実行しますと、GraphQL endpointなどが表示されます。<br>
+                        Launch StudioをクリックしてAmplify Studioを起動します。<br>
                         amplify status<br><br>
-                        ./pages/index.vueを以下のように変更します。<br>
+                        【２】Cronバッチを作成しますので、以下のコマンドを実行してください。<br>
+                        amplify add function<br>
+                        Select which capability you want to addの選択肢が出ましたらLambda function (serverless function)を選択してください<br>
+                        Lambda Function nameを入力します。ここではcronBatchForEventsと入力しました。<br>
+                        RuntimeにはNode.jsを選択します。<br>
+                        Function TemplateにはHello Worldを選択します。<br>
+                        Do you want to configure advanced settings?と表示されましたらyを入力します。<br>
+                        Do you want to access other resources in this project from your Lambda function?と表示されましたらnを入力します。<br>
+                        Do you want to invoke this function on a recurring schedule?と表示されましたらyと入力します。<br>
+                        Minutesを選択してEnterを押します。<br>
+                        Enter the rate in minutesと表示されましたら 3 と入力します。<br>
+                        それ以降はデフォルトの選択値を選択しますがDo you want to edit the local lambda function now?と表示されたらnと入力してください。<br>
+                        全て選択し終わりましたら、amplify/backend/function/(lambda function name)/src/の下にindex.jsファイルが作成されます。<br>
+                        途中で選択肢を間違えたなど、誤ってFunctionを作成してしまった場合はamplify remove functionを入力して削除するファイルを選んで削除してください。<br>
+                        ランタイムやメモリサイズを変更する場合は、amplify/backend/function/(lambda function name)の下の(lambda function name)-cloudformation-template.jsonファイルを変更します。<br>
+                        "Runtime"と書いているところがFunctionのRuntimeのバージョン名です。<br>
+                        メモリサイズを変更する場合は"Runtime"の下に"MemorySize"のキーを追加し、指定したいメモリのサイズを指定します。1024MBを指定したい場合は"MemorySize": "1024", とします。<br>
+                        ではLambda Functionを作成していきます。プロジェクトルートで以下のコマンドを実行してください。<br>
+                        amplify mock function cronBatchForEvents<br>
+                        Provide the path to the event JSON object ..? と表示されたらEnterを押してください。<br>
+                        Ensuring latest function changes are built...<br>
+                        Starting execution...<br>
+                        EVENT: {"key1":"value1","key2":"value2","key3":"value3"}<br>
+                        Result:<br>
+                        {<br>
+                        　"statusCode": 200,<br>
+                        　"body": "\"Hello from Lambda!\""<br>
+                        }<br>
+                        Finished execution.<br>
+                        と表示されると思います。これはAWSのクラウド上ではなくローカル環境で実行した結果になります。<br>
+                        しかし、Mockの状態ではクラウドのDynamoDBにアクセスができないのでデプロイをして確認をします。以下のコマンドを実行してください。<br>
+                        https://www.youtube.com/watch?v=Sk9HMuAaTmQ　を参考にDynamoDBへのアクセスポリシーをセット。<br>
+
+                        出来たファイルをデプロイしますので、以下のコマンドを実行してください。<br>
+                        amplify push<br>
+                        Are you sure you want to continue?と表示されましたらyと入力します。<br>
+
                         ・If false is returned in fun in iterationFunc, the loop stops there; if true, the loop continues.<br>
                         (iterationFuncの中のfunの中でfalseを返すとループの処理がそこで止まります。trueを返すとループが続きます。)<br><br>
                         To get a list of all NFT references owned by an account, do the following<br>
